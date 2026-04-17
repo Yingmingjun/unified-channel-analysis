@@ -58,9 +58,9 @@ nyu_142 = attach_xlsx_pl_ds(df(df.institution == "NYU" & df.band == "subTHz", :)
 nyu_7   = attach_xlsx_pl_ds(df(df.institution == "NYU" & df.band == "FR1C",   :), ...
                             fullfile(root, 'N3_7_UMi.xlsx'),   'NYU orig', 'key');
 usc_145 = attach_xlsx_pl_ds(df(df.institution == "USC" & df.band == "subTHz", :), ...
-                            fullfile(root, 'U3_142_UMi.xlsx'), 'USC orig', 'keyloc');
+                            fullfile(root, 'U3_142_UMi.xlsx'), 'USC orig', 'position');
 usc_7   = attach_xlsx_pl_ds(df(df.institution == "USC" & df.band == "FR1C",   :), ...
-                            fullfile(root, 'U3_7_UMi.xlsx'),   'USC orig', 'keyloc');
+                            fullfile(root, 'U3_7_UMi.xlsx'),   'USC orig', 'position');
 
 df = vertcat(nyu_142, nyu_7, usc_145, usc_7);
 
@@ -220,11 +220,13 @@ end
 function out = attach_xlsx_pl_ds(frame, xlsx_path, pick_orig, by)
 % Join xlsx-derived PL/DS into an AS-csv-based frame.
 %
-%   by = 'key'    : match on normalized tx_rx_id (NYU scheme).
-%   by = 'keyloc' : match on (tx_rx_id | loc_type_raw)  - USC xlsx reuses
-%                   R1..R13 across LOS and NLOS groups, so locatype is part
-%                   of the key (matches python io.py lines 202-232 /
-%                   table06_rmse._load_variants).
+%   by = 'key'      : match on normalized tx_rx_id (NYU scheme, keys like
+%                     "T1-R1").
+%   by = 'position' : align the two tables by row order within each
+%                     loc_type group. Used for USC, where the CSV key
+%                     ("R01", "LOS_RX1_07-12-2024") doesn't match the
+%                     xlsx's "T1-R1". Both files enumerate LOS rows first,
+%                     then NLOS/OLOS, in the same order.
 %
 % Mirrors python/src/channel_analysis/io.py _attach_xlsx_pl_ds.
 
@@ -238,23 +240,36 @@ if height(frame) == 0 || ~isfile(xlsx_path)
 end
 
 aux = xlsx_orig_cols(xlsx_path, pick_orig);
-aux_key = aux.tx + "-" + aux.rx;
-% Build frame key by normalizing the CSV tx_rx_id to "T<i>-R<j>".
-frame_key = regexprep(frame.tx_rx_id, 'TX', 'T');
-frame_key = regexprep(frame_key, 'RX', 'R');
 
-if strcmp(by, 'keyloc')
-    aux_key   = aux_key   + "|" + aux.loc_type_raw;
-    frame_key = frame_key + "|" + frame.loc_type_raw;
+if strcmp(by, 'key')
+    aux_key = aux.tx + "-" + aux.rx;
+    frame_key = regexprep(frame.tx_rx_id, 'TX', 'T');
+    frame_key = regexprep(frame_key, 'RX', 'R');
+    for k = 1:height(frame)
+        hit = find(aux_key == frame_key(k), 1, 'first');
+        if ~isempty(hit)
+            out.pl_orig(k)  = aux.pl_orig(hit);
+            out.ds_orig(k)  = aux.ds_orig(hit);
+            out.d_m_xlsx(k) = aux.d_m_xlsx(hit);
+        end
+    end
+    return
 end
 
-% Positional merge: for each frame row, look up the first matching aux row.
-for k = 1:height(frame)
-    hit = find(aux_key == frame_key(k), 1, 'first');
-    if ~isempty(hit)
-        out.pl_orig(k)  = aux.pl_orig(hit);
-        out.ds_orig(k)  = aux.ds_orig(hit);
-        out.d_m_xlsx(k) = aux.d_m_xlsx(hit);
+% Positional merge within loc_type groups: 0 = LOS, 1 = NLOS/OLOS.
+aux_sort = zeros(height(aux), 1);
+aux_sort(ismember(aux.loc_type_raw, ["NLOS","OLOS"])) = 1;
+frame_sort = zeros(height(frame), 1);
+frame_sort(ismember(frame.loc_type_raw, ["NLOS","OLOS"])) = 1;
+
+for s = unique([aux_sort; frame_sort])'
+    f_idx = find(frame_sort == s);
+    a_idx = find(aux_sort   == s);
+    n = min(numel(f_idx), numel(a_idx));
+    for j = 1:n
+        out.pl_orig(f_idx(j))  = aux.pl_orig(a_idx(j));
+        out.ds_orig(f_idx(j))  = aux.ds_orig(a_idx(j));
+        out.d_m_xlsx(f_idx(j)) = aux.d_m_xlsx(a_idx(j));
     end
 end
 end
