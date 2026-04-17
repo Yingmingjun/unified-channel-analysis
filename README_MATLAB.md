@@ -18,6 +18,7 @@ cd <repo>/matlab
 run_all              % full raw-to-figures pipeline (first run: ~30-60 min)
 run_all('figures')   % skip raw processing; regenerate figures only
 run_all('rebuild')   % force full rerun of every step
+run_all('cb_a')      % Codebase-A 6.75 GHz cross-processing (~10-30 min)
 ```
 
 The **first invocation** takes ~30–60 minutes because STEP 1 processes
@@ -39,6 +40,36 @@ only regenerates the paper figures.
 - `matlab/processing/<band>/Figures/` — the per-pipeline diagnostic
   figures that the raw-processing scripts emit (Fig1_OmniPDP_... etc.).
   These are not paper figures; they are sanity plots.
+
+### Codebase-A 6.75 GHz cross-processing (`run_all('cb_a')`)
+
+The `cb_a` mode regenerates the two canonical 6.75 GHz point-data tables
+(`<repo>/data/point_data/7_UMi_U3.xlsx` and `7_UMi_N3.xlsx`) from the
+6.3 GB of intermediate PDP inputs and antenna patterns bundled under
+`<repo>/data/raw_cb_a/`:
+
+- `NYUformatUSCdata7/` — 17 USC 6.75 GHz PDP files reformatted into NYU
+  cell-array layout (input to `NYUprocessUSC7.m`; writes `7_UMi_U3.xlsx`).
+- `USCformatNYUdata7/` — 18 NYU 6.75 GHz PDP files reformatted into USC
+  5-D layout (input to `USCprocessNYU7M_exp.m`; writes `7_UMi_N3.xlsx`).
+- `NYU_Data_thresholded_7/{7 GHz,142 GHz}/` — thresholded-PDP metadata
+  keyed by TX/RX ID, used by the USC-side helper `USCprocessing7.m` for
+  angle-based noise-floor evaluation.
+- `USC_antennaPattern/` — the shared THz 3-D pattern + 7 GHz
+  H-plane/E-plane cut files.
+
+**When to use:** only if the bundled xlsx tables do not reproduce paper
+Table VI 6.75 GHz values (e.g., you have a new antenna pattern or a
+revised thresholding rule and need to regenerate the xlsx from
+scratch). The default `run_all` flow does **not** need this mode — it
+consumes the already-bundled xlsx directly.
+
+**Runtime:** ~10-30 min depending on the machine (disk throughput
+dominates; the 3.4 GB USC-format NYU-data drop is the heaviest step).
+
+After `run_all('cb_a')` finishes, it automatically re-runs
+`paper_parity` so the Python-vs-MATLAB parity CSVs pick up the fresh
+xlsx values.
 
 ## Tested MATLAB version
 

@@ -8,6 +8,12 @@ function run_all(mode)
 %   run_all('figures') -- Skip raw processing entirely; only regenerate the
 %                         paper-figure scripts (requires Results/*.mat
 %                         produced by a previous run).
+%   run_all('cb_a')    -- Run only the Codebase-A 7 GHz cross-processing
+%                         pipeline to regenerate <repo>/data/point_data/
+%                         7_UMi_U3.xlsx + 7_UMi_N3.xlsx from the 6.3 GB of
+%                         intermediate inputs under <repo>/data/raw_cb_a/.
+%                         Runtime ~10-30 min. Used only if the bundled xlsx
+%                         drop does not reproduce paper Table VI 6.75 GHz.
 %
 % Pipeline layout:
 %   STEP 1: Raw processing (may take 30-60 minutes total on first run)
@@ -44,6 +50,13 @@ addpath(fullfile(this_dir, 'processing', 'usc_145'));
 addpath(fullfile(this_dir, 'processing', 'usc_7'));
 addpath(fullfile(this_dir, 'patterns'));
 
+% Codebase-A 7 GHz cross-processing tree (NYU-side + USC-side helpers).
+% Always on the path so the default mode can reach them if explicitly called.
+if exist(fullfile(this_dir, 'processing_cb_a'), 'dir')
+    addpath(genpath(fullfile(this_dir, 'processing_cb_a', 'nyu_side')));
+    addpath(genpath(fullfile(this_dir, 'processing_cb_a', 'usc_side')));
+end
+
 % ----------------------------------------------------------------------------
 % Apply paper-wide plot styling (fonts, colors, line widths)
 % ----------------------------------------------------------------------------
@@ -66,6 +79,54 @@ fprintf('============================================================\n\n');
 
 % Track per-stage outcomes for the final summary.
 status = struct();
+
+% ============================================================================
+% OPTIONAL MODE: Codebase-A 7 GHz cross-processing
+% ============================================================================
+% Regenerates <repo>/data/point_data/7_UMi_U3.xlsx and 7_UMi_N3.xlsx from the
+% 6.3 GB of intermediate inputs bundled under <repo>/data/raw_cb_a/. Only
+% needed if the current bundled xlsx drop does not reproduce paper Table VI
+% 6.75 GHz values and a fresh regeneration is required. Runtime ~10-30 min.
+if mode == "cb_a"
+    banner(1, 'Codebase-A 7 GHz cross-processing');
+    addpath(fullfile(this_dir, 'processing_cb_a', 'nyu_side'));
+    addpath(fullfile(this_dir, 'processing_cb_a', 'usc_side'));
+
+    % NYU-side 7 GHz: regenerates 7_UMi_U3.xlsx
+    fprintf('\n[STEP cb_a.1] NYUprocessUSC7 ...\n');
+    try
+        evalin('base', 'clear; NYUprocessUSC7;');
+        status.cb_a_NYUprocessUSC7 = "ok";
+    catch ME
+        status.cb_a_NYUprocessUSC7 = "failed";
+        fprintf(2, 'FAIL: %s\n', ME.message);
+    end
+
+    % USC-side 7 GHz: regenerates 7_UMi_N3.xlsx
+    fprintf('\n[STEP cb_a.2] USCprocessNYU7M_exp ...\n');
+    try
+        evalin('base', 'clear; USCprocessNYU7M_exp;');
+        status.cb_a_USCprocessNYU7M_exp = "ok";
+    catch ME
+        status.cb_a_USCprocessNYU7M_exp = "failed";
+        fprintf(2, 'FAIL: %s\n', ME.message);
+    end
+
+    % Re-run the Python-parity driver that consumes the freshly-regenerated xlsx.
+    fprintf('\n[STEP cb_a.3] paper_parity ...\n');
+    try
+        paper_parity();
+        status.cb_a_paper_parity = "ok";
+    catch ME
+        status.cb_a_paper_parity = "failed";
+        fprintf(2, 'FAIL: %s\n', ME.message);
+    end
+
+    fprintf('\n============================================================\n');
+    fprintf('  Codebase-A 7 GHz pipeline done.\n');
+    fprintf('============================================================\n\n');
+    return
+end
 
 % ============================================================================
 % STEP 1: Raw processing
@@ -190,8 +251,9 @@ end
 fprintf('\n  Output locations:\n');
 fprintf('    - Per-pipeline Results : %s\n', fullfile(P.repo_root, 'matlab', 'processing', '*', 'Results'));
 fprintf('    - Paper figures        : %s\n', P.out_dir);
-fprintf('\n  To rerun raw processing from scratch: run_all(''rebuild'')\n');
-fprintf('  To regenerate figures only           : run_all(''figures'')\n\n');
+fprintf('\n  To rerun raw processing from scratch  : run_all(''rebuild'')\n');
+fprintf('  To regenerate figures only            : run_all(''figures'')\n');
+fprintf('  To regenerate 6.75 GHz U3/N3 xlsx     : run_all(''cb_a'')\n\n');
 
 fprintf('============================================================\n');
 fprintf('  Done.\n');

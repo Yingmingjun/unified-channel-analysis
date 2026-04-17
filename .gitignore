@@ -16,6 +16,10 @@ data/point_data/*
 data/raw/*/*
 !data/raw/README.md
 
+# Codebase-A 7 GHz intermediate data (6.3 GB, for run_all('cb_a'))
+data/raw_cb_a/*/*
+!data/raw_cb_a/README.md
+
 # Processing outputs that raw-processing regenerates
 matlab/processing/*/Results/
 matlab/processing/*/Figures/

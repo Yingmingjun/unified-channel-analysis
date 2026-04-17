@@ -94,6 +94,26 @@ P.figures_nyu_7   = fullfile(repo_root, 'matlab', 'processing', 'nyu_7',   'Figu
 P.figures_usc_145 = fullfile(repo_root, 'matlab', 'processing', 'usc_145', 'Figures');
 P.figures_usc_7   = fullfile(repo_root, 'matlab', 'processing', 'usc_7',   'Figures');
 
+% -- Codebase-A 7 GHz cross-processing inputs --------------------------------
+P.cb_a_root                  = fullfile(repo_root, 'data', 'raw_cb_a');
+P.cb_a_nyu_format_usc_7      = fullfile(P.cb_a_root, 'NYUformatUSCdata7');
+P.cb_a_usc_format_nyu_7      = fullfile(P.cb_a_root, 'USCformatNYUdata7');
+P.cb_a_thresholded_root      = fullfile(P.cb_a_root, 'NYU_Data_thresholded_7');
+P.cb_a_thresholded_142       = fullfile(P.cb_a_thresholded_root, '142 GHz');
+P.cb_a_thresholded_7         = fullfile(P.cb_a_thresholded_root, '7 GHz');
+P.cb_a_usc_antenna_root      = fullfile(P.cb_a_root, 'USC_antennaPattern');
+P.cb_a_usc_3d_pattern        = fullfile(P.cb_a_usc_antenna_root, 'THz_3D_pattern_aver.mat');
+P.cb_a_usc_eplane_7          = fullfile(P.cb_a_usc_antenna_root, 'EPlanePattern7.dat');
+P.cb_a_usc_hplane_7          = fullfile(P.cb_a_usc_antenna_root, 'HPlanePattern7.dat');
+P.cb_a_usc_azicut            = fullfile(P.cb_a_usc_antenna_root, 'aziCut.mat');
+P.cb_a_usc_elevcut           = fullfile(P.cb_a_usc_antenna_root, 'elevCut.mat');
+
+% -- Output locations for CB-A regenerated xlsx ------------------------------
+% The CB-A scripts write to relative paths like 'OriginalUSC-PointData/7_UMi_U3.xlsx';
+% redirect to <repo>/data/point_data/ so the paper-figure drivers see them.
+P.cb_a_out_u3_7_xlsx         = fullfile(repo_root, 'data', 'point_data', '7_UMi_U3.xlsx');
+P.cb_a_out_n3_7_xlsx         = fullfile(repo_root, 'data', 'point_data', '7_UMi_N3.xlsx');
+
 % -- Output directory for all paper figures and tables -----------------------
 P.out_dir       = fullfile(repo_root, 'figures', 'matlab');
 % Some paper-figure scripts hardcode a "paper figures" folder inside the
