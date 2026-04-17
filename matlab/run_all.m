@@ -68,4 +68,7 @@ table07_pooled_stats();
 fprintf('[run_all] table_dumps (Tables 4, 8, 9, 10, 11) ...\n');
 table_dumps();
 
+fprintf('[run_all] paper_parity (Paper vs Python vs MATLAB) ...\n');
+paper_parity();
+
 fprintf('[run_all] DONE. See %s\n', P.out_dir);

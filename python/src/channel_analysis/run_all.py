@@ -22,6 +22,7 @@ from .figures import (
     fig06_ds_cdf,
     fig07_asa_cdf,
     fig08_asd_cdf,
+    paper_parity,
     table06_rmse,
     table07_pooled_stats,
     table_dumps,
@@ -37,6 +38,7 @@ DRIVERS = [
     ("table06_rmse", table06_rmse.render),
     ("table07_pooled_stats", table07_pooled_stats.render),
     ("table_dumps_4_8_9_10_11", table_dumps.render),
+    ("paper_parity",              paper_parity.render),
 ]
 
 

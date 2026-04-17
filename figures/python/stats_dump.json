@@ -492,6 +492,12 @@
         "table10_N3_142.csv": "D:\\unified-channel-analysis\\figures\\python\\table10_N3_142.csv",
         "table11_N3_7.csv": "D:\\unified-channel-analysis\\figures\\python\\table11_N3_7.csv"
       }
+    },
+    "paper_parity": {
+      "summary": "## Summary\n\n- Python vs Paper - Table VI: 20/32 tight (<=2%), 8/32 close (<=10%), 4 miss.\n- Python vs Paper - Table VII: 70/108 tight (<=2%), 28/108 close (<=10%), 10 miss.\n- MATLAB vs Paper - Table VI: 20/32 tight (<=2%), 8/32 close (<=10%), 4 miss.\n- MATLAB vs Paper - Table VII: 60/108 tight (<=2%), 24/108 close (<=10%), 24 miss.",
+      "doc": "D:\\unified-channel-analysis\\docs\\paper_parity.md",
+      "csv_t6": "D:\\unified-channel-analysis\\figures\\python\\paper_parity_table06.csv",
+      "csv_t7": "D:\\unified-channel-analysis\\figures\\python\\paper_parity_table07.csv"
     }
   },
   "errors": {}
