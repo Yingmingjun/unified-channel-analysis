@@ -1,0 +1,9 @@
+metric,side,variant_a,variant_b,n,rmse
+PL [dB],NYU,N1,U3_nyu_thr,3,13.0934665732579
+PL [dB],USC,U1,N3_usc_thr,3,5.57041865414882
+DS [ns],NYU,N1,U3_nyu_thr,3,11.2311849347457
+DS [ns],USC,U1,N3_usc_thr,3,53.9569727130252
+ASA [deg],NYU,N1,U3_nyu_thr,3,37.5764309995863
+ASA [deg],USC,U1,N3_usc_thr,3,34.6668626597024
+ASD [deg],NYU,N1,U3_nyu_thr,3,6.46304623739198
+ASD [deg],USC,U1,N3_usc_thr,3,7.7378657694914

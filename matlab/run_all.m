@@ -65,4 +65,7 @@ table06_rmse();
 fprintf('[run_all] table07 Pooled stats ...\n');
 table07_pooled_stats();
 
+fprintf('[run_all] table_dumps (Tables 4, 8, 9, 10, 11) ...\n');
+table_dumps();
+
 fprintf('[run_all] DONE. See %s\n', P.out_dir);
