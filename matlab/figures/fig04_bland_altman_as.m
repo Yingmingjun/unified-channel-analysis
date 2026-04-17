@@ -1,68 +1,99 @@
 function fig04_bland_altman_as()
-% fig04_bland_altman_as  Bland-Altman agreement plots for ASA and ASD.
+% fig04_bland_altman_as  Bland-Altman for Omni ASA and ASD (Fig 4).
 %
-%   Same pairing structure as fig03 but for omni angular spreads
-%   (azimuth-of-arrival and azimuth-of-departure, in degrees).
+%   Same single-axis-overlay layout as fig03 but for angular spreads.
+%   Four output figures:
+%       fig04_BA_ASA    : sub-THz ASA
+%       fig04_BA_ASD    : sub-THz ASD
+%       fig04_BA_ASA7   : 6.75 GHz ASA
+%       fig04_BA_ASD7   : 6.75 GHz ASD
 %
-%   Output files:
-%       figures/matlab/fig04_bland_altman_as.png
-%       figures/matlab/fig04_bland_altman_as.pdf
+%   Comparison pair per row: asa_nyu_10 (NYU method, 10 dB PAS threshold) vs
+%   asa_usc (USC method, no spatial threshold). Diff = USC method - NYU
+%   method. Drops non-positive / non-finite before BA (matches BA_AS_Merged.m
+%   filter: isfinite(a) & isfinite(b) & a>0 & b>0).
 
 % Mirrors python/src/channel_analysis/figures/fig04_bland_altman_as.py
-% Paper Section V, Fig. 4
+% Paper Fig 4; layout from BA_AS_Merged.m (Codebase B).
 
 plot_style();
 P = paths();
+if ~exist(P.out_dir, 'dir'), mkdir(P.out_dir); end
 
-T = load_point_data({'N1', 'U1', 'N3', 'U3'});
-T = T(T.band == "subTHz", :);
+T = load_point_data();
 
-pair_nyu_asa = pair_by_link(T, 'N1',        'omni_asa_d', 'U3_nyu_thr', 'omni_asa_d');
-pair_usc_asa = pair_by_link(T, 'U1',        'omni_asa_d', 'N3_usc_thr', 'omni_asa_d');
-pair_nyu_asd = pair_by_link(T, 'N1',        'omni_asd_d', 'U3_nyu_thr', 'omni_asd_d');
-pair_usc_asd = pair_by_link(T, 'U1',        'omni_asd_d', 'N3_usc_thr', 'omni_asd_d');
-
-fig = figure('Position', [100 100 900 700]);
-
-subplot(2,2,1);
-draw_ba_panel(pair_nyu_asa.a, pair_nyu_asa.b, 'ASA [deg] — NYU side');
-
-subplot(2,2,2);
-draw_ba_panel(pair_usc_asa.a, pair_usc_asa.b, 'ASA [deg] — USC side');
-
-subplot(2,2,3);
-draw_ba_panel(pair_nyu_asd.a, pair_nyu_asd.b, 'ASD [deg] — NYU side');
-
-subplot(2,2,4);
-draw_ba_panel(pair_usc_asd.a, pair_usc_asd.b, 'ASD [deg] — USC side');
-
-sgtitle('Bland-Altman: Omni ASA and ASD (sub-THz)');
-
-save_figure(fig, P.out_dir, 'fig04_bland_altman_as');
-close(fig);
+render_one(T, P, 'fig04_BA_ASA',  'Bland-Altman: Omni ASA (sub-THz)', ...
+           'subTHz', 'asa_nyu_10', 'asa_usc',  'deg', 'ASA');
+render_one(T, P, 'fig04_BA_ASD',  'Bland-Altman: Omni ASD (sub-THz)', ...
+           'subTHz', 'asd_nyu_10', 'asd_usc',  'deg', 'ASD');
+render_one(T, P, 'fig04_BA_ASA7', 'Bland-Altman: Omni ASA (6.75 GHz)', ...
+           'FR1C',   'asa_nyu_10', 'asa_usc',  'deg', 'ASA');
+render_one(T, P, 'fig04_BA_ASD7', 'Bland-Altman: Omni ASD (6.75 GHz)', ...
+           'FR1C',   'asd_nyu_10', 'asd_usc',  'deg', 'ASD');
 end
 
 
-% ============================================================================
-function pr = pair_by_link(T, va, col_a, vb, col_b)
-Ta = T(T.variant == string(va), :);
-Tb = T(T.variant == string(vb), :);
-key_a = Ta.tx + "|" + Ta.rx;
-key_b = Tb.tx + "|" + Tb.rx;
-[~, ia, ib] = intersect(key_a, key_b, 'stable');
-pr.a = Ta.(col_a)(ia);
-pr.b = Tb.(col_b)(ib);
-end
+% ===========================================================================
+function render_one(T, P, stem, ttl, band, col_a, col_b, unit, metric_lbl)
+% Single overlaid BA figure for AS (drops non-positive / non-finite).
 
+sub_nyu = T(T.institution == "NYU" & T.band == string(band), :);
+sub_usc = T(T.institution == "USC" & T.band == string(band), :);
 
-function draw_ba_panel(a, b, ttl)
-S = bland_altman(a, b);
-scatter(S.mean, S.diff, 40, [0.85 0.33 0.10], 'filled'); hold on;
-yline(S.bias,     '-',  sprintf('bias=%.2f', S.bias), 'LineWidth', 1.5);
-yline(S.loa_low,  '--', sprintf('LoA_{lo}=%.2f', S.loa_low),  'LineWidth', 1.0);
-yline(S.loa_high, '--', sprintf('LoA_{hi}=%.2f', S.loa_high), 'LineWidth', 1.0);
-xlabel('Mean of pair');
-ylabel('Difference (a - b)');
+a_n = sub_nyu.(col_a);  b_n = sub_nyu.(col_b);
+a_u = sub_usc.(col_a);  b_u = sub_usc.(col_b);
+
+% Drop non-positive / non-finite per BA_AS_Merged.m filter.
+m_n = isfinite(a_n) & isfinite(b_n) & (a_n > 0) & (b_n > 0);
+m_u = isfinite(a_u) & isfinite(b_u) & (a_u > 0) & (b_u > 0);
+a_n = a_n(m_n); b_n = b_n(m_n);
+a_u = a_u(m_u); b_u = b_u(m_u);
+
+% Diff = B - A (USC method - NYU method).
+res_n3 = bland_altman(b_n, a_n);
+res_u3 = bland_altman(b_u, a_u);
+
+c_nyu      = [0.00 0.45 0.74];
+c_nyu_face = [0.60 0.78 0.92];
+c_usc      = [0.85 0.33 0.10];
+c_usc_face = [0.98 0.78 0.68];
+
+fig = figure('Position', [100 100 1100 600], 'Color', 'w');
+hold on; grid on; box on;
+
+scatter(res_n3.mean, res_n3.diff, 120, 'o', ...
+        'MarkerFaceColor', c_nyu_face, ...
+        'MarkerEdgeColor', c_nyu, 'LineWidth', 1.8, ...
+        'DisplayName', sprintf('N3: NYU data (n=%d)', res_n3.n));
+scatter(res_u3.mean, res_u3.diff, 120, 's', ...
+        'MarkerFaceColor', c_usc_face, ...
+        'MarkerEdgeColor', c_usc, 'LineWidth', 1.8, ...
+        'DisplayName', sprintf('U3: USC data (n=%d)', res_u3.n));
+
+yline(res_n3.bias,     '-',  'Color', c_nyu, 'LineWidth', 2.0, 'HandleVisibility','off');
+yline(res_n3.loa_low,  '--', 'Color', c_nyu, 'LineWidth', 1.6, 'HandleVisibility','off');
+yline(res_n3.loa_high, '--', 'Color', c_nyu, 'LineWidth', 1.6, 'HandleVisibility','off');
+yline(res_u3.bias,     '-',  'Color', c_usc, 'LineWidth', 2.0, 'HandleVisibility','off');
+yline(res_u3.loa_low,  '--', 'Color', c_usc, 'LineWidth', 1.6, 'HandleVisibility','off');
+yline(res_u3.loa_high, '--', 'Color', c_usc, 'LineWidth', 1.6, 'HandleVisibility','off');
+yline(0, ':', 'Color', [0.5 0.5 0.5], 'LineWidth', 0.8, 'HandleVisibility','off');
+
+xlabel(sprintf('Mean of %s (NYU & USC methods) [%s]', metric_lbl, unit));
+ylabel(sprintf('USC method - NYU method [%s]', unit));
 title(ttl);
-grid on;
+legend('Location', 'southeast', 'FontSize', 10);
+
+text(0.02, 0.98, ...
+     sprintf('N3 bias = %+.2f %s\nSD = %.2f', res_n3.bias, unit, res_n3.sd), ...
+     'Units', 'normalized', 'Color', c_nyu, 'HorizontalAlignment', 'left', ...
+     'VerticalAlignment', 'top', 'FontSize', 11, 'FontWeight', 'bold', ...
+     'BackgroundColor', 'w', 'EdgeColor', c_nyu);
+text(0.98, 0.98, ...
+     sprintf('U3 bias = %+.2f %s\nSD = %.2f', res_u3.bias, unit, res_u3.sd), ...
+     'Units', 'normalized', 'Color', c_usc, 'HorizontalAlignment', 'right', ...
+     'VerticalAlignment', 'top', 'FontSize', 11, 'FontWeight', 'bold', ...
+     'BackgroundColor', 'w', 'EdgeColor', c_usc);
+
+save_figure(fig, P.out_dir, stem);
+close(fig);
 end

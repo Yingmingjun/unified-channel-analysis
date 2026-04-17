@@ -1,224 +1,294 @@
-function T = load_point_data(variants)
-% load_point_data  Load canonical per-variant point-data tables.
+function T = load_point_data()
+% load_point_data  Hybrid loader mirroring python/src/channel_analysis/io.py.
 %
-%   T = load_point_data(variants) reads the requested variants from the
-%   xlsx tables listed in config/paths.m and returns a single MATLAB table
-%   with columns matching the Python canonical schema:
+%   T = load_point_data() returns a single MATLAB table holding one row per
+%   (institution, band, TX-RX link) with the canonical schema:
 %
-%       institution, band, freq_ghz, tx, rx, loc_type, loc_type_raw,
-%       d_m, pl_db, omni_ds_ns, omni_asa_d, omni_asd_d, variant
+%       institution, band, freq_ghz, tx_rx_id, d_m, loc_type, loc_type_raw,
+%       pl_db, omni_ds_ns,
+%       pl_nyu_sum, pl_usc_pdm, ds_nyu_method, ds_usc_method,
+%       asa_nyu_10, asa_nyu_15, asa_nyu_20, asa_usc,
+%       asd_nyu_10, asd_nyu_15, asd_nyu_20, asd_usc
 %
-%   variants : cell array of strings, subset of {'N1','U1','N3','U3'}.
+%   Loads ASA / ASD from the per-TX-RX result CSVs (these are the paper's
+%   authoritative angular-spread tables):
 %
-%   The N3/U3 xlsx files use a two-row header structure
-%       row 1 : section (e.g. "NYU orig.", "USC thres ...")
-%       row 2 : metric  (e.g. "Omni PL", "Omni DS", "Omni ASA", "Omni ASD")
-%   plus a top label row; we use detectImportOptions with VariableNamesRange
-%   pointing at row 2 and VariableDescriptionsRange pointing at row 1 so that
-%   each column is uniquely identified by the pair (section, metric).
+%       NYU142GHz_Method_Comparison_Results.csv   (27 rows: 16 LOS + 11 NLOS)
+%       NYU7GHz_Method_Comparison_Results.csv     (18 rows:  6 LOS + 12 NLOS)
+%       USC145GHz_Full_Results.csv                (26 rows: 13 LOS + 13 NLOS)
+%       USC7GHz_NewData_Results.csv               (17 rows:  6 LOS + 11 NLOS,
+%                                                  OLOS->NLOS already applied)
 %
-%   OLOS -> NLOS relabeling: loc_type is the harmonized label, while
-%   loc_type_raw preserves the original category.
+%   Loads PL and DS from the two-row-header xlsx point-data tables
+%   ("NYU orig. (N1)" / "USC orig. (U1)" columns -> the thresholded values
+%   that match paper Table 7):
+%
+%       N3_142_UMi.xlsx / N3_7_UMi.xlsx   (NYU data)
+%       U3_142_UMi.xlsx / U3_7_UMi.xlsx   (USC data)
+%
+%   Merge strategy:
+%       * NYU: join by normalized tx_rx_id ('T1-R1' form).
+%       * USC: xlsx RX labels (R1..R13) repeat across LOS and NLOS, so the
+%         join key is (tx_rx_id_normalized | loc_type).
+%
+%   Finally applies OLOS -> NLOS relabeling in loc_type while preserving the
+%   original label in loc_type_raw.
 
 % Mirrors python/src/channel_analysis/io.py load_point_data
 
-if nargin < 1 || isempty(variants)
-    variants = {'N1', 'U1'};
-end
-if ischar(variants) || isstring(variants)
-    variants = cellstr(variants);
-end
-want = upper(string(variants));
-
 P = paths();
+root = fileparts(P.n3_142_xlsx);   % DATA_ROOT
+
+% -- Authoritative AS CSVs --------------------------------------------------
+% One frame per file; each frame carries: institution, band, freq_ghz,
+% tx_rx_id, d_m (if present in CSV), loc_type_raw and all AS/PL/DS columns.
 frames = {};
+frames{end+1} = load_as_nyu_142(fullfile(root, 'NYU142GHz_Method_Comparison_Results.csv')); %#ok<*AGROW>
+frames{end+1} = load_as_nyu_7  (fullfile(root, 'NYU7GHz_Method_Comparison_Results.csv'));
+frames{end+1} = load_as_usc    (fullfile(root, 'USC145GHz_Full_Results.csv'),       145.5);
+frames{end+1} = load_as_usc    (fullfile(root, 'USC7GHz_NewData_Results.csv'),       6.75);
+df = vertcat(frames{:});
 
-if any(want == "N1")
-    % Authoritative N1 values live in the "NYU orig." column of the N3 xlsx.
-    frames{end+1} = load_orig_from_cross(P.n3_142_xlsx, 142.0, 'NYU');
-    frames{end+1} = load_orig_from_cross(P.n3_7_xlsx,     6.75, 'NYU');
-end
+% -- Attach xlsx "orig" PL/DS for each (institution, band) -------------------
+% NYU xlsx uses TX/RX labels that match the CSV's TX_RX_ID (e.g. "T1-R1");
+% merge by key. USC xlsx uses its own RX labels that repeat across LOS/NLOS,
+% so we include loc_type in the key.
+nyu_142 = attach_xlsx_pl_ds(df(df.institution == "NYU" & df.band == "subTHz", :), ...
+                            fullfile(root, 'N3_142_UMi.xlsx'), 'NYU orig', 'key');
+nyu_7   = attach_xlsx_pl_ds(df(df.institution == "NYU" & df.band == "FR1C",   :), ...
+                            fullfile(root, 'N3_7_UMi.xlsx'),   'NYU orig', 'key');
+usc_145 = attach_xlsx_pl_ds(df(df.institution == "USC" & df.band == "subTHz", :), ...
+                            fullfile(root, 'U3_142_UMi.xlsx'), 'USC orig', 'keyloc');
+usc_7   = attach_xlsx_pl_ds(df(df.institution == "USC" & df.band == "FR1C",   :), ...
+                            fullfile(root, 'U3_7_UMi.xlsx'),   'USC orig', 'keyloc');
 
-if any(want == "U1")
-    % Authoritative U1 values live in the "USC orig." column of the U3 xlsx.
-    frames{end+1} = load_orig_from_cross(P.u3_142_xlsx, 145.5, 'USC');
-    frames{end+1} = load_orig_from_cross(P.u3_7_xlsx,     6.75, 'USC');
-end
+df = vertcat(nyu_142, nyu_7, usc_145, usc_7);
 
-if any(want == "N3")
-    frames{end+1} = load_cross_xlsx(P.n3_142_xlsx, 142.0, 'N3');
-    frames{end+1} = load_cross_xlsx(P.n3_7_xlsx,     6.75, 'N3');
-end
+% -- pl_db / omni_ds_ns : prefer xlsx orig, fallback to per-method CSV ------
+% (Python io.py lines 266-281: "prefer the xlsx 'orig' values; fall back to
+% native per-institution method values from the CSV".)
+df.pl_db      = df.pl_orig;
+df.omni_ds_ns = df.ds_orig;
+miss_pl = isnan(df.pl_db);
+native_pl = df.pl_nyu_sum;
+native_pl(df.institution == "USC") = df.pl_usc_pdm(df.institution == "USC");
+df.pl_db(miss_pl) = native_pl(miss_pl);
 
-if any(want == "U3")
-    frames{end+1} = load_cross_xlsx(P.u3_142_xlsx, 145.5, 'U3');
-    frames{end+1} = load_cross_xlsx(P.u3_7_xlsx,     6.75, 'U3');
-end
+miss_ds = isnan(df.omni_ds_ns);
+native_ds = df.ds_nyu_method;
+native_ds(df.institution == "USC") = df.ds_usc_method(df.institution == "USC");
+df.omni_ds_ns(miss_ds) = native_ds(miss_ds);
 
-if isempty(frames)
-    T = empty_schema();
-    return;
-end
+% -- Distance: prefer CSV value (USC + NYU 7 GHz), fall back to xlsx (NYU 142)
+miss_d = isnan(df.d_m);
+df.d_m(miss_d) = df.d_m_xlsx(miss_d);
 
-T = vertcat(frames{:});
+% -- OLOS -> NLOS relabel (USC 6.75 GHz has OLOS in loc_type_raw) -----------
+df.loc_type = df.loc_type_raw;
+df.loc_type(df.loc_type_raw == "OLOS") = "NLOS";
 
-% -- OLOS -> NLOS relabeling (loc_type harmonized, loc_type_raw preserved) ---
-T.loc_type = T.loc_type_raw;
-T.loc_type(T.loc_type == "OLOS") = "NLOS";
-end
-
-
-% ============================================================================
-% Local helpers
-% ============================================================================
-function T = load_orig_from_cross(xlsx_path, freq_ghz, inst)
-% Load the "<inst> orig." column block of a two-row-header cross xlsx.
-% inst is either 'NYU' (yields variant 'N1') or 'USC' (yields variant 'U1').
-%
-% See python io._load_n1_from_n3_orig and _load_u1_from_u3_orig.
-
-raw = read_two_row_header(xlsx_path, 'FinalTable');
-institution = inst;
-variant_tag = ternary(strcmp(inst, 'NYU'), 'N1', 'U1');
-section_key = [inst ' orig'];   % matches "NYU orig." / "USC orig."
-
-T = assemble_rows(raw, freq_ghz, institution, variant_tag, section_key);
-end
-
-
-function T = load_cross_xlsx(xlsx_path, freq_ghz, kind)
-% Load the two thresholded variant blocks ("<inst> thres ...") of a cross
-% xlsx and concatenate them with variant tags '<kind>_nyu_thr' / '<kind>_usc_thr'.
-%
-% See python io._load_cross_xlsx.
-
-raw = read_two_row_header(xlsx_path, 'FinalTable');
-kind = upper(kind);
-if strcmp(kind, 'N3')
-    institution = 'NYU';
-else
-    institution = 'USC';
-end
-
-frames = {};
-suffix_map = {'nyu_thr', 'NYU thres'; 'usc_thr', 'USC thres'};
-for k = 1:size(suffix_map, 1)
-    suffix_tag = suffix_map{k, 1};
-    section_key = suffix_map{k, 2};
-    variant_tag = sprintf('%s_%s', kind, suffix_tag);
-    try
-        frames{end+1} = assemble_rows(raw, freq_ghz, institution, variant_tag, section_key); %#ok<AGROW>
-    catch
-        % Some xlsx files contain only one of the two threshold blocks.
-        continue
-    end
-end
-T = vertcat(frames{:});
+% -- Keep canonical schema, drop aux columns -------------------------------
+keep = {'institution','band','freq_ghz','tx_rx_id','d_m', ...
+        'loc_type','loc_type_raw', ...
+        'pl_db','omni_ds_ns', ...
+        'pl_nyu_sum','pl_usc_pdm','ds_nyu_method','ds_usc_method', ...
+        'asa_nyu_10','asa_nyu_15','asa_nyu_20','asa_usc', ...
+        'asd_nyu_10','asd_nyu_15','asd_nyu_20','asd_usc'};
+T = df(:, keep);
 end
 
 
-function T = assemble_rows(raw, freq_ghz, institution, variant_tag, section_key)
-% Pull the canonical columns out of a raw two-row-header table and build a
-% tall MATLAB table in the canonical schema.
-
-tx_col  = find_col(raw, 'TX',       '');
-rx_col  = find_col(raw, 'RX',       '');
-loc_col = find_col(raw, 'Loc Type', '');
-tr_col  = find_col(raw, 'TR Sep',   '');
-
-pl_col  = find_col(raw, 'Omni PL',  section_key);
-ds_col  = find_col(raw, 'Omni DS',  section_key);
-asa_col = find_col(raw, 'Omni ASA', section_key);
-asd_col = find_col(raw, 'Omni ASD', section_key);
-
-if isempty(pl_col)
-    error('assemble_rows:missingSection', 'Section "%s" not found', section_key);
+% ===========================================================================
+% AS CSV loaders — one frame per (institution, band)
+% ===========================================================================
+function T = load_as_nyu_142(csv_path)
+% Mirrors python/src/channel_analysis/io.py _load_as_nyu_142
+c = readtable(csv_path, 'VariableNamingRule', 'preserve');
+n = height(c);
+T = table();
+T.institution   = repmat("NYU", n, 1);
+T.band          = repmat("subTHz", n, 1);
+T.freq_ghz      = repmat(142.0, n, 1);
+T.tx_rx_id      = string(c.TX_RX_ID);
+T.d_m           = nan(n, 1);        % NYU 142 CSV has no distance column;
+                                    % filled from xlsx TR-Sep later.
+T.loc_type_raw  = upper(strtrim(string(c.Environment)));
+T.pl_nyu_sum    = double(c.PL_NYU_SUM_dB);
+T.pl_usc_pdm    = double(c.PL_USC_perDelayMax_dB);
+T.ds_nyu_method = double(c.DS_NYU_SUM_ns);
+T.ds_usc_method = double(c.DS_USC_perDelayMax_ns);
+T.asa_nyu_10    = double(c.ASA_NYU_10dB);
+T.asa_nyu_15    = double(c.ASA_NYU_15dB);
+T.asa_nyu_20    = double(c.ASA_NYU_20dB);
+T.asa_usc       = double(c.ASA_USC);
+T.asd_nyu_10    = double(c.ASD_NYU_10dB);
+T.asd_nyu_15    = double(c.ASD_NYU_15dB);
+T.asd_nyu_20    = double(c.ASD_NYU_20dB);
+T.asd_usc       = double(c.ASD_USC);
 end
 
-% Forward-fill TX (merged cells look like NaN in subsequent rows).
-tx_vals = ffill_strings(raw{:, tx_col});
 
-% Keep rows with numeric TR-Sep.
-d_raw = to_numeric(raw{:, tr_col});
-keep  = ~isnan(d_raw);
+function T = load_as_nyu_7(csv_path)
+% Mirrors python/src/channel_analysis/io.py _load_as_nyu_7
+c = readtable(csv_path, 'VariableNamingRule', 'preserve');
+n = height(c);
+T = table();
+T.institution   = repmat("NYU", n, 1);
+T.band          = repmat("FR1C", n, 1);
+T.freq_ghz      = repmat(6.75,  n, 1);
+T.tx_rx_id      = string(c.TX_RX_ID);
+T.d_m           = double(c.Distance_m);
+T.loc_type_raw  = upper(strtrim(string(c.Environment)));
+T.pl_nyu_sum    = double(c.NYUthr_PL_SUM_dB);
+T.pl_usc_pdm    = double(c.NYUthr_PL_pDM_dB);
+T.ds_nyu_method = double(c.NYUthr_DS_SUM_ns);
+T.ds_usc_method = double(c.NYUthr_DS_pDM_ns);
+T.asa_nyu_10    = double(c.NYUthr_ASA_N10);
+T.asa_nyu_15    = double(c.NYUthr_ASA_N15);
+T.asa_nyu_20    = double(c.NYUthr_ASA_N20);
+T.asa_usc       = double(c.NYUthr_ASA_U);
+T.asd_nyu_10    = double(c.NYUthr_ASD_N10);
+T.asd_nyu_15    = double(c.NYUthr_ASD_N15);
+T.asd_nyu_20    = double(c.NYUthr_ASD_N20);
+T.asd_usc       = double(c.NYUthr_ASD_U);
+end
 
-rx_vals  = string(raw{:, rx_col});
-loc_raw  = upper(strtrim(string(raw{:, loc_col})));
 
-pl_vals  = to_numeric(raw{:, pl_col});
-ds_vals  = to_numeric(raw{:, ds_col});
-asa_vals = to_numeric(raw{:, asa_col});
-asd_vals = to_numeric(raw{:, asd_col});
-
+function T = load_as_usc(csv_path, freq_ghz)
+% Mirrors python/src/channel_analysis/io.py _load_as_usc
+c = readtable(csv_path, 'VariableNamingRule', 'preserve');
+n = height(c);
 if freq_ghz >= 100
     band = "subTHz";
 else
     band = "FR1C";
 end
-
-n = sum(keep);
-T = table( ...
-    repmat(string(institution), n, 1), ...
-    repmat(band,                 n, 1), ...
-    repmat(freq_ghz,             n, 1), ...
-    tx_vals(keep),                     ...
-    rx_vals(keep),                     ...
-    strings(n, 1),                     ...   % loc_type placeholder; filled outside
-    loc_raw(keep),                     ...
-    d_raw(keep),                       ...
-    pl_vals(keep),                     ...
-    ds_vals(keep),                     ...
-    asa_vals(keep),                    ...
-    asd_vals(keep),                    ...
-    repmat(string(variant_tag),   n, 1), ...
-    'VariableNames', {'institution','band','freq_ghz','tx','rx', ...
-                      'loc_type','loc_type_raw','d_m','pl_db', ...
-                      'omni_ds_ns','omni_asa_d','omni_asd_d','variant'});
+T = table();
+T.institution   = repmat("USC",    n, 1);
+T.band          = repmat(band,     n, 1);
+T.freq_ghz      = repmat(freq_ghz, n, 1);
+T.tx_rx_id      = string(c.Location);
+T.d_m           = double(c.Distance_m);
+T.loc_type_raw  = upper(strtrim(string(c.Env)));
+T.pl_nyu_sum    = double(c.PL_NYU_dB);
+T.pl_usc_pdm    = double(c.PL_USC_dB);
+T.ds_nyu_method = double(c.DS_NYU_ns);
+T.ds_usc_method = double(c.DS_USC_ns);
+T.asa_nyu_10    = double(c.ASA_NYU_10dB);
+T.asa_nyu_15    = double(c.ASA_NYU_15dB);
+T.asa_nyu_20    = double(c.ASA_NYU_20dB);
+T.asa_usc       = double(c.ASA_USC);
+T.asd_nyu_10    = double(c.ASD_NYU_10dB);
+T.asd_nyu_15    = double(c.ASD_NYU_15dB);
+T.asd_nyu_20    = double(c.ASD_NYU_20dB);
+T.asd_usc       = double(c.ASD_USC);
 end
 
 
-function raw = read_two_row_header(xlsx_path, sheet)
-% Read an xlsx that has (top label row) + (section row) + (metric row) + data.
-%
-% Strategy: read the whole sheet as a cell array, use row 2 as the "section"
-% label and row 3 as the "metric" label. Data begins at row 4. Column
-% identity is (section, metric). Some columns have only a single label;
-% the unused level is filled with an empty string.
+% ===========================================================================
+% Xlsx "<inst> orig" loader and join
+% ===========================================================================
+function aux = xlsx_orig_cols(xlsx_path, pick_orig)
+% Read the xlsx FinalTable sheet (two-row header: row 2 = metric, row 3 =
+% threshold/section). Return a table of aux columns keyed by (tx, rx,
+% loc_type_raw). Mirrors python io._xlsx_orig_cols.
 
-% readcell is the modern replacement for xlsread; it preserves mixed
-% numeric/text cells and correctly reports merged-cell content in the
-% top-left anchor (the rest of a merged range reads as <missing>).
+raw = read_two_row_header(xlsx_path, 'FinalTable');
+
+tx_col  = find_col(raw, 'TX',       '');
+rx_col  = find_col(raw, 'RX',       '');
+loc_col = find_col(raw, 'Loc Type', '');
+tr_col  = find_col(raw, 'TR Sep',   '');
+pl_col  = find_col(raw, 'Omni PL',  pick_orig);
+ds_col  = find_col(raw, 'Omni DS',  pick_orig);
+
+% Forward-fill TX (merged cells appear as missing in later rows).
+tx_vals = ffill_strings(raw{:, tx_col});
+tr_vals = to_numeric(raw{:, tr_col});
+keep_mask = ~isnan(tr_vals);
+
+aux = table();
+aux.tx           = regexprep(string(tx_vals(keep_mask)), '^TX', 'T');
+aux.rx           = regexprep(string(raw{keep_mask, rx_col}), '^RX', 'R');
+aux.loc_type_raw = upper(strtrim(string(raw{keep_mask, loc_col})));
+aux.d_m_xlsx     = tr_vals(keep_mask);
+aux.pl_orig      = to_numeric(raw{keep_mask, pl_col});
+aux.ds_orig      = to_numeric(raw{keep_mask, ds_col});
+end
+
+
+function out = attach_xlsx_pl_ds(frame, xlsx_path, pick_orig, by)
+% Join xlsx-derived PL/DS into an AS-csv-based frame.
+%
+%   by = 'key'    : match on normalized tx_rx_id (NYU scheme).
+%   by = 'keyloc' : match on (tx_rx_id | loc_type_raw)  - USC xlsx reuses
+%                   R1..R13 across LOS and NLOS groups, so locatype is part
+%                   of the key (matches python io.py lines 202-232 /
+%                   table06_rmse._load_variants).
+%
+% Mirrors python/src/channel_analysis/io.py _attach_xlsx_pl_ds.
+
+out = frame;
+out.pl_orig   = nan(height(frame), 1);
+out.ds_orig   = nan(height(frame), 1);
+out.d_m_xlsx  = nan(height(frame), 1);
+
+if height(frame) == 0 || ~isfile(xlsx_path)
+    return
+end
+
+aux = xlsx_orig_cols(xlsx_path, pick_orig);
+aux_key = aux.tx + "-" + aux.rx;
+% Build frame key by normalizing the CSV tx_rx_id to "T<i>-R<j>".
+frame_key = regexprep(frame.tx_rx_id, 'TX', 'T');
+frame_key = regexprep(frame_key, 'RX', 'R');
+
+if strcmp(by, 'keyloc')
+    aux_key   = aux_key   + "|" + aux.loc_type_raw;
+    frame_key = frame_key + "|" + frame.loc_type_raw;
+end
+
+% Positional merge: for each frame row, look up the first matching aux row.
+for k = 1:height(frame)
+    hit = find(aux_key == frame_key(k), 1, 'first');
+    if ~isempty(hit)
+        out.pl_orig(k)  = aux.pl_orig(hit);
+        out.ds_orig(k)  = aux.ds_orig(hit);
+        out.d_m_xlsx(k) = aux.d_m_xlsx(hit);
+    end
+end
+end
+
+
+% ===========================================================================
+% Two-row-header xlsx reader (shared by load_point_data and table06_rmse)
+% ===========================================================================
+function raw = read_two_row_header(xlsx_path, sheet)
+% Load an xlsx that carries:
+%   row 1 : free-form title
+%   row 2 : metric group ("Omni PL", "Omni DS", ...) with MERGED cells
+%   row 3 : sub-section / threshold ("NYU thres", "NYU orig. (N1)", ...)
+%   row 4+: data.
+% We forward-fill row 2 (merged cells report as <missing> beyond anchor),
+% then build a table whose VariableDescriptions encode (section, metric).
+
 cells = readcell(char(xlsx_path), 'Sheet', char(sheet));
 
-% The xlsx structure is:
-%   Row 1 : free-form title (e.g. "Point-Data table implementing ...")
-%   Row 2 : metric group labels, with MERGED cells spanning 3 columns each
-%           (e.g. "Omni PL", "Omni DS", "Omni ASA", "Omni ASD"). We forward-
-%           fill to propagate the label across the merged range.
-%   Row 3 : threshold / section labels ("NYU thres", "USC thres",
-%           "NYU orig. (N1)" / "USC orig. (U1)").  No merging.
-%   Row 4+: data.
-% find_col() will later pair (metric, section) to locate a single column.
-metric_row = forward_fill_row(cells(2, :));   % metrics live on row 2
-sec_row    = cells(3, :);                     % threshold labels on row 3
+metric_row = forward_fill_row(cells(2, :));   % merged metric groups
+sec_row    = cells(3, :);                     % threshold labels
 
-% Normalize to string arrays.
 sec_row    = cellfun(@cell_to_string, sec_row,    'UniformOutput', false);
 metric_row = cellfun(@cell_to_string, metric_row, 'UniformOutput', false);
 sec_row    = string(sec_row);
 metric_row = string(metric_row);
 
-% Data is rows 4:end. Wrap into a table with two attributes per column:
-%   VariableNames       -> unique sanitized metric+section name
-%   VariableDescriptions-> section|metric original labels (for find_col)
 data_rows = cells(4:end, :);
-n_cols    = size(data_rows, 2);
-T_cols    = cell(1, n_cols);
+n_cols = size(data_rows, 2);
+T_cols = cell(1, n_cols);
 var_names = strings(1, n_cols);
 var_descs = strings(1, n_cols);
 for c = 1:n_cols
-    col_cells = data_rows(:, c);
-    T_cols{c} = col_cells;
+    T_cols{c} = data_rows(:, c);
     var_names(c) = sprintf('Col%03d', c);
     var_descs(c) = sec_row(c) + "||" + metric_row(c);
 end
@@ -228,18 +298,13 @@ end
 
 
 function col_name = find_col(raw, metric_substr, section_substr)
-% Locate the column whose metric (second header level) contains
-% metric_substr AND whose section (first header level) contains
-% section_substr. Matching is case-insensitive. If section_substr is empty,
-% only the metric is checked. Returns '' if no column matches.
-
+% Find the column whose (section, metric) pair matches both substrings
+% (case-insensitive). Empty section_substr -> metric-only match.
 descs = string(raw.Properties.VariableDescriptions);
 col_name = '';
 for i = 1:numel(descs)
     parts = split(descs(i), "||");
-    if numel(parts) < 2
-        continue
-    end
+    if numel(parts) < 2, continue, end
     sec = lower(parts(1));
     met = lower(parts(2));
     metric_ok = contains(met, lower(metric_substr));
@@ -257,7 +322,7 @@ end
 
 
 function y = to_numeric(x)
-% Coerce a cell/array to double, mapping non-numeric entries to NaN.
+% Coerce a cell / array to double; non-numeric entries -> NaN.
 if iscell(x)
     y = nan(size(x));
     for k = 1:numel(x)
@@ -265,8 +330,7 @@ if iscell(x)
         if isnumeric(v) && isscalar(v)
             y(k) = v;
         elseif ischar(v) || isstring(v)
-            d = str2double(v);
-            y(k) = d;  % str2double returns NaN on failure
+            y(k) = str2double(v);
         end
     end
 else
@@ -276,7 +340,6 @@ end
 
 
 function s = ffill_strings(x)
-% Forward-fill a column of strings (used to populate merged TX cells).
 s = string(x);
 current = "";
 for k = 1:numel(s)
@@ -290,7 +353,6 @@ end
 
 
 function row = forward_fill_row(row)
-% Forward-fill a row cell array (for merged section headers).
 current = '';
 for k = 1:numel(row)
     v = cell_to_string(row{k});
@@ -305,40 +367,12 @@ end
 
 
 function s = cell_to_string(v)
-% Convert a scalar cell value (which may be missing / NaN / numeric / text)
-% to a trimmed MATLAB string.
 if ismissing(v)
-    s = "";
-    return
+    s = ""; return
 end
 if isnumeric(v)
-    if isnan(v)
-        s = "";
-    else
-        s = string(v);
-    end
+    if isnan(v), s = ""; else, s = string(v); end
     return
 end
 s = strtrim(string(v));
-end
-
-
-function out = ternary(cond, a, b)
-if cond
-    out = a;
-else
-    out = b;
-end
-end
-
-
-function T = empty_schema()
-% Return an empty table with the canonical schema (used when no variants
-% are requested).
-T = table('Size', [0 13], ...
-    'VariableTypes', {'string','string','double','string','string','string', ...
-                      'string','double','double','double','double','double','string'}, ...
-    'VariableNames', {'institution','band','freq_ghz','tx','rx', ...
-                      'loc_type','loc_type_raw','d_m','pl_db', ...
-                      'omni_ds_ns','omni_asa_d','omni_asd_d','variant'});
 end

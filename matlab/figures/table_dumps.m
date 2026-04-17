@@ -1,78 +1,159 @@
 function table_dumps()
 % table_dumps  Regenerate paper Tables 4, 8, 9, 10, 11 as CSV dumps.
 %
-%   These paper tables are pretty-prints of the institutional point-data
-%   xlsx. We dump each as a CSV so readers can diff against the paper.
+%   Each paper table is a pretty-print of one of the xlsx point-data files;
+%   we dump them as CSV so readers can diff against the paper.
 %
-%     Table 4  : partial N1 @ 142 GHz
-%     Table 8  : partial U3 @ 145.5 GHz (USC-thr, NYU-thr, USC-orig columns)
-%     Table 9  : partial U3 @ 6.75 GHz
-%     Table 10 : partial N3 @ 142 GHz (USC-thr, NYU-thr, NYU-orig columns)
-%     Table 11 : partial N3 @ 6.75 GHz
+%       Table 4  : N1_142_UMi.xlsx   (single-row-header PL listing)
+%       Table 8  : U3_142_UMi.xlsx   (two-row-header cross table @ 145.5 GHz)
+%       Table 9  : U3_7_UMi.xlsx     (two-row-header @ 6.75 GHz)
+%       Table 10 : N3_142_UMi.xlsx   (two-row-header @ 142 GHz)
+%       Table 11 : N3_7_UMi.xlsx     (two-row-header @ 6.75 GHz)
 %
 %   Output: figures/matlab/table{04,08,09,10,11}_*.csv
 %
 % Mirrors python/src/channel_analysis/figures/table_dumps.py
 
+plot_style();
 P = paths();
 if ~exist(P.out_dir, 'dir'), mkdir(P.out_dir); end
 
-% -- Table 4 — N1 @ 142 GHz ---------------------------------------------------
-df_n1 = load_point_data({'N1'});
-t4    = df_n1((df_n1.variant == "N1") & (df_n1.freq_ghz == 142.0), :);
-t4    = sortrows(t4, {'tx','rx'});
-t4    = t4(:, {'tx','rx','loc_type','d_m','pl_db', ...
-               'omni_ds_ns','omni_asa_d','omni_asd_d'});
-writetable(t4, fullfile(P.out_dir, 'table04_N1_142.csv'));
-fprintf('[table04] wrote table04_N1_142.csv\n');
+root = fileparts(P.n3_142_xlsx);
 
-% -- Tables 8 & 9 — U3 cross-processed ---------------------------------------
-df_u3 = load_point_data({'U1','U3'});
-write_wide_table(df_u3, 145.5, {'U3_nyu_thr','U3_usc_thr','U1'}, ...
-                 fullfile(P.out_dir, 'table08_U3_145.csv'), '[table08]');
-write_wide_table(df_u3, 6.75,  {'U3_nyu_thr','U3_usc_thr','U1'}, ...
-                 fullfile(P.out_dir, 'table09_U3_7.csv'),  '[table09]');
+pairs = { ...
+    'table04_N1_142.csv', fullfile(root, 'N1_142_UMi.xlsx'), 'single'; ...
+    'table08_U3_145.csv', fullfile(root, 'U3_142_UMi.xlsx'), 'two_row'; ...
+    'table09_U3_7.csv',   fullfile(root, 'U3_7_UMi.xlsx'),   'two_row'; ...
+    'table10_N3_142.csv', fullfile(root, 'N3_142_UMi.xlsx'), 'two_row'; ...
+    'table11_N3_7.csv',   fullfile(root, 'N3_7_UMi.xlsx'),   'two_row'  ...
+};
 
-% -- Tables 10 & 11 — N3 cross-processed -------------------------------------
-df_n3 = load_point_data({'N1','N3'});
-write_wide_table(df_n3, 142.0, {'N3_usc_thr','N3_nyu_thr','N1'}, ...
-                 fullfile(P.out_dir, 'table10_N3_142.csv'), '[table10]');
-write_wide_table(df_n3, 6.75,  {'N3_usc_thr','N3_nyu_thr','N1'}, ...
-                 fullfile(P.out_dir, 'table11_N3_7.csv'),  '[table11]');
+for k = 1:size(pairs, 1)
+    name = pairs{k, 1};
+    src  = pairs{k, 2};
+    kind = pairs{k, 3};
+    if ~isfile(src)
+        fprintf('[table_dumps] skip %s (missing)\n', src);
+        continue
+    end
+    if strcmp(kind, 'single')
+        df = readtable(src, 'Sheet', 'FinalTable', ...
+                       'VariableNamingRule', 'preserve');
+    else
+        df = dump_two_row_header(src, 'FinalTable');
+    end
+    out_path = fullfile(P.out_dir, name);
+    writetable(df, out_path);
+    fprintf('[table_dumps] wrote %s\n', out_path);
+end
 end
 
 
-% ============================================================================
-function write_wide_table(df, freq_ghz, variants, csv_path, tag)
-% Pivot one-row-per-(TX,RX,variant) long table into wide with one row per
-% (TX,RX) carrying all metric columns for each variant.
-sub = df(df.freq_ghz == freq_ghz, :);
-metrics = {'pl_db','omni_ds_ns','omni_asa_d','omni_asd_d'};
+% ===========================================================================
+function T = dump_two_row_header(xlsx_path, sheet)
+% Flatten a two-row-header xlsx into a single-header MATLAB table with
+% column names "<section>__<metric>" (matches python table_dumps output).
 
-% Base: sorted unique (tx, rx, loc_type, d_m) from the first variant
-base_mask = sub.variant == string(variants{1});
-base = sub(base_mask, {'tx','rx','loc_type','d_m'});
-[~, idx] = unique(base(:, {'tx','rx'}), 'rows', 'stable');
-base = base(idx, :);
-out = base;
+cells = readcell(char(xlsx_path), 'Sheet', char(sheet));
 
-for iv = 1:numel(variants)
-    v = string(variants{iv});
-    vsub = sub(sub.variant == v, :);
-    [~, i2] = unique(vsub(:, {'tx','rx'}), 'rows', 'stable');
-    vsub = vsub(i2, :);
-    keys = out.tx + "|" + out.rx;
-    vkeys = vsub.tx + "|" + vsub.rx;
-    [~, out_idx, vsub_idx] = intersect(keys, vkeys, 'stable');
-    for im = 1:numel(metrics)
-        m = metrics{im};
-        new_col = nan(height(out), 1);
-        new_col(out_idx) = vsub.(m)(vsub_idx);
-        col_name = sprintf('%s__%s', m, char(v));
-        out.(col_name) = new_col;
+metric_row = forward_fill_row(cells(2, :));   % metric groups (merged)
+sec_row    = cells(3, :);                     % thresholds / sub-sections
+
+metric_row = cellfun(@cell_to_string, metric_row, 'UniformOutput', false);
+sec_row    = cellfun(@cell_to_string, sec_row,    'UniformOutput', false);
+metric_row = string(metric_row);
+sec_row    = string(sec_row);
+
+data_rows = cells(4:end, :);
+n_cols = size(data_rows, 2);
+
+% Build flat column names.
+col_names = strings(1, n_cols);
+for c = 1:n_cols
+    if strlength(sec_row(c)) == 0
+        col_names(c) = metric_row(c);
+    else
+        col_names(c) = metric_row(c) + "__" + sec_row(c);
+    end
+    if strlength(col_names(c)) == 0
+        col_names(c) = sprintf('Col%03d', c);
+    end
+end
+col_names = matlab.lang.makeUniqueStrings( ...
+    matlab.lang.makeValidName(col_names));
+
+% Build table columns as mixed numeric / string.
+T_cols = cell(1, n_cols);
+for c = 1:n_cols
+    col_cells = data_rows(:, c);
+    numeric_attempt = nan(numel(col_cells), 1);
+    all_numeric = true;
+    for r = 1:numel(col_cells)
+        v = col_cells{r};
+        if ismissing(v)
+            % leave NaN
+        elseif isnumeric(v) && isscalar(v)
+            numeric_attempt(r) = v;
+        elseif ischar(v) || isstring(v)
+            d = str2double(v);
+            if isnan(d), all_numeric = false; break
+            else, numeric_attempt(r) = d;
+            end
+        else
+            all_numeric = false; break
+        end
+    end
+    if all_numeric
+        T_cols{c} = numeric_attempt;
+    else
+        % Fall back to strings.
+        s = strings(numel(col_cells), 1);
+        for r = 1:numel(col_cells)
+            s(r) = cell_to_string(col_cells{r});
+        end
+        T_cols{c} = s;
     end
 end
 
-writetable(out, csv_path);
-fprintf('%s wrote %s\n', tag, csv_path);
+T = table(T_cols{:}, 'VariableNames', cellstr(col_names));
+
+% Drop fully-empty rows (all NaN or empty) so the CSV matches python output.
+is_data_row = false(height(T), 1);
+for r = 1:height(T)
+    for c = 1:width(T)
+        v = T{r, c};
+        if isnumeric(v)
+            if any(isfinite(v)), is_data_row(r) = true; break, end
+        else
+            if strlength(string(v)) > 0, is_data_row(r) = true; break, end
+        end
+    end
+end
+T = T(is_data_row, :);
+end
+
+
+function row = forward_fill_row(row)
+current = '';
+for k = 1:numel(row)
+    v = cell_to_string(row{k});
+    if strlength(v) == 0
+        row{k} = current;
+    else
+        current = char(v);
+        row{k}  = current;
+    end
+end
+end
+
+
+function s = cell_to_string(v)
+if ismissing(v)
+    s = ""; return
+end
+if isnumeric(v)
+    if isnan(v), s = ""; else, s = string(v); end
+    return
+end
+s = strtrim(string(v));
 end

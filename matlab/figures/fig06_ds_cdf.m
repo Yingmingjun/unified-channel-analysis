@@ -1,75 +1,104 @@
 function fig06_ds_cdf()
-% fig06_ds_cdf  Empirical CDFs of omni RMS delay spread with DKW bands.
+% fig06_ds_cdf  Omni RMS Delay Spread CDFs (Fig 6).
 %
-%   One subplot per band, overlaying LOS vs NLOS CDFs for NYU (N1) and USC
-%   (U1) variants. DKW 95% uniform confidence bands are shaded around each
-%   empirical CDF (see dkw_band.m).
+%   Produces TWO figures:
+%       fig06_OmniDS_merged    : sub-THz
+%       fig06_OmniDS_merged7   : 6.75 GHz
 %
-%   Output files:
-%       figures/matlab/fig06_ds_cdf.png
-%       figures/matlab/fig06_ds_cdf.pdf
+%   Each figure has subplot(1,2,1) LOS + subplot(1,2,2) NLOS. Each subplot
+%   shows three ECDF curves (NYU, USC, Pooled) with DKW 95 % uniform
+%   confidence bands shaded at alpha 0.12.
 
 % Mirrors python/src/channel_analysis/figures/fig06_ds_cdf.py
-% Paper Section V.B, Fig. 6
+% Paper Fig 6; CDF helper pattern from AS_CDF_Merged.m.
 
 plot_style();
 P = paths();
+if ~exist(P.out_dir, 'dir'), mkdir(P.out_dir); end
 
-T = load_point_data({'N1', 'U1'});
+T = load_point_data();
 
-fig = figure('Position', [100 100 1100 500]);
-bands = ["subTHz", "FR1C"];
-locs  = ["LOS", "NLOS"];
-colors = struct('NYU', [0 0.45 0.74], 'USC', [0.85 0.33 0.10]);
-ls_loc = struct('LOS', '-', 'NLOS', '--');
-
-for ib = 1:numel(bands)
-    subplot(1, numel(bands), ib);
-    hold on;
-    band = bands(ib);
-    for inst = ["NYU", "USC"]
-        for il = 1:numel(locs)
-            loc = locs(il);
-            mask = T.band == band & T.institution == inst & T.loc_type == loc;
-            x    = T.omni_ds_ns(mask);
-            draw_ecdf_with_dkw(x, colors.(char(inst)), ls_loc.(char(loc)), ...
-                               sprintf('%s %s', inst, loc));
-        end
-    end
-    set(gca, 'XScale', 'log');
-    xlabel('Omni RMS DS [ns]');
-    ylabel('CDF');
-    title(sprintf('%s', band));
-    legend('Location', 'best', 'FontSize', 8);
-    grid on;
+render_band(T, P, 'subTHz', 'Sub-THz (142 / 145.5 GHz)', ...
+            'fig06_OmniDS_merged', 'omni_ds_ns', 'omni_ds_ns', ...
+            'Omni RMS DS', 'ns');
+render_band(T, P, 'FR1C',   'FR1(C) 6.75 GHz', ...
+            'fig06_OmniDS_merged7', 'omni_ds_ns', 'omni_ds_ns', ...
+            'Omni RMS DS', 'ns');
 end
 
-sgtitle('Omni RMS Delay Spread CDFs with DKW 95% bands');
 
-save_figure(fig, P.out_dir, 'fig06_ds_cdf');
+% ===========================================================================
+function render_band(T, P, band, band_label, stem, nyu_col, usc_col, ...
+                     metric_label, unit)
+sub = T(T.band == string(band), :);
+fig = figure('Position', [100 100 1300 500], 'Color', 'w');
+
+% Subplot 1: LOS
+subplot(1, 2, 1);
+draw_panel(sub(sub.loc_type == "LOS", :), nyu_col, usc_col, ...
+           sprintf('%s CDF (LOS) - %s', metric_label, band_label), ...
+           sprintf('%s (%s)', metric_label, unit));
+
+% Subplot 2: NLOS
+subplot(1, 2, 2);
+draw_panel(sub(sub.loc_type == "NLOS", :), nyu_col, usc_col, ...
+           sprintf('%s CDF (NLOS) - %s', metric_label, band_label), ...
+           sprintf('%s (%s)', metric_label, unit));
+
+save_figure(fig, P.out_dir, stem);
 close(fig);
 end
 
 
-% ============================================================================
+function draw_panel(band_df, nyu_col, usc_col, ttl, xlab)
+% Draw one (LOS or NLOS) panel: NYU / USC / Pooled ECDF + DKW 95 % bands.
+% Mirrors python fig06_ds_cdf._panel.
+
+nyu_vals    = band_df.(nyu_col)(band_df.institution == "NYU");
+usc_vals    = band_df.(usc_col)(band_df.institution == "USC");
+pooled_vals = [nyu_vals; usc_vals];
+
+c_nyu    = [0.00 0.45 0.74];
+c_usc    = [0.85 0.33 0.10];
+c_pooled = [0.20 0.20 0.20];
+
+hold on; grid on; box on;
+curves = { 'NYU',    nyu_vals,    c_nyu,    '-'; ...
+           'USC',    usc_vals,    c_usc,    '--'; ...
+           'Pooled', pooled_vals, c_pooled, '-' };
+for k = 1:size(curves, 1)
+    label  = curves{k, 1};
+    vals   = curves{k, 2};
+    color  = curves{k, 3};
+    ls     = curves{k, 4};
+    draw_ecdf_with_dkw(vals, color, ls, label);
+end
+xlabel(xlab);
+ylabel('CDF');
+ylim([0 1]);
+title(ttl);
+legend('Location', 'southeast', 'FontSize', 9);
+end
+
+
 function draw_ecdf_with_dkw(x, color, ls, label)
-% Draw a staircase ECDF and shade the DKW 95% uniform band around it.
+% Draw staircase ECDF + shaded DKW band (alpha 0.12).
+% Mirrors python fig06_ds_cdf._ecdf_with_dkw.
 x = double(x(:));
 x = x(isfinite(x) & x > 0);
 n = numel(x);
 if n == 0, return, end
 xs  = sort(x);
 fs  = (1:n)' / n;
-eps = dkw_band(n, 0.05);
+eps_d = dkw_band(n, 0.05);
+fs_lo = max(fs - eps_d, 0);
+fs_hi = min(fs + eps_d, 1);
 
-fs_lo = max(fs - eps, 0);
-fs_hi = min(fs + eps, 1);
-
-% Shade the band first so the main line sits on top.
+% Shaded DKW band (plot BEFORE the step line so it sits underneath).
 xx = [xs; flipud(xs)];
 yy = [fs_lo; flipud(fs_hi)];
-fill(xx, yy, color, 'FaceAlpha', 0.15, 'EdgeColor', 'none', ...
+fill(xx, yy, color, 'FaceAlpha', 0.12, 'EdgeColor', 'none', ...
      'HandleVisibility', 'off');
 stairs(xs, fs, 'Color', color, 'LineStyle', ls, 'LineWidth', 2.0, ...
-       'DisplayName', label);
+       'DisplayName', sprintf('%s (n=%d)', label, n));
 end
