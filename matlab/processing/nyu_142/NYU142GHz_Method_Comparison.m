@@ -54,6 +54,11 @@ params.TX_Ant_Gain_dB = 27;        % TX antenna gain
 params.RX_Ant_Gain_dB = 27;        % RX antenna gain
 params.Frequency_GHz = 142;        % Carrier frequency
 params.dilation_factor = 20;       % Samples per ns (NYU's standard)
+% Optional delay gate for DS computation (parity with USC pipelines).
+% Set to finite value (e.g. 966.67) to enable USC-style gating; default Inf
+% preserves the historical NYU behavior (no time-domain gate, only the
+% per-directional PDP power threshold max(peak-25, NF+5) upstream).
+params.DS_DELAY_GATE_NS = Inf;
 
 % =========================================================================
 % LOAD TX POWER LOOKUP TABLE FROM CSV
@@ -276,8 +281,8 @@ for iFile = 1:nFiles
     % =====================================================================
     % STEP 5: Compute Delay Spread
     % =====================================================================
-    results.DS_NYU(iFile) = compute_RMS_DS(delays_ns, OmniPDP_NYU);
-    results.DS_USC(iFile) = compute_RMS_DS(delays_ns, OmniPDP_USC);
+    results.DS_NYU(iFile) = compute_RMS_DS(delays_ns, OmniPDP_NYU, params.DS_DELAY_GATE_NS);
+    results.DS_USC(iFile) = compute_RMS_DS(delays_ns, OmniPDP_USC, params.DS_DELAY_GATE_NS);
 
     % =====================================================================
     % STEP 6: Compute Angular Spread - NYU Method (with PAS threshold + antenna pattern expansion)
@@ -1373,25 +1378,37 @@ function [OmniPDP, delays_ns] = compute_omni_USC(TRpdpSet, params)
     delays_ns = (0:pdp_len-1)' / params.dilation_factor;
 end
 
-function rmsDS = compute_RMS_DS(delays_ns, PDP_lin)
-    % Compute RMS Delay Spread
+function rmsDS = compute_RMS_DS(delays_ns, PDP_lin, tgate_ns)
+    % Compute RMS Delay Spread (with optional delay gating)
     % Based on NYU's computeDSonMPC.m
+    %
+    % Optional arg `tgate_ns`: if provided, samples with delays_ns > tgate_ns
+    % are excluded from the DS computation. Mirrors the USC-side
+    % USCprocessUSCdata/rms_delay_spread_calc.m behavior, which the paper
+    % text describes as "tau_gate = 966.67 ns" for 145.5 GHz. When tgate_ns
+    % is Inf or omitted the call is backwards-compatible.
+
+    if nargin < 3 || isempty(tgate_ns), tgate_ns = Inf; end
 
     if isempty(PDP_lin) || sum(PDP_lin) <= 0
         rmsDS = 0;
         return;
     end
 
-    % Normalize weights
+    % Apply delay gate (NYU pipeline previously had no time-domain gate;
+    % this matches the USC-side implementation for cross-processing parity).
+    gate_mask = (delays_ns(:) <= tgate_ns);
+    PDP_lin   = PDP_lin(:) .* gate_mask;
+    delays_ns = delays_ns(:);
+
+    if sum(PDP_lin) <= 0
+        rmsDS = 0;
+        return;
+    end
+
     weights = PDP_lin / sum(PDP_lin);
-
-    % Mean delay
-    mean_delay = sum(delays_ns .* weights);
-
-    % Second moment
+    mean_delay    = sum(delays_ns    .* weights);
     second_moment = sum((delays_ns.^2) .* weights);
-
-    % RMS DS
     variance = second_moment - mean_delay^2;
     if variance < 0
         variance = 0;  % Numerical protection

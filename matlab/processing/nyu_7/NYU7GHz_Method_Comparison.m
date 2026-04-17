@@ -68,6 +68,10 @@ params.TX_Ant_Gain_dB = 15;        % TX antenna gain (dBi)
 params.RX_Ant_Gain_dB = 15;        % RX antenna gain (dBi)
 params.Frequency_GHz = 6.75;       % Carrier frequency
 params.HPBW = 30;                  % Half-power beamwidth in degrees
+% Optional delay gate for DS computation (parity with USC pipelines).
+% Set to finite value to enable USC-style gating; default Inf preserves
+% historical NYU behavior (no time-domain gate).
+params.DS_DELAY_GATE_NS = Inf;
 
 % =========================================================================
 % LOAD TX POWER LOOKUP TABLE FROM CSV
@@ -330,9 +334,9 @@ for iFile = 1:nFiles
         results.PL_NYUthr_pDM(iFile) = NaN;
     end
 
-    % Delay Spread (NYU threshold)
-    results.DS_NYUthr_SUM(iFile) = compute_RMS_DS(delays_ns, OmniPDP_Nt_SUM);
-    results.DS_NYUthr_pDM(iFile) = compute_RMS_DS(delays_ns, OmniPDP_Nt_pDM);
+    % Delay Spread (NYU threshold) — with optional delay gate for USC-parity
+    results.DS_NYUthr_SUM(iFile) = compute_RMS_DS(delays_ns, OmniPDP_Nt_SUM, params.DS_DELAY_GATE_NS);
+    results.DS_NYUthr_pDM(iFile) = compute_RMS_DS(delays_ns, OmniPDP_Nt_pDM, params.DS_DELAY_GATE_NS);
 
     % Angular Spread — NYU AS method (NYU threshold)
     [results.ASA_NYUthr_N10(iFile), ~, ~] = compute_AS_NYU(AOA_angles_Nt, AOA_powers_Nt, config.PAS_threshold_1, config.multipath_low_bound, antenna_azi, params.HPBW);
@@ -375,9 +379,9 @@ for iFile = 1:nFiles
         results.PL_USCthr_pDM(iFile) = NaN;
     end
 
-    % Delay Spread (USC threshold)
-    results.DS_USCthr_SUM(iFile) = compute_RMS_DS(delays_ns, OmniPDP_Ut_SUM);
-    results.DS_USCthr_pDM(iFile) = compute_RMS_DS(delays_ns, OmniPDP_Ut_pDM);
+    % Delay Spread (USC threshold) — with optional delay gate for USC-parity
+    results.DS_USCthr_SUM(iFile) = compute_RMS_DS(delays_ns, OmniPDP_Ut_SUM, params.DS_DELAY_GATE_NS);
+    results.DS_USCthr_pDM(iFile) = compute_RMS_DS(delays_ns, OmniPDP_Ut_pDM, params.DS_DELAY_GATE_NS);
 
     % Angular Spread — NYU AS method (USC threshold)
     [results.ASA_USCthr_N10(iFile), ~, ~] = compute_AS_NYU(AOA_angles_Ut, AOA_powers_Ut, config.PAS_threshold_1, config.multipath_low_bound, antenna_azi, params.HPBW);
@@ -1551,10 +1555,28 @@ function [OmniPDP, delays_ns] = compute_omni_USC(TRpdpSet, params)
     delays_ns = (0:pdp_len-1)' / params.dilation_factor;
 end
 
-function rmsDS = compute_RMS_DS(delays_ns, PDP_lin)
-    % Compute RMS Delay Spread
+function rmsDS = compute_RMS_DS(delays_ns, PDP_lin, tgate_ns)
+    % Compute RMS Delay Spread (with optional delay gating)
+    %
+    % Optional arg `tgate_ns`: if provided, samples with delays_ns > tgate_ns
+    % are excluded from the DS computation. Mirrors the USC-side
+    % USCprocessUSCdata/rms_delay_spread_calc.m behavior, which the paper
+    % text describes as "tau_gate = 966.67 ns" for 145.5 GHz. When tgate_ns
+    % is Inf or omitted the call is backwards-compatible.
+
+    if nargin < 3 || isempty(tgate_ns), tgate_ns = Inf; end
 
     if isempty(PDP_lin) || sum(PDP_lin) <= 0
+        rmsDS = 0;
+        return;
+    end
+
+    % Apply optional delay gate (parity with USC pipelines).
+    gate_mask = (delays_ns(:) <= tgate_ns);
+    PDP_lin   = PDP_lin(:) .* gate_mask;
+    delays_ns = delays_ns(:);
+
+    if sum(PDP_lin) <= 0
         rmsDS = 0;
         return;
     end
