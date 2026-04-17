@@ -1,6 +1,10 @@
-# Data — never commit measurement data
+# Data — raw measurement data stays out; small point-data xlsx are bundled
 data/*
 !data/README.md
+!data/point_data/
+data/point_data/*
+!data/point_data/*.xlsx
+!data/point_data/README.md
 *.mat
 **/NYU_Data/**
 **/USC_Data/**

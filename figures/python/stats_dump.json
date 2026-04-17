@@ -505,6 +505,15 @@
           "ASD_CFI_width_d": 21.895545109903555
         }
       ]
+    },
+    "table_dumps_4_8_9_10_11": {
+      "outputs": {
+        "table04_N1_142": "D:\\unified-channel-analysis\\figures\\python\\table04_N1_142.csv",
+        "table08_U3_145": "D:\\unified-channel-analysis\\figures\\python\\table08_U3_145.csv",
+        "table09_U3_7": "D:\\unified-channel-analysis\\figures\\python\\table09_U3_7.csv",
+        "table10_N3_142": "D:\\unified-channel-analysis\\figures\\python\\table10_N3_142.csv",
+        "table11_N3_7": "D:\\unified-channel-analysis\\figures\\python\\table11_N3_7.csv"
+      }
     }
   },
   "errors": {}

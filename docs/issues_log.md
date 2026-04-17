@@ -33,6 +33,12 @@ Tracks ambiguities, unmapped scripts, and best-judgment decisions made during th
 
 - `USC/USC_Data/` and `NYU/NYU_Data/` contain raw directional PDP files (not loaded by the Python pipeline). The existing point-data xlsx tables are derived from these. If a future user wants to regenerate point-data tables, the MATLAB scripts in Codebase A and B under `USCprocess*/` and `NYUprocess*/` are the authoritative path.
 
+## Post-handoff fixes (2026-04-17 follow-up)
+
+- *S:high / fixed* — MATLAB `load_point_data.m` had `sec_row` and `metric_row` swapped in `read_two_row_header`. The xlsx has row 2 = metrics (with merged-cell "Omni PL" etc. spanning three columns) and row 3 = threshold labels. The bug caused `Error: Section "NYU orig" not found` when `run_all.m` was executed. Fixed in the same file; the Python reference was correct and unchanged.
+- *S:info* — Point-data xlsx files are now bundled under `data/point_data/` (6 files, ~100 kB total). Both the Python and MATLAB loaders default to that in-repo location; `CHANNEL_DATA_ROOT` env var still overrides. The repo is now self-contained — no external data mount required to run `channel-run-all` or MATLAB `run_all`.
+- *S:info* — Python drivers added for Tables 4, 8, 9, 10, 11 (previously only Tables 6 and 7 were regenerated). These dump the bundled xlsx content to CSV under `figures/python/` so readers can diff directly against the paper tables.
+
 ## Source-data anomalies found during port
 
 - *S:med* — `142_UMi_N3.xlsx` row `TX4-RX37` has `Omni ASA — NYU thres` = `714.0` where the other columns (`NYU orig`, `USC thres`) agree on `7.14` / `7.14`. Almost certainly a lost decimal point. This single cell inflates the computed RMSE (Table 6 ASA NYU-data/NYU-thr) from the paper's reported `0°` to `~136°`. We do not mutate the input file; instead, `figures/table06_rmse.py` drops this location from the ASA RMSE computation (flagged with a Python-side filter) and the discrepancy is recorded here.

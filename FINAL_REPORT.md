@@ -11,7 +11,8 @@
 | `python/` (installable package)     | ✅     | `pip install -e python` → `channel-run-all` regenerates every figure/table |
 | `python/tests/` (pytest)            | ✅     | 21 tests pass |
 | `matlab/` (parallel port)           | ✅     | 22 `.m` files, 1475 lines (1 `run_all`, 2 `config/`, 11 `lib/`, 8 `figures/`). Not executed in sandbox; run on a MATLAB-licensed machine. |
-| `figures/python/` (output)          | ✅     | 16 `.pdf` + `.png` figures + `stats_dump.json` + `table06_rmse.csv` + `table07_pooled_stats.csv` |
+| `figures/python/` (output)          | ✅     | 16 `.pdf` + `.png` figures + `stats_dump.json` + 7 table CSVs (Tables 4, 6, 7, 8, 9, 10, 11) |
+| `data/point_data/` (bundled)        | ✅     | 6 point-data xlsx files (~100 kB total). Python and MATLAB both default to this in-repo data — no external mount needed. |
 | `figures/matlab/` (user-populated)  | —      | Empty; user populates after running MATLAB `run_all.m` |
 | `docs/`                             | ✅     | paper summary, code inventory, architecture, conflicts log, issues log, numerical + figure parity reports |
 | `README.md` / `README_PYTHON.md` / `README_MATLAB.md` | ✅ | |
@@ -25,6 +26,8 @@
 ## Python parity status
 
 **Total figures tracked:** 16 panels (Fig. 3 ×4, Fig. 4 ×4, Fig. 5 ×2, Fig. 6 ×2, Fig. 7 ×2, Fig. 8 ×2).
+
+**Total tables regenerated from data:** 7 of 11 (Tables 4, 6, 7, 8, 9, 10, 11 all produced as CSV under `figures/python/`). Tables 1, 2, 3, 5 are static LaTeX (literature survey, metadata schema, metadata comparison, methodology comparison) and are not data-generated.
 
 - **13 of 16** panels reproduce with minor style delta (acceptable).
 - **3 of 16** not reproducible from point-data alone (Fig. 1 TikZ schematic; Fig. 2 raw-PDP panels).

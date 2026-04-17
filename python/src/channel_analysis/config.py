@@ -8,34 +8,21 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-# --- Input data (read-only; not shipped with the repo) -----------------------
-DATA_ROOT = Path(
-    os.environ.get(
-        "CHANNEL_DATA_ROOT",
-        r"D:/NaveedDipankarMingjunJorgeShare/NaveedDipankarMingjunJorgeShare",
-    )
-)
+# --- Input data (point-data tables bundled under data/point_data/) -----------
+# The point-data xlsx files are the multi-institution interchange format and
+# are shipped with the repo under data/point_data/. Set CHANNEL_DATA_ROOT to
+# a folder of your own if you want to override (must contain the same file
+# names; see data/point_data/README.md).
+_DEFAULT_DATA_ROOT = Path(__file__).resolve().parents[3] / "data" / "point_data"
+DATA_ROOT = Path(os.environ.get("CHANNEL_DATA_ROOT", _DEFAULT_DATA_ROOT))
 
-# Per-institution point-data tables. These are the canonical inputs.
 DATA_PATHS: dict[str, Path] = {
-    # NYU original point-data (N1), produced by NYU's native pipeline
-    "n1_142_xlsx": DATA_ROOT / "USC/USCprocessNYUdata/OriginalNYU_pointData/142_UMi.xlsx",
-    "n1_7_xlsx": DATA_ROOT / "USC/USCprocessNYUdata/OriginalNYU_pointData/7_UMi.xlsx",
-    # USC original point-data (U1), produced by USC's native pipeline
-    "u1_142_los_csv": DATA_ROOT
-    / "NYU/NYUprocessUSCdata/OriginalUSC-PointData/usc_microcellular_LOS_metrics.csv",
-    "u1_142_nlos_csv": DATA_ROOT
-    / "NYU/NYUprocessUSCdata/OriginalUSC-PointData/usc_microcellular_NLOS_metrics.csv",
-    "u1_7_los_csv": DATA_ROOT
-    / "NYU/NYUprocessUSCdata/OriginalUSC-PointData/usc_microcellular_LOS_metrics7.csv",
-    "u1_7_nlos_csv": DATA_ROOT
-    / "NYU/NYUprocessUSCdata/OriginalUSC-PointData/usc_microcellular_NLOS_metrics7.csv",
-    # Cross-processed tables (N3, U3): partner-applied processing
-    "n3_142_xlsx": DATA_ROOT / "USC/USCprocessNYUdata/OriginalNYU_pointData/142_UMi_N3.xlsx",
-    "n3_7_xlsx": DATA_ROOT / "USC/USCprocessNYUdata/OriginalNYU_pointData/7_UMi_N3.xlsx",
-    "u3_142_xlsx": DATA_ROOT
-    / "NYU/NYUprocessUSCdata/OriginalUSC-PointData/142_UMi_U3.xlsx",
-    "u3_7_xlsx": DATA_ROOT / "NYU/NYUprocessUSCdata/OriginalUSC-PointData/7_UMi_U3.xlsx",
+    "n1_142_xlsx": DATA_ROOT / "N1_142_UMi.xlsx",
+    "n1_7_xlsx":   DATA_ROOT / "N1_7_UMi.xlsx",
+    "n3_142_xlsx": DATA_ROOT / "N3_142_UMi.xlsx",
+    "n3_7_xlsx":   DATA_ROOT / "N3_7_UMi.xlsx",
+    "u3_142_xlsx": DATA_ROOT / "U3_142_UMi.xlsx",
+    "u3_7_xlsx":   DATA_ROOT / "U3_7_UMi.xlsx",
 }
 
 # --- Output ------------------------------------------------------------------

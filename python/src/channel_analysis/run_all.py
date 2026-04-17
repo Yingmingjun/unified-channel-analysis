@@ -24,6 +24,7 @@ from .figures import (
     fig08_asd_cdf,
     table06_rmse,
     table07_pooled_stats,
+    table_dumps,
 )
 
 DRIVERS = [
@@ -35,6 +36,7 @@ DRIVERS = [
     ("fig08_asd_cdf", fig08_asd_cdf.render),
     ("table06_rmse", table06_rmse.render),
     ("table07_pooled_stats", table07_pooled_stats.render),
+    ("table_dumps_4_8_9_10_11", table_dumps.render),
 ]
 
 

@@ -190,9 +190,17 @@ function raw = read_two_row_header(xlsx_path, sheet)
 % top-left anchor (the rest of a merged range reads as <missing>).
 cells = readcell(char(xlsx_path), 'Sheet', char(sheet));
 
-% Section row = row 2 (forward fill), Metric row = row 3.
-sec_row    = forward_fill_row(cells(2, :));
-metric_row = cells(3, :);
+% The xlsx structure is:
+%   Row 1 : free-form title (e.g. "Point-Data table implementing ...")
+%   Row 2 : metric group labels, with MERGED cells spanning 3 columns each
+%           (e.g. "Omni PL", "Omni DS", "Omni ASA", "Omni ASD"). We forward-
+%           fill to propagate the label across the merged range.
+%   Row 3 : threshold / section labels ("NYU thres", "USC thres",
+%           "NYU orig. (N1)" / "USC orig. (U1)").  No merging.
+%   Row 4+: data.
+% find_col() will later pair (metric, section) to locate a single column.
+metric_row = forward_fill_row(cells(2, :));   % metrics live on row 2
+sec_row    = cells(3, :);                     % threshold labels on row 3
 
 % Normalize to string arrays.
 sec_row    = cellfun(@cell_to_string, sec_row,    'UniformOutput', false);
