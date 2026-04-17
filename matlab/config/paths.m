@@ -109,10 +109,13 @@ P.cb_a_usc_azicut            = fullfile(P.cb_a_usc_antenna_root, 'aziCut.mat');
 P.cb_a_usc_elevcut           = fullfile(P.cb_a_usc_antenna_root, 'elevCut.mat');
 
 % -- Output locations for CB-A regenerated xlsx ------------------------------
-% The CB-A scripts write to relative paths like 'OriginalUSC-PointData/7_UMi_U3.xlsx';
-% redirect to <repo>/data/point_data/ so the paper-figure drivers see them.
-P.cb_a_out_u3_7_xlsx         = fullfile(repo_root, 'data', 'point_data', '7_UMi_U3.xlsx');
-P.cb_a_out_n3_7_xlsx         = fullfile(repo_root, 'data', 'point_data', '7_UMi_N3.xlsx');
+% The CB-A scripts write to a "_cba_regenerated" side-by-side filename so
+% they do NOT clobber the authoritative paper-typesetting xlsx snapshots.
+% Compare the regenerated vs bundled values manually; if Dipankar's scripts
+% now produce paper-matching values, swap the file names to reproduce
+% Table VI cells for 6.75 GHz USC-data.
+P.cb_a_out_u3_7_xlsx         = fullfile(repo_root, 'data', 'point_data', '7_UMi_U3_cba_regenerated.xlsx');
+P.cb_a_out_n3_7_xlsx         = fullfile(repo_root, 'data', 'point_data', '7_UMi_N3_cba_regenerated.xlsx');
 
 % -- Output directory for all paper figures and tables -----------------------
 P.out_dir       = fullfile(repo_root, 'figures', 'matlab');
