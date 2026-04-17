@@ -1,0 +1,47 @@
+# Data — never commit measurement data
+data/*
+!data/README.md
+*.mat
+**/NYU_Data/**
+**/USC_Data/**
+**/NYU_Data_thresholded/**
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+build/
+dist/
+*.egg
+
+# MATLAB
+*.asv
+*.m~
+.mat
+matlab/figures/*.pdf
+matlab/figures/*.png
+matlab/figures/*.fig
+matlab/figures/*.csv
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.vscode/
+.idea/
+
+# Build / test outputs
+coverage.xml
+htmlcov/
+.coverage
+.tox/
+
+# Figure scratch (allow regenerated outputs under figures/python/)
+# but keep stats_dump.json committable if needed
+figures/python/.cache/
+figures/matlab/.cache/
