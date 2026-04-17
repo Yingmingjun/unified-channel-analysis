@@ -1,311 +1,301 @@
 {
   "results": {
     "fig03_bland_altman_pl_ds": {
-      "NYU_subTHz_pl_db": {
-        "bias": -1.4554050657378517,
-        "sd": 0.8578585102619031,
-        "n": 27,
-        "loa_low": -3.136807745851182,
-        "loa_high": 0.22599761437547827
+      "BA_PL": {
+        "N3": {
+          "bias": 1.7609736901590727,
+          "sd": 0.625991898964007,
+          "n": 27,
+          "loa_low": 0.534029568189619,
+          "loa_high": 2.9879178121285266
+        },
+        "U3": {
+          "bias": 5.836709265620162,
+          "sd": 1.024277563081893,
+          "n": 26,
+          "loa_low": 3.829125241979652,
+          "loa_high": 7.844293289260673
+        }
       },
-      "NYU_subTHz_omni_ds_ns": {
-        "bias": -0.3794916191849256,
-        "sd": 30.60888910745274,
-        "n": 27,
-        "loa_low": -60.3729142697923,
-        "loa_high": 59.613931031422446
+      "BA_DS": {
+        "N3": {
+          "bias": 19.574375380745668,
+          "sd": 23.29100142789986,
+          "n": 27,
+          "loa_low": -26.075987417938062,
+          "loa_high": 65.2247381794294
+        },
+        "U3": {
+          "bias": 46.703738591924576,
+          "sd": 26.823423516982384,
+          "n": 26,
+          "loa_low": -5.870171501360893,
+          "loa_high": 99.27764868521004
+        }
       },
-      "USC_subTHz_pl_db": {
-        "bias": 3.03314298444615,
-        "sd": 1.5357705044733219,
-        "n": 26,
-        "loa_low": 0.0230327956784393,
-        "loa_high": 6.043253173213861
+      "BA_PL7": {
+        "N3": {
+          "bias": 3.5322091068601673,
+          "sd": 1.410329703629827,
+          "n": 18,
+          "loa_low": 0.7679628877457065,
+          "loa_high": 6.2964553259746285
+        },
+        "U3": {
+          "bias": 6.653677782469952,
+          "sd": 2.5274711828792173,
+          "n": 17,
+          "loa_low": 1.699834264026686,
+          "loa_high": 11.607521300913218
+        }
       },
-      "USC_subTHz_omni_ds_ns": {
-        "bias": -21.40442080086124,
-        "sd": 58.6391988911185,
-        "n": 26,
-        "loa_low": -136.3372506274535,
-        "loa_high": 93.52840902573101
-      },
-      "NYU_FR1C_pl_db": {
-        "bias": -2.904914281749964,
-        "sd": 1.5061828301549507,
-        "n": 18,
-        "loa_low": -5.857032628853667,
-        "loa_high": 0.04720406535373911
-      },
-      "NYU_FR1C_omni_ds_ns": {
-        "bias": -7.868813788112163,
-        "sd": 12.80431205298888,
-        "n": 18,
-        "loa_low": -32.965265411970364,
-        "loa_high": 17.22763783574604
-      },
-      "USC_FR1C_pl_db": {
-        "bias": 2.005923266080789,
-        "sd": 1.9105045615699954,
-        "n": 17,
-        "loa_low": -1.738665674596402,
-        "loa_high": 5.75051220675798
-      },
-      "USC_FR1C_omni_ds_ns": {
-        "bias": 9.203356379193814,
-        "sd": 7.997734594171932,
-        "n": 17,
-        "loa_low": -6.472203425383174,
-        "loa_high": 24.8789161837708
+      "BA_DS7": {
+        "N3": {
+          "bias": 13.622722481065605,
+          "sd": 14.412218404878166,
+          "n": 18,
+          "loa_low": -14.6252255924956,
+          "loa_high": 41.87067055462681
+        },
+        "U3": {
+          "bias": 7.945026335567708,
+          "sd": 25.680344852936727,
+          "n": 17,
+          "loa_low": -42.38844957618827,
+          "loa_high": 58.27850224732369
+        }
       }
     },
     "fig04_bland_altman_as": {
-      "NYU_subTHz_omni_asa_d": {
-        "bias": 23.078518518518518,
-        "sd": 136.30618016644345,
-        "n": 27
+      "BA_ASA": {
+        "N3": {
+          "bias": 3.4735840761646326,
+          "sd": 8.038002617736005,
+          "n": 27
+        },
+        "U3": {
+          "bias": 4.34969808369459,
+          "sd": 4.386803138366654,
+          "n": 26
+        }
       },
-      "NYU_subTHz_omni_asd_d": {
-        "bias": -0.35592592592592626,
-        "sd": 4.2210172482100345,
-        "n": 27
+      "BA_ASD": {
+        "N3": {
+          "bias": 0.3531466564493949,
+          "sd": 4.2208212311282685,
+          "n": 27
+        },
+        "U3": {
+          "bias": 0.3807156229772126,
+          "sd": 2.014260998885605,
+          "n": 26
+        }
       },
-      "USC_subTHz_omni_asa_d": {
-        "bias": -4.350384615384614,
-        "sd": 4.387860964770174,
-        "n": 26
+      "BA_ASA7": {
+        "N3": {
+          "bias": -0.41775632003258983,
+          "sd": 4.44976306632364,
+          "n": 18
+        },
+        "U3": {
+          "bias": -1.573207868019356,
+          "sd": 5.224490438709381,
+          "n": 17
+        }
       },
-      "USC_subTHz_omni_asd_d": {
-        "bias": -0.38038461538461504,
-        "sd": 2.0145440789801166,
-        "n": 26
-      },
-      "NYU_FR1C_omni_asa_d": {
-        "bias": 19.353333333333335,
-        "sd": 7.985680566967796,
-        "n": 18
-      },
-      "NYU_FR1C_omni_asd_d": {
-        "bias": 31.665000000000003,
-        "sd": 25.378881969070264,
-        "n": 18
-      },
-      "USC_FR1C_omni_asa_d": {
-        "bias": 1.5735294117647056,
-        "sd": 5.225631470425932,
-        "n": 17
-      },
-      "USC_FR1C_omni_asd_d": {
-        "bias": 2.520588235294117,
-        "sd": 1.2003097026821623,
-        "n": 17
+      "BA_ASD7": {
+        "N3": {
+          "bias": 0.5069284579113487,
+          "sd": 7.967388781409699,
+          "n": 18
+        },
+        "U3": {
+          "bias": -2.5193288801484264,
+          "sd": 1.200417300840273,
+          "n": 17
+        }
       }
     },
     "fig05_ci_pl_scatter": {
-      "subTHz_NYU_LOS": {
-        "PLE": 1.9580486703347242,
-        "sigma_SF_dB": 2.63297946592766,
-        "PLE_CFI_width": 0.15895506222319655,
-        "PLE_CFI_lo": 1.8845624488125488,
-        "PLE_CFI_hi": 2.0435175110357453
+      "subTHz": {
+        "NYU_LOS": {
+          "n": 16,
+          "PLE": 1.951975719065876,
+          "sigma_SF_dB": 2.6358555498661382,
+          "PLE_CFI_lo": 1.8763516268763294,
+          "PLE_CFI_hi": 2.033432230341499,
+          "PLE_CFI_width": 0.15708060346516972
+        },
+        "NYU_NLOS": {
+          "n": 11,
+          "PLE": 2.91259823799616,
+          "sigma_SF_dB": 8.280602484535802,
+          "PLE_CFI_lo": 2.6557464092202463,
+          "PLE_CFI_hi": 3.2092997842073996,
+          "PLE_CFI_width": 0.5535533749871533
+        },
+        "USC_LOS": {
+          "n": 13,
+          "PLE": 1.895650352005866,
+          "sigma_SF_dB": 0.857627146167339,
+          "PLE_CFI_lo": 1.871818701782213,
+          "PLE_CFI_hi": 1.9246521311150508,
+          "PLE_CFI_width": 0.052833429332837856
+        },
+        "USC_NLOS": {
+          "n": 13,
+          "PLE": 2.8292171127492884,
+          "sigma_SF_dB": 6.005646347462909,
+          "PLE_CFI_lo": 2.630762065687131,
+          "PLE_CFI_hi": 3.012503425687308,
+          "PLE_CFI_width": 0.38174136000017667
+        },
+        "Pooled_LOS": {
+          "n": 29,
+          "PLE": 1.9276572570308452,
+          "sigma_SF_dB": 2.0956723470882475,
+          "PLE_CFI_lo": 1.881982567311915,
+          "PLE_CFI_hi": 1.9796756012329144,
+          "PLE_CFI_width": 0.09769303392099937
+        },
+        "Pooled_NLOS": {
+          "n": 24,
+          "PLE": 2.869783773152588,
+          "sigma_SF_dB": 7.174141707413841,
+          "PLE_CFI_lo": 2.707994515976294,
+          "PLE_CFI_hi": 3.0267870852489347,
+          "PLE_CFI_width": 0.31879256927264077
+        }
       },
-      "subTHz_NYU_NLOS": {
-        "PLE": 2.918640231635703,
-        "sigma_SF_dB": 8.283912488285111,
-        "PLE_CFI_width": 0.5442894799376505,
-        "PLE_CFI_lo": 2.6683753697411547,
-        "PLE_CFI_hi": 3.2126648496788053
-      },
-      "subTHz_USC_LOS": {
-        "PLE": 1.8894343044630866,
-        "sigma_SF_dB": 0.8575383154778855,
-        "PLE_CFI_width": 0.05265808348242462,
-        "PLE_CFI_lo": 1.8656903262534326,
-        "PLE_CFI_hi": 1.9183484097358572
-      },
-      "subTHz_USC_NLOS": {
-        "PLE": 2.822926283786378,
-        "sigma_SF_dB": 6.002888483699485,
-        "PLE_CFI_width": 0.3814256776174685,
-        "PLE_CFI_lo": 2.6244571569775754,
-        "PLE_CFI_hi": 3.005882834595044
-      },
-      "subTHz_Pooled_LOS": {
-        "PLE": 1.9276572570308452,
-        "sigma_SF_dB": 2.0956723470882475,
-        "PLE_CFI_width": 0.09184596506014331,
-        "PLE_CFI_lo": 1.883396584548585,
-        "PLE_CFI_hi": 1.9752425496087282
-      },
-      "subTHz_Pooled_NLOS": {
-        "PLE": 2.869783773152588,
-        "sigma_SF_dB": 7.174141707413841,
-        "PLE_CFI_width": 0.32356547989768414,
-        "PLE_CFI_lo": 2.703559029898893,
-        "PLE_CFI_hi": 3.027124509796577
-      },
-      "FR1C_NYU_LOS": {
-        "PLE": 1.7938948157829477,
-        "sigma_SF_dB": 2.5583305806161363,
-        "PLE_CFI_width": 0.1909670451967822,
-        "PLE_CFI_lo": 1.6911524074993884,
-        "PLE_CFI_hi": 1.8821194526961706
-      },
-      "FR1C_NYU_NLOS": {
-        "PLE": 2.5640327889164594,
-        "sigma_SF_dB": 6.512785253827176,
-        "PLE_CFI_width": 0.3677815146486325,
-        "PLE_CFI_lo": 2.3994645070464813,
-        "PLE_CFI_hi": 2.767246021695114
-      },
-      "FR1C_USC_LOS": {
-        "PLE": 1.915360461348366,
-        "sigma_SF_dB": 1.4243558440277804,
-        "PLE_CFI_width": 0.1179330643276515,
-        "PLE_CFI_lo": 1.8567236558305429,
-        "PLE_CFI_hi": 1.9746567201581944
-      },
-      "FR1C_USC_NLOS": {
-        "PLE": 2.615668716066946,
-        "sigma_SF_dB": 7.332635213927674,
-        "PLE_CFI_width": 0.36535491932680353,
-        "PLE_CFI_lo": 2.4072585224741934,
-        "PLE_CFI_hi": 2.772613441800997
-      },
-      "FR1C_Pooled_LOS": {
-        "PLE": 1.8495823169906878,
-        "sigma_SF_dB": 2.44401830212288,
-        "PLE_CFI_width": 0.1327128734793641,
-        "PLE_CFI_lo": 1.7773119207304107,
-        "PLE_CFI_hi": 1.9100247942097748
-      },
-      "FR1C_Pooled_NLOS": {
-        "PLE": 2.590651949985196,
-        "sigma_SF_dB": 6.958334894549033,
-        "PLE_CFI_width": 0.2757135341852881,
-        "PLE_CFI_lo": 2.451053053468784,
-        "PLE_CFI_hi": 2.726766587654072
+      "FR1C": {
+        "NYU_LOS": {
+          "n": 6,
+          "PLE": 1.8101077776881622,
+          "sigma_SF_dB": 2.612795337935216,
+          "PLE_CFI_lo": 1.6962444689005556,
+          "PLE_CFI_hi": 1.9067129107490945,
+          "PLE_CFI_width": 0.21046844184853897
+        },
+        "NYU_NLOS": {
+          "n": 12,
+          "PLE": 2.501765684323395,
+          "sigma_SF_dB": 7.905745794222734,
+          "PLE_CFI_lo": 2.2946254642188295,
+          "PLE_CFI_hi": 2.729780112302304,
+          "PLE_CFI_width": 0.4351546480834747
+        },
+        "USC_LOS": {
+          "n": 6,
+          "PLE": 1.915360461348366,
+          "sigma_SF_dB": 1.4243558440277804,
+          "PLE_CFI_lo": 1.8567236558305429,
+          "PLE_CFI_hi": 1.9746567201581944,
+          "PLE_CFI_width": 0.1179330643276515
+        },
+        "USC_NLOS": {
+          "n": 11,
+          "PLE": 2.615668716066946,
+          "sigma_SF_dB": 7.332635213927674,
+          "PLE_CFI_lo": 2.4072585224741934,
+          "PLE_CFI_hi": 2.772613441800997,
+          "PLE_CFI_width": 0.36535491932680353
+        },
+        "Pooled_LOS": {
+          "n": 12,
+          "PLE": 1.862240725286813,
+          "sigma_SF_dB": 2.361020863787882,
+          "PLE_CFI_lo": 1.7895324919810482,
+          "PLE_CFI_hi": 1.92210049896941,
+          "PLE_CFI_width": 0.1325680069883617
+        },
+        "Pooled_NLOS": {
+          "n": 23,
+          "PLE": 2.558380822488027,
+          "sigma_SF_dB": 7.739603867145602,
+          "PLE_CFI_lo": 2.4064986589554587,
+          "PLE_CFI_hi": 2.689864482917755,
+          "PLE_CFI_width": 0.2833658239622965
+        }
       }
     },
     "fig06_ds_cdf": {
       "subTHz": {
-        "NYU": {
-          "n": 27,
-          "median_ns": 11.9597345851095
-        },
-        "USC": {
-          "n": 26,
-          "median_ns": 21.68050197550685
-        },
-        "Pooled": {
-          "n": 53,
-          "median_ns": 13.6603744679624
-        }
+        "n_LOS": 29,
+        "n_NLOS": 24
       },
       "FR1C": {
-        "NYU": {
-          "n": 18,
-          "median_ns": 57.8530358605195
-        },
-        "USC": {
-          "n": 17,
-          "median_ns": 12.5178715583259
-        },
-        "Pooled": {
-          "n": 35,
-          "median_ns": 27.1949709514732
-        }
+        "n_LOS": 12,
+        "n_NLOS": 23
       }
     },
-    "fig07_asa_cdf": {
-      "subTHz": {
-        "NYU": 27,
-        "USC": 26,
-        "Pooled": 53
-      },
-      "FR1C": {
-        "NYU": 18,
-        "USC": 17,
-        "Pooled": 35
-      }
-    },
-    "fig08_asd_cdf": {
-      "subTHz": {
-        "NYU": 27,
-        "USC": 26,
-        "Pooled": 53
-      },
-      "FR1C": {
-        "NYU": 18,
-        "USC": 17,
-        "Pooled": 35
-      }
-    },
+    "fig07_asa_cdf": {},
+    "fig08_asd_cdf": {},
     "table06_rmse": {
       "table_csv": "D:\\unified-channel-analysis\\figures\\python\\table06_rmse.csv",
       "rows": [
         {
           "Band": "Sub-THz",
           "Metric": "PL [dB]",
-          "USC data \u2013 NYU thres": 3.3864188114308065,
-          "USC data \u2013 USC thres": 3.0075496707483547,
-          "NYU data \u2013 USC thres": 14.196069374254673,
-          "NYU data \u2013 NYU thres": 1.6813294702075174
+          "USC data - NYU thres": 3.386418811430807,
+          "USC data - USC thres": 3.0075496707483547,
+          "NYU data - USC thres": 14.196069374254673,
+          "NYU data - NYU thres": 1.6813294702075174
         },
         {
           "Band": "Sub-THz",
           "Metric": "DS [ns]",
-          "USC data \u2013 NYU thres": 61.35513618401438,
-          "USC data \u2013 USC thres": 4.706839950238248,
-          "NYU data \u2013 USC thres": 45.27235254550452,
-          "NYU data \u2013 NYU thres": 18.561391876398844
+          "USC data - NYU thres": 61.35513618401438,
+          "USC data - USC thres": 4.706839950238248,
+          "NYU data - USC thres": 45.27235254550452,
+          "NYU data - NYU thres": 18.561391876398844
         },
         {
           "Band": "Sub-THz",
           "Metric": "ASA [deg]",
-          "USC data \u2013 NYU thres": 6.118713728579537,
-          "USC data \u2013 USC thres": 0.0,
-          "NYU data \u2013 USC thres": 8.497727800875818,
-          "NYU data \u2013 NYU thres": 0.0
+          "USC data - NYU thres": 6.118713728579537,
+          "USC data - USC thres": 0.0,
+          "NYU data - USC thres": 8.497727800875818,
+          "NYU data - NYU thres": 0.0
         },
         {
           "Band": "Sub-THz",
           "Metric": "ASD [deg]",
-          "USC data \u2013 NYU thres": 2.0119087760325822,
-          "USC data \u2013 USC thres": 0.0019611613513817986,
-          "NYU data \u2013 USC thres": 4.1573767548156475,
-          "NYU data \u2013 NYU thres": 0.0
+          "USC data - NYU thres": 2.0119087760325822,
+          "USC data - USC thres": 0.0019611613513817986,
+          "NYU data - USC thres": 4.1573767548156475,
+          "NYU data - NYU thres": 0.0
         },
         {
           "Band": "6.75 GHz",
           "Metric": "PL [dB]",
-          "USC data \u2013 NYU thres": 2.7311258335361814,
-          "USC data \u2013 USC thres": 2.88940532603394,
-          "NYU data \u2013 USC thres": 3.681915317652589,
-          "NYU data \u2013 NYU thres": 3.2528573757132633
+          "USC data - NYU thres": 2.7311258335361814,
+          "USC data - USC thres": 2.88940532603394,
+          "NYU data - USC thres": 3.681915317652589,
+          "NYU data - NYU thres": 3.2528573757132633
         },
         {
           "Band": "6.75 GHz",
           "Metric": "DS [ns]",
-          "USC data \u2013 NYU thres": 12.037564257094731,
-          "USC data \u2013 USC thres": 4.2435588981975485,
-          "NYU data \u2013 USC thres": 32.54239644514963,
-          "NYU data \u2013 NYU thres": 14.7227810426395
+          "USC data - NYU thres": 12.037564257094731,
+          "USC data - USC thres": 4.243558898197548,
+          "NYU data - USC thres": 32.54239644514963,
+          "NYU data - NYU thres": 14.7227810426395
         },
         {
           "Band": "6.75 GHz",
           "Metric": "ASA [deg]",
-          "USC data \u2013 NYU thres": 5.308192890683785,
-          "USC data \u2013 USC thres": 0.0,
-          "NYU data \u2013 USC thres": 20.851373256135115,
-          "NYU data \u2013 NYU thres": 0.0
+          "USC data - NYU thres": 5.308192890683786,
+          "USC data - USC thres": 0.0,
+          "NYU data - USC thres": 20.851373256135115,
+          "NYU data - NYU thres": 0.0
         },
         {
           "Band": "6.75 GHz",
           "Metric": "ASD [deg]",
-          "USC data \u2013 NYU thres": 2.7765732159497274,
-          "USC data \u2013 USC thres": 0.0,
-          "NYU data \u2013 USC thres": 40.13698080047599,
-          "NYU data \u2013 NYU thres": 0.0
+          "USC data - NYU thres": 2.7765732159497274,
+          "USC data - USC thres": 0.0,
+          "NYU data - USC thres": 40.13698080047599,
+          "NYU data - NYU thres": 0.0
         }
       ]
     },
@@ -316,203 +306,191 @@
           "Band": "Sub-THz (142/145.5)",
           "Dataset": "NYU only",
           "LocType": "LOS",
-          "n_pl": 16,
-          "n_ds": 16,
-          "PLE": 1.9580486703347242,
-          "sigma_SF_dB": 2.63297946592766,
-          "PLE_CFI_width": 0.15895506222319655,
-          "DS_mean_ns": 14.543200789900535,
-          "DS_CFI_width_ns": 32.45009560972643,
-          "ASA_mean_d": 6.156854285959132,
-          "ASA_CFI_width_d": 8.613078597667753,
-          "ASD_mean_d": 5.067668231177192,
-          "ASD_CFI_width_d": 4.772910097097201
+          "n": 16,
+          "PLE": 1.9580486703347246,
+          "sigma_SF_dB": 2.6329794659276597,
+          "PLE_CFI_width": 0.15687840016755783,
+          "DS_mean_ns": 14.543200789900542,
+          "DS_CFI_width_ns": 32.73825206595755,
+          "ASA_mean_d": 6.160917215530377,
+          "ASA_CFI_width_d": 8.157583141400991,
+          "ASD_mean_d": 5.072009061068538,
+          "ASD_CFI_width_d": 4.691294910547837
         },
         {
           "Band": "Sub-THz (142/145.5)",
           "Dataset": "NYU only",
           "LocType": "NLOS",
-          "n_pl": 11,
-          "n_ds": 11,
-          "PLE": 2.918640231635703,
+          "n": 11,
+          "PLE": 2.9186402316357025,
           "sigma_SF_dB": 8.283912488285111,
-          "PLE_CFI_width": 0.5442894799376505,
+          "PLE_CFI_width": 0.5533950892884705,
           "DS_mean_ns": 30.989919585551753,
-          "DS_CFI_width_ns": 37.318453223418096,
-          "ASA_mean_d": 43.15622792835438,
-          "ASA_CFI_width_d": 36.19576416653974,
-          "ASD_mean_d": 8.715554677367368,
-          "ASD_CFI_width_d": 10.092345094488085
+          "DS_CFI_width_ns": 34.71659839264644,
+          "ASA_mean_d": 43.14890499147432,
+          "ASA_CFI_width_d": 35.937612725889494,
+          "ASD_mean_d": 8.71606003048434,
+          "ASD_CFI_width_d": 10.35726361698968
         },
         {
           "Band": "Sub-THz (142/145.5)",
           "Dataset": "USC only",
           "LocType": "LOS",
-          "n_pl": 13,
-          "n_ds": 13,
+          "n": 13,
           "PLE": 1.8894343044630866,
           "sigma_SF_dB": 0.8575383154778855,
           "PLE_CFI_width": 0.05265808348242462,
           "DS_mean_ns": 25.646828785551136,
           "DS_CFI_width_ns": 25.374993798148644,
-          "ASA_mean_d": 15.653608557606207,
-          "ASA_CFI_width_d": 7.173817243330184,
-          "ASD_mean_d": 10.96706025213132,
-          "ASD_CFI_width_d": 1.7199468041999566
+          "ASA_mean_d": 15.652990821025881,
+          "ASA_CFI_width_d": 7.1760027806545,
+          "ASD_mean_d": 10.966866493707517,
+          "ASD_CFI_width_d": 1.7192419190285353
         },
         {
           "Band": "Sub-THz (142/145.5)",
           "Dataset": "USC only",
           "LocType": "NLOS",
-          "n_pl": 13,
-          "n_ds": 13,
+          "n": 13,
           "PLE": 2.822926283786378,
           "sigma_SF_dB": 6.002888483699485,
           "PLE_CFI_width": 0.3814256776174685,
           "DS_mean_ns": 30.62395266657978,
           "DS_CFI_width_ns": 25.530272021528077,
-          "ASA_mean_d": 30.70603253584873,
-          "ASA_CFI_width_d": 20.579795785303613,
-          "ASD_mean_d": 21.398160358133307,
-          "ASD_CFI_width_d": 11.320641209869923
+          "ASA_mean_d": 30.705166651553185,
+          "ASA_CFI_width_d": 20.580222089899088,
+          "ASD_mean_d": 21.397822327716508,
+          "ASD_CFI_width_d": 11.321511896042274
         },
         {
           "Band": "Sub-THz (142/145.5)",
           "Dataset": "Pooled",
           "LocType": "LOS",
-          "n_pl": 29,
-          "n_ds": 29,
+          "n": 29,
           "PLE": 1.9276572570308452,
           "sigma_SF_dB": 2.0956723470882475,
-          "PLE_CFI_width": 0.09184596506014331,
-          "DS_mean_ns": 23.5553320334121,
-          "DS_CFI_width_ns": 26.783475035795405,
-          "ASA_mean_d": 10.95591131020762,
-          "ASA_CFI_width_d": 8.108399438047737,
-          "ASD_mean_d": 7.973617444695908,
-          "ASD_CFI_width_d": 3.9278918020107563
+          "PLE_CFI_width": 0.09769303392099937,
+          "DS_mean_ns": 23.55533203341211,
+          "DS_CFI_width_ns": 26.468911586060322,
+          "ASA_mean_d": 10.956543985064709,
+          "ASA_CFI_width_d": 7.81919247282745,
+          "ASD_mean_d": 7.975259321028762,
+          "ASD_CFI_width_d": 3.9755033296303326
         },
         {
           "Band": "Sub-THz (142/145.5)",
           "Dataset": "Pooled",
           "LocType": "NLOS",
-          "n_pl": 24,
-          "n_ds": 24,
+          "n": 24,
           "PLE": 2.869783773152588,
           "sigma_SF_dB": 7.174141707413841,
-          "PLE_CFI_width": 0.32356547989768414,
+          "PLE_CFI_width": 0.31879256927264077,
           "DS_mean_ns": 33.338611209769425,
-          "DS_CFI_width_ns": 25.474139709278425,
-          "ASA_mean_d": 35.977641872952205,
-          "ASA_CFI_width_d": 18.851934568229463,
-          "ASD_mean_d": 16.285365205718772,
-          "ASD_CFI_width_d": 10.409859752916347
+          "DS_CFI_width_ns": 24.949317474782504,
+          "ASA_mean_d": 35.974021151013474,
+          "ASA_CFI_width_d": 19.374400712747338,
+          "ASD_mean_d": 16.284263831880494,
+          "ASD_CFI_width_d": 10.288077599697049
         },
         {
           "Band": "6.75 GHz",
           "Dataset": "NYU only",
           "LocType": "LOS",
-          "n_pl": 7,
-          "n_ds": 7,
-          "PLE": 1.7938948157829477,
-          "sigma_SF_dB": 2.5583305806161363,
-          "PLE_CFI_width": 0.1909670451967822,
-          "DS_mean_ns": 64.03748543802544,
-          "DS_CFI_width_ns": 89.70500054623136,
-          "ASA_mean_d": 24.566030816881998,
-          "ASA_CFI_width_d": 22.73118626129349,
-          "ASD_mean_d": 33.88909791517514,
-          "ASD_CFI_width_d": 34.15447167046706
+          "n": 6,
+          "PLE": 1.8101077776881622,
+          "sigma_SF_dB": 2.612795337935216,
+          "PLE_CFI_width": 0.21046844184853897,
+          "DS_mean_ns": 63.75622575187729,
+          "DS_CFI_width_ns": 106.84617009101417,
+          "ASA_mean_d": 25.20303298423515,
+          "ASA_CFI_width_d": 27.135230758301805,
+          "ASD_mean_d": 36.69881950581441,
+          "ASD_CFI_width_d": 39.46174182172905
         },
         {
           "Band": "6.75 GHz",
           "Dataset": "NYU only",
           "LocType": "NLOS",
-          "n_pl": 11,
-          "n_ds": 11,
-          "PLE": 2.5640327889164594,
-          "sigma_SF_dB": 6.512785253827176,
-          "PLE_CFI_width": 0.3677815146486325,
-          "DS_mean_ns": 118.54530354558442,
-          "DS_CFI_width_ns": 149.1069350066233,
-          "ASA_mean_d": 32.682516641985686,
-          "ASA_CFI_width_d": 21.008511199582536,
-          "ASD_mean_d": 42.21589716482727,
-          "ASD_CFI_width_d": 33.59154655991599
+          "n": 12,
+          "PLE": 2.501765684323395,
+          "sigma_SF_dB": 7.905745794222734,
+          "PLE_CFI_width": 0.4351546480834747,
+          "DS_mean_ns": 112.68826754322053,
+          "DS_CFI_width_ns": 131.6590555565736,
+          "ASA_mean_d": 31.608608568580085,
+          "ASA_CFI_width_d": 20.618982570574254,
+          "ASD_mean_d": 40.040697759080786,
+          "ASD_CFI_width_d": 31.177836563940552
         },
         {
           "Band": "6.75 GHz",
           "Dataset": "USC only",
           "LocType": "LOS",
-          "n_pl": 6,
-          "n_ds": 6,
+          "n": 6,
           "PLE": 1.915360461348366,
           "sigma_SF_dB": 1.4243558440277804,
           "PLE_CFI_width": 0.1179330643276515,
           "DS_mean_ns": 13.094225324934062,
           "DS_CFI_width_ns": 19.117311041869435,
-          "ASA_mean_d": 10.265257171123405,
-          "ASA_CFI_width_d": 12.898262459761973,
-          "ASD_mean_d": 5.861396596585868,
-          "ASD_CFI_width_d": 1.6107717757764002
+          "ASA_mean_d": 10.26415161929584,
+          "ASA_CFI_width_d": 12.897982068037997,
+          "ASD_mean_d": 5.862965913162752,
+          "ASD_CFI_width_d": 1.6113583210250981
         },
         {
           "Band": "6.75 GHz",
           "Dataset": "USC only",
           "LocType": "NLOS",
-          "n_pl": 11,
-          "n_ds": 11,
+          "n": 11,
           "PLE": 2.615668716066946,
           "sigma_SF_dB": 7.332635213927674,
           "PLE_CFI_width": 0.36535491932680353,
           "DS_mean_ns": 27.57976917176868,
           "DS_CFI_width_ns": 51.651444559839796,
-          "ASA_mean_d": 12.358213399892275,
-          "ASA_CFI_width_d": 9.079646540458885,
-          "ASD_mean_d": 12.166749738017266,
-          "ASD_CFI_width_d": 5.537258103041859
+          "ASA_mean_d": 12.359709409476034,
+          "ASA_CFI_width_d": 9.07950319736984,
+          "ASD_mean_d": 12.16836145113095,
+          "ASD_CFI_width_d": 5.536183093932831
         },
         {
           "Band": "6.75 GHz",
           "Dataset": "Pooled",
           "LocType": "LOS",
-          "n_pl": 13,
-          "n_ds": 13,
-          "PLE": 1.8495823169906878,
-          "sigma_SF_dB": 2.44401830212288,
-          "PLE_CFI_width": 0.1327128734793641,
-          "DS_mean_ns": 46.52091752324641,
-          "DS_CFI_width_ns": 74.54959089673069,
-          "ASA_mean_d": 18.389157921769897,
-          "ASA_CFI_width_d": 16.479167268819975,
-          "ASD_mean_d": 20.783124046055725,
-          "ASD_CFI_width_d": 26.499200955456132
+          "n": 12,
+          "PLE": 1.862240725286813,
+          "sigma_SF_dB": 2.361020863787882,
+          "PLE_CFI_width": 0.1325680069883617,
+          "DS_mean_ns": 42.81780793404204,
+          "DS_CFI_width_ns": 76.36931593108255,
+          "ASA_mean_d": 18.041559495301563,
+          "ASA_CFI_width_d": 18.272744907022208,
+          "ASD_mean_d": 20.843958424529664,
+          "ASD_CFI_width_d": 28.341643187249673
         },
         {
           "Band": "6.75 GHz",
           "Dataset": "Pooled",
           "LocType": "NLOS",
-          "n_pl": 22,
-          "n_ds": 22,
-          "PLE": 2.590651949985196,
-          "sigma_SF_dB": 6.958334894549033,
-          "PLE_CFI_width": 0.2757135341852881,
-          "DS_mean_ns": 65.71113008011926,
-          "DS_CFI_width_ns": 65.16105825516235,
-          "ASA_mean_d": 22.432996354745338,
-          "ASA_CFI_width_d": 14.961290937847787,
-          "ASD_mean_d": 26.402555947692818,
-          "ASD_CFI_width_d": 21.895545109903555
+          "n": 23,
+          "PLE": 2.558380822488027,
+          "sigma_SF_dB": 7.739603867145602,
+          "PLE_CFI_width": 0.2833658239622965,
+          "DS_mean_ns": 66.4306850960134,
+          "DS_CFI_width_ns": 66.3844733672903,
+          "ASA_mean_d": 22.38722158575056,
+          "ASA_CFI_width_d": 14.011388737348158,
+          "ASD_mean_d": 26.02707363561522,
+          "ASD_CFI_width_d": 20.498801136651036
         }
       ]
     },
     "table_dumps_4_8_9_10_11": {
       "outputs": {
-        "table04_N1_142": "D:\\unified-channel-analysis\\figures\\python\\table04_N1_142.csv",
-        "table08_U3_145": "D:\\unified-channel-analysis\\figures\\python\\table08_U3_145.csv",
-        "table09_U3_7": "D:\\unified-channel-analysis\\figures\\python\\table09_U3_7.csv",
-        "table10_N3_142": "D:\\unified-channel-analysis\\figures\\python\\table10_N3_142.csv",
-        "table11_N3_7": "D:\\unified-channel-analysis\\figures\\python\\table11_N3_7.csv"
+        "table04_N1_142.csv": "D:\\unified-channel-analysis\\figures\\python\\table04_N1_142.csv",
+        "table08_U3_145.csv": "D:\\unified-channel-analysis\\figures\\python\\table08_U3_145.csv",
+        "table09_U3_7.csv": "D:\\unified-channel-analysis\\figures\\python\\table09_U3_7.csv",
+        "table10_N3_142.csv": "D:\\unified-channel-analysis\\figures\\python\\table10_N3_142.csv",
+        "table11_N3_7.csv": "D:\\unified-channel-analysis\\figures\\python\\table11_N3_7.csv"
       }
     }
   },

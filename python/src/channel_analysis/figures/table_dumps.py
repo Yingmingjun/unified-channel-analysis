@@ -1,83 +1,59 @@
 """Tables 4, 8, 9, 10, 11 — per-location point-data summaries.
 
-These paper tables are essentially pretty-prints of the institutional
-point-data xlsx tables. We render each as a CSV under ``figures/python/`` so
-readers can diff against the paper.
-
-    Table 4  — partial N1 @ 142 GHz
-    Table 8  — partial U3 @ 145.5 GHz
-    Table 9  — partial U3 @ 6.75 GHz
-    Table 10 — partial N3 @ 142 GHz
-    Table 11 — partial N3 @ 6.75 GHz
+Each paper table is a pretty-print of one of the bundled xlsx point-data
+files. We dump them as CSV under ``figures/python/`` so readers can diff
+directly against the paper tables.
 """
 from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from .. import config
-from ..io import load_point_data
 
 
-def _sort_key(df: pd.DataFrame) -> pd.DataFrame:
-    return df.sort_values(["tx", "rx"]).reset_index(drop=True)
+def _read_xlsx_two_row_header(path: Path) -> pd.DataFrame:
+    raw = pd.read_excel(path, sheet_name="FinalTable", header=[1, 2])
+    # Forward-fill continuation-row TX/Freq and drop non-numeric TR Sep rows
+    def _col(name):
+        for c in raw.columns:
+            if c[0] == name:
+                return c
+        return None
+    tx = _col("TX"); raw[tx] = raw[tx].ffill()
+    fr = _col("Freq."); raw[fr] = raw[fr].ffill()
+    tr = _col("TR Sep")
+    raw = raw[pd.to_numeric(raw[tr], errors="coerce").notna()].copy()
+    raw.columns = [f"{a}__{b}" if (isinstance(b, str) and not b.startswith("Unnamed"))
+                   else f"{a}" for a, b in raw.columns]
+    return raw.reset_index(drop=True)
 
 
 def render() -> dict:
-    """Write per-table CSVs. Returns {table_name: path}."""
-    config.ensure_output_dirs()
     outputs: dict[str, str] = {}
+    root = config.DATA_ROOT
+    config.ensure_output_dirs()
 
-    # --- Table 4 — N1 @ 142 GHz ----------------------------------------------
-    df = load_point_data(variants=["N1"])
-    t4 = _sort_key(df[(df.variant == "N1") & (df.freq_ghz == 142.0)])[
-        ["tx", "rx", "loc_type", "d_m", "pl_db",
-         "omni_ds_ns", "omni_asa_d", "omni_asd_d"]
+    pairs = [
+        ("table04_N1_142.csv", root / "N1_142_UMi.xlsx"),
+        ("table08_U3_145.csv", root / "U3_142_UMi.xlsx"),
+        ("table09_U3_7.csv",   root / "U3_7_UMi.xlsx"),
+        ("table10_N3_142.csv", root / "N3_142_UMi.xlsx"),
+        ("table11_N3_7.csv",   root / "N3_7_UMi.xlsx"),
     ]
-    p = Path(config.FIGURE_DIR) / "table04_N1_142.csv"
-    t4.to_csv(p, index=False, float_format="%.3f")
-    outputs["table04_N1_142"] = str(p)
-
-    # --- Tables 8 & 9 — U3 cross-processed (NYU-thres, USC-thres, USC-orig) --
-    dfu3 = load_point_data(variants=["U1", "U3"])
-    for freq, tag in [(145.5, "table08_U3_145"), (6.75, "table09_U3_7")]:
-        sub = dfu3[dfu3.freq_ghz == freq]
-        # Pivot so each row is a TX-RX pair with all three variant columns
-        wide = _wide_variant(sub, ["U3_nyu_thr", "U3_usc_thr", "U1"])
-        p = Path(config.FIGURE_DIR) / f"{tag}.csv"
-        wide.to_csv(p, index=False, float_format="%.3f")
-        outputs[tag] = str(p)
-
-    # --- Tables 10 & 11 — N3 cross-processed (USC-thres, NYU-thres, NYU-orig)
-    dfn3 = load_point_data(variants=["N1", "N3"])
-    for freq, tag in [(142.0, "table10_N3_142"), (6.75, "table11_N3_7")]:
-        sub = dfn3[dfn3.freq_ghz == freq]
-        wide = _wide_variant(sub, ["N3_usc_thr", "N3_nyu_thr", "N1"])
-        p = Path(config.FIGURE_DIR) / f"{tag}.csv"
-        wide.to_csv(p, index=False, float_format="%.3f")
-        outputs[tag] = str(p)
-
+    for name, src in pairs:
+        if not src.exists():
+            continue
+        if "N1" in src.name and "N1_" in src.name:
+            df = pd.read_excel(src, sheet_name="FinalTable", header=0)
+            df = df.drop(columns=[c for c in ["PL_X"] if c in df.columns])
+            df["TX"] = df["TX"].ffill()
+            df = df[pd.to_numeric(df["PL"], errors="coerce").notna()]
+        else:
+            df = _read_xlsx_two_row_header(src)
+        out_path = Path(config.FIGURE_DIR) / name
+        df.to_csv(out_path, index=False, float_format="%.3f")
+        outputs[name] = str(out_path)
     return {"outputs": outputs}
-
-
-def _wide_variant(df: pd.DataFrame, variants: list[str]) -> pd.DataFrame:
-    """Pivot from long to wide by variant. Preserves tx/rx/loc/d ordering.
-
-    Uses a left-merge per variant — robust to duplicate (tx, rx) keys which
-    can occur when a station name is reused across frequencies.
-    """
-    metrics = ["pl_db", "omni_ds_ns", "omni_asa_d", "omni_asd_d"]
-    base_keys = ["tx", "rx", "loc_type", "d_m"]
-
-    base = (df[df.variant == variants[0]][base_keys]
-            .drop_duplicates(subset=["tx", "rx"])
-            .reset_index(drop=True))
-    out = base.copy()
-    for v in variants:
-        sub = (df[df.variant == v]
-               .drop_duplicates(subset=["tx", "rx"])
-               [["tx", "rx"] + metrics]
-               .rename(columns={m: f"{m}__{v}" for m in metrics}))
-        out = out.merge(sub, on=["tx", "rx"], how="left")
-    return out

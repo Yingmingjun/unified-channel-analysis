@@ -17,12 +17,21 @@ _DEFAULT_DATA_ROOT = Path(__file__).resolve().parents[3] / "data" / "point_data"
 DATA_ROOT = Path(os.environ.get("CHANNEL_DATA_ROOT", _DEFAULT_DATA_ROOT))
 
 DATA_PATHS: dict[str, Path] = {
-    "n1_142_xlsx": DATA_ROOT / "N1_142_UMi.xlsx",
-    "n1_7_xlsx":   DATA_ROOT / "N1_7_UMi.xlsx",
+    # Authoritative per-TX-RX result CSVs (source: D:/NYU-USC/Cross-Processing/
+    # ProcessingXXXGHzData/Results/). These are the exact files the paper-
+    # figure MATLAB scripts read.
+    "nyu_142_csv": DATA_ROOT / "NYU142GHz_Method_Comparison_Results.csv",
+    "nyu_7_csv":   DATA_ROOT / "NYU7GHz_Method_Comparison_Results.csv",
+    "usc_145_csv": DATA_ROOT / "USC145GHz_Full_Results.csv",
+    "usc_7_csv":   DATA_ROOT / "USC7GHz_NewData_Results.csv",
+    # Legacy two-row-header xlsx point-data tables (kept for the Table 4/8-11
+    # dumps and for MATLAB's load_point_data backwards-compat).
     "n3_142_xlsx": DATA_ROOT / "N3_142_UMi.xlsx",
     "n3_7_xlsx":   DATA_ROOT / "N3_7_UMi.xlsx",
     "u3_142_xlsx": DATA_ROOT / "U3_142_UMi.xlsx",
     "u3_7_xlsx":   DATA_ROOT / "U3_7_UMi.xlsx",
+    "n1_142_xlsx": DATA_ROOT / "N1_142_UMi.xlsx",
+    "n1_7_xlsx":   DATA_ROOT / "N1_7_UMi.xlsx",
 }
 
 # --- Output ------------------------------------------------------------------

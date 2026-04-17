@@ -1,90 +1,104 @@
-"""Table 6 — Cross-processing RMSE for PL, DS, ASA, ASD across threshold choices.
+"""Table 6 — Cross-processing RMSE (paper Table VI).
 
-For each (dataset × metric × threshold variant), compute RMSE vs. the *original*
-partner-institution values (N1 or U1):
-    USC data (U3 table): U3_nyu_thr vs U1  AND  U3_usc_thr vs U1.
-    NYU data (N3 table): N3_usc_thr vs N1  AND  N3_nyu_thr vs N1.
+For each (metric × band) the paper reports RMSE between paired native and
+cross-processed estimates under the two delay-domain thresholds:
 
-Matches ``calculate_AS_RMSE.m`` and ``verify_crossproc_stats.m``.
+    USC data (U3 table) under NYU thres       : RMSE(U3_nyu_thr, U1)
+    USC data (U3 table) under USC thres       : RMSE(U3_usc_thr, U1)
+    NYU data (N3 table) under USC thres       : RMSE(N3_usc_thr, N1)
+    NYU data (N3 table) under NYU thres       : RMSE(N3_nyu_thr, N1)
+
+These are read directly from the two-row-header xlsx tables (the authoritative
+Method_Comparison CSVs do not carry the threshold-variant columns).
 """
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
 from .. import config
-from ..io import load_point_data
 from ._common import apply_style
 
 
-METRICS = [("pl_db", "PL [dB]"), ("omni_ds_ns", "DS [ns]"),
-           ("omni_asa_d", "ASA [deg]"), ("omni_asd_d", "ASD [deg]")]
+def _col(raw, first, sub=None):
+    for c in raw.columns:
+        if c[0] != first:
+            continue
+        if sub is None:
+            return c
+        if isinstance(c[1], str) and sub.lower() in c[1].lower():
+            return c
+    return None
 
 
-def _rmse(a, b):
+def _load_variants(xlsx_path: Path, orig_label: str) -> dict[str, pd.DataFrame]:
+    """Returns {'nyu_thr', 'usc_thr', 'orig'} each a frame with TX-RX keys."""
+    raw = pd.read_excel(xlsx_path, sheet_name="FinalTable", header=[1, 2])
+    tx = _col(raw, "TX")
+    raw[tx] = raw[tx].ffill()
+    tr = _col(raw, "TR Sep")
+    raw = raw[pd.to_numeric(raw[tr], errors="coerce").notna()].copy()
+    out: dict[str, pd.DataFrame] = {}
+    # USC xlsx reuses RX labels across LOS and NLOS groups, so include the
+    # locatype in the key to make it unique.
+    lt = raw[_col(raw, "Loc Type")].astype(str).str.upper().str.strip()
+    key = (raw[tx].astype(str).str.replace("TX", "T", regex=False)
+           + "-"
+           + raw[_col(raw, "RX")].astype(str).str.replace("RX", "R", regex=False)
+           + "|" + lt)
+    for label, sub in (("nyu_thr", "NYU thres"),
+                       ("usc_thr", "USC thres"),
+                       ("orig",    orig_label)):
+        frame = pd.DataFrame({"key": key})
+        for metric_label, short in (("Omni PL", "pl"), ("Omni DS", "ds"),
+                                    ("Omni ASA", "asa"), ("Omni ASD", "asd")):
+            c = _col(raw, metric_label, sub)
+            frame[short] = pd.to_numeric(raw[c], errors="coerce") if c is not None else np.nan
+        out[label] = frame
+    return out
+
+
+def _rmse(a, b, guard_factor=50.0):
     a = np.asarray(a, dtype=float); b = np.asarray(b, dtype=float)
     m = np.isfinite(a) & np.isfinite(b)
     if m.sum() == 0:
         return float("nan")
-    return float(np.sqrt(np.mean((a[m] - b[m]) ** 2)))
+    diff = np.abs(a - b)
+    # Outlier guard for the one 714° ASA typo
+    med = np.nanmedian(diff[m])
+    outlier = diff > max(med * guard_factor, 100.0)
+    keep = m & ~outlier
+    return float(np.sqrt(np.mean((a[keep] - b[keep]) ** 2)))
 
 
-def _institution_rmse(df, institution, band, orig_variant, cross_variants):
-    """Compute RMSE of each cross-variant against the original at common TX-RX keys.
-
-    Drops entries where |cross - orig| exceeds 100× the IQR of the column
-    as a robust guard against source-data typos (see docs/issues_log.md —
-    one row in 142_UMi_N3.xlsx has an ASA value of 714° where 7.14° was
-    intended; we filter such anomalies rather than mutate the input file).
-    """
-    sub = df[(df.institution == institution) & (df.band == band)]
-    orig = sub[sub.variant == orig_variant].set_index(["tx", "rx"])
-    out = {}
-    for v in cross_variants:
-        cross = sub[sub.variant == v].set_index(["tx", "rx"])
-        common = orig.index.intersection(cross.index)
-        for col, label in METRICS:
-            a = orig.loc[common, col].values
-            b = cross.loc[common, col].values
-            mask = np.isfinite(a) & np.isfinite(b)
-            if mask.any():
-                diff = np.abs(a - b)
-                median_valid = np.nanmedian(diff[mask]) if mask.any() else 0.0
-                # Guard against source-data typos: drop outliers that exceed
-                # median by more than 50x (typical spread is < 5x median).
-                outlier = (diff > max(median_valid * 50.0, 100.0))
-                keep = mask & ~outlier
-                out[f"{v}:{label}"] = _rmse(a[keep], b[keep])
-            else:
-                out[f"{v}:{label}"] = float("nan")
-    return out
+def _compare_pair(left: pd.DataFrame, right: pd.DataFrame, metric: str):
+    merged = left.merge(right, on="key", how="inner", suffixes=("_L", "_R"))
+    return _rmse(merged[f"{metric}_L"].values, merged[f"{metric}_R"].values)
 
 
 def render() -> dict:
     apply_style()
-    df = load_point_data(variants=["N1", "U1", "N3", "U3"])
-
+    root = config.DATA_ROOT
+    # Load N3 (NYU data) and U3 (USC data) variants, per band
+    bands = [("Sub-THz", "N3_142_UMi.xlsx", "U3_142_UMi.xlsx"),
+             ("6.75 GHz", "N3_7_UMi.xlsx",  "U3_7_UMi.xlsx")]
     rows = []
-    for band, label in [("subTHz", "Sub-THz"), ("FR1C", "6.75 GHz")]:
-        # USC data vs U1 original
-        usc = _institution_rmse(df, "USC", band, "U1",
-                                ["U3_nyu_thr", "U3_usc_thr"])
-        # NYU data vs N1 original
-        nyu = _institution_rmse(df, "NYU", band, "N1",
-                                ["N3_nyu_thr", "N3_usc_thr"])
-        for (col, mlabel) in METRICS:
+    for band_label, n3_file, u3_file in bands:
+        n3 = _load_variants(root / n3_file, "NYU orig")
+        u3 = _load_variants(root / u3_file, "USC orig")
+        for metric, mlabel in (("pl", "PL [dB]"), ("ds", "DS [ns]"),
+                                ("asa", "ASA [deg]"), ("asd", "ASD [deg]")):
             rows.append({
-                "Band": label, "Metric": mlabel,
-                "USC data – NYU thres": usc[f"U3_nyu_thr:{mlabel}"],
-                "USC data – USC thres": usc[f"U3_usc_thr:{mlabel}"],
-                "NYU data – USC thres": nyu[f"N3_usc_thr:{mlabel}"],
-                "NYU data – NYU thres": nyu[f"N3_nyu_thr:{mlabel}"],
+                "Band": band_label, "Metric": mlabel,
+                "USC data - NYU thres": _compare_pair(u3["nyu_thr"], u3["orig"], metric),
+                "USC data - USC thres": _compare_pair(u3["usc_thr"], u3["orig"], metric),
+                "NYU data - USC thres": _compare_pair(n3["usc_thr"], n3["orig"], metric),
+                "NYU data - NYU thres": _compare_pair(n3["nyu_thr"], n3["orig"], metric),
             })
     tbl = pd.DataFrame(rows)
     config.ensure_output_dirs()
-    out_csv = Path(config.FIGURE_DIR) / "table06_rmse.csv"
-    tbl.to_csv(out_csv, index=False)
-    return {"table_csv": str(out_csv), "rows": rows}
+    out = Path(config.FIGURE_DIR) / "table06_rmse.csv"
+    tbl.to_csv(out, index=False, float_format="%.3f")
+    return {"table_csv": str(out), "rows": rows}

@@ -1,4 +1,13 @@
-"""Fig. 6 — Omni RMS delay-spread CDFs (pooled) with DKW 95 % bands."""
+"""Fig. 6 — Omni RMS Delay Spread CDF (LOS | NLOS, per band).
+
+Mirrors ``cdf_ci_pl_analysis_DS_ref.m`` → ``plot_cdf_group``. Each output
+figure has two subplots (LOS | NLOS) with three curves each (NYU, USC,
+Pooled) plus DKW 95 % bands shaded at alpha 0.12.
+
+Two output figures:
+    fig06_OmniDS_merged   (sub-THz)
+    fig06_OmniDS_merged7  (6.75 GHz)
+"""
 from __future__ import annotations
 
 import matplotlib.pyplot as plt
@@ -10,62 +19,78 @@ from ..stats import dkw_band, ecdf
 from ._common import apply_style, save
 
 
-def _cdf_panel(ax, series_dict: dict[str, np.ndarray], xlabel: str, title: str):
-    styles = {
-        "NYU":   dict(color=config.COLORS["nyu"],    ls="-",  lw=2.0),
-        "USC":   dict(color=config.COLORS["usc"],    ls="--", lw=2.0),
-        "Pooled":dict(color=config.COLORS["pooled"], ls="-",  lw=2.4),
-    }
-    for label, data in series_dict.items():
-        data = np.asarray(data, dtype=float)
-        data = data[np.isfinite(data) & (data > 0)]
-        if data.size == 0:
+LINE = {
+    "NYU":    dict(color=config.COLORS["nyu"],    ls="-",  lw=1.8),
+    "USC":    dict(color=config.COLORS["usc"],    ls="--", lw=1.8),
+    "Pooled": dict(color=config.COLORS["gray"],   ls="-",  lw=2.2),
+}
+
+
+def _ecdf_with_dkw(vals):
+    vals = np.asarray(vals, dtype=float)
+    vals = vals[np.isfinite(vals) & (vals > 0)]
+    xs, fs = ecdf(vals)
+    eps = dkw_band(vals.size)
+    flo = np.clip(fs - eps, 0, 1)
+    fhi = np.clip(fs + eps, 0, 1)
+    return xs, fs, flo, fhi, vals.size
+
+
+def _panel(ax, band_df, metric_col, title, xlabel):
+    nyu_vals    = band_df[band_df.institution == "NYU"][metric_col].to_numpy()
+    usc_vals    = band_df[band_df.institution == "USC"][metric_col].to_numpy()
+    pooled_vals = band_df[metric_col].to_numpy()
+
+    for label, vals in (("NYU", nyu_vals), ("USC", usc_vals),
+                        ("Pooled", pooled_vals)):
+        xs, fs, flo, fhi, n = _ecdf_with_dkw(vals)
+        if n == 0:
             continue
-        xs, fs = ecdf(data)
-        eps = dkw_band(data.size)
-        ax.step(xs, fs, where="post", label=f"{label} (n={data.size})", **styles[label])
-        ax.fill_between(xs, np.clip(fs - eps, 0, 1), np.clip(fs + eps, 0, 1),
-                        step="post", alpha=0.12, color=styles[label]["color"],
-                        linewidth=0)
+        st = LINE[label]
+        # Extend ECDF to (xs, 1) for proper step plotting
+        xs_plot = np.r_[xs, xs[-1]]
+        fs_plot = np.r_[fs, fs[-1]]
+        ax.step(xs_plot, fs_plot, where="post",
+                label=f"{label} (n={n})", **st)
+        ax.fill_between(xs, flo, fhi, step="post",
+                        color=st["color"], alpha=0.12, linewidth=0)
     ax.set_xlabel(xlabel)
     ax.set_ylabel("CDF")
     ax.set_ylim(0, 1)
     ax.set_title(title)
-    ax.legend(loc="lower right", fontsize=10)
+    ax.legend(loc="lower right", fontsize=9)
+
+
+def _render_band(band, band_label, stem, metric_col="omni_ds_ns",
+                 unit="ns", metric_label="Omni RMS DS"):
+    df = load_point_data()
+    df = df[df.band == band]
+
+    fig, (ax_los, ax_nlos) = plt.subplots(1, 2, figsize=(13, 5))
+    _panel(ax_los,
+           df[df.loc_type == "LOS"],
+           metric_col,
+           f"{metric_label} CDF (LOS) — {band_label}",
+           f"{metric_label} ({unit})")
+    _panel(ax_nlos,
+           df[df.loc_type == "NLOS"],
+           metric_col,
+           f"{metric_label} CDF (NLOS) — {band_label}",
+           f"{metric_label} ({unit})")
+    fig.tight_layout()
+    save(fig, stem)
+    return {
+        "n_LOS": int(df[df.loc_type == "LOS"][metric_col].notna().sum()),
+        "n_NLOS": int(df[df.loc_type == "NLOS"][metric_col].notna().sum()),
+    }
 
 
 def render() -> dict:
     apply_style()
-    df = load_point_data(variants=["N1", "U1"])
-
-    fig, axes = plt.subplots(1, 2, figsize=(13, 5.0))
-
-    def _series(band: str, loc: str):
-        sub = df[(df.band == band) & (df.loc_type == loc)]
-        return {
-            "NYU":    sub[sub.institution == "NYU"]["omni_ds_ns"].to_numpy(),
-            "USC":    sub[sub.institution == "USC"]["omni_ds_ns"].to_numpy(),
-            "Pooled": sub["omni_ds_ns"].to_numpy(),
-        }
-
-    # Build combined LOS+NLOS CDF per band (paper shows both stacked; we do
-    # one CDF per band with LOS/NLOS colored via line style)
-    stats: dict = {}
-    for col, band, label in [(0, "subTHz", "Sub-THz (142/145.5 GHz)"),
-                             (1, "FR1C", "FR1(C) 6.75 GHz")]:
-        # Combine LOS+NLOS for the main omni-DS CDF
-        srs = {
-            "NYU":    df[(df.band == band) & (df.institution == "NYU")]["omni_ds_ns"].to_numpy(),
-            "USC":    df[(df.band == band) & (df.institution == "USC")]["omni_ds_ns"].to_numpy(),
-            "Pooled": df[df.band == band]["omni_ds_ns"].to_numpy(),
-        }
-        _cdf_panel(axes[col], srs, "Omni RMS DS (ns)", label)
-        stats[band] = {k: {"n": int(np.sum(np.isfinite(v) & (v > 0))),
-                            "median_ns": float(np.nanmedian(v[np.isfinite(v) & (v > 0)])) if np.any(np.isfinite(v) & (v > 0)) else float("nan")}
-                        for k, v in srs.items()}
-
-    fig.suptitle("Fig. 6 — Omni RMS Delay Spread CDF (pooled NYU + USC)",
-                 fontsize=14, y=1.02)
-    fig.tight_layout()
-    save(fig, "fig06_ds_cdf")
+    stats = {
+        "subTHz": _render_band("subTHz", "Sub-THz (142 / 145.5 GHz)",
+                                "fig06_OmniDS_merged"),
+        "FR1C":   _render_band("FR1C", "FR1(C) 6.75 GHz",
+                                "fig06_OmniDS_merged7"),
+    }
     return stats

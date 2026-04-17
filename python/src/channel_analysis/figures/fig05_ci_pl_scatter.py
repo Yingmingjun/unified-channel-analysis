@@ -1,112 +1,134 @@
-"""Fig. 5 — Close-in path-loss scatter with CI fits, pooled sub-THz and 6.75 GHz.
+"""Fig. 5 — CI path-loss scatter with per-group fits (LOS & NLOS combined).
 
-LOS and NLOS are fit separately per dataset (NYU-only, USC-only, Pooled).
+Paper layout (from ``cdf_ci_pl_analysis.m`` → ``plot_ci_models``): two
+figures (sub-THz, 6.75 GHz). Each figure has a single axes with ALL TX-RX
+pairs scattered — LOS as circles, NLOS as squares — plus six fit lines:
+
+    LOS  × {NYU, USC, Pooled}
+    NLOS × {NYU, USC, Pooled}
+
+Scatter counts per figure:
+    Sub-THz: 29 LOS + 24 NLOS = 53 dots
+    6.75 GHz: 12 LOS + 23 NLOS = 35 dots
+
+CI model: PL(d) = FSPL(1 m) + 10 n log10(d) + X_σ,  d0 = 1 m.
+Data source: ``pl_nyu_sum`` column (NYU-method, NYU-threshold — the paper's
+Table-7 PLEs are computed on this variant for NYU and on ``pl_usc_pdm`` for
+USC; we plot the NYU-method value for both, matching Fig 5 of the paper
+where a single PL per location is used).
 """
 from __future__ import annotations
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 from .. import config
 from ..io import load_point_data
-from ..pl import ci_fit, _fspl_db
+from ..pl import ci_fit
 from ._common import apply_style, save
 
 
-def _fit_group(df, loc_type):
-    d = df[df.loc_type == loc_type]["d_m"].to_numpy()
-    pl = df[df.loc_type == loc_type]["pl_db"].to_numpy()
-    freq = float(df["freq_ghz"].iloc[0]) if len(df) else 0.0
-    return ci_fit(d, pl, freq_ghz=freq), d, pl
+def _pl_values(df):
+    """Paper Table 7 / Fig 5 use the institution's thresholded original PL
+    (xlsx "<inst> orig" column). Fallback: per-method CSV columns."""
+    if "pl_db" in df.columns and df["pl_db"].notna().any():
+        return df["pl_db"].to_numpy(dtype=float)
+    out = np.where(df["institution"].values == "NYU",
+                   df["pl_nyu_sum"].values, df["pl_usc_pdm"].values)
+    return out.astype(float)
 
 
-def _plot_band(ax, band_name: str, freq_like: float, nyu, usc, pooled, title: str):
-    d_grid = np.logspace(0, np.log10(500), 200)
-    fspl_nyu = _fspl_db(nyu.freq_ghz)
-    fspl_usc = _fspl_db(usc.freq_ghz)
-    fspl_pool = _fspl_db(freq_like)
+def _fit_and_draw(ax, d, pl, loc, color, label, line_style):
+    fit = ci_fit(d, pl, freq_ghz=_pooled_freq_for(loc))
+    dgrid = np.logspace(np.log10(max(np.nanmin(d[np.isfinite(d)]), 1.0)),
+                        np.log10(np.nanmax(d[np.isfinite(d)])), 100)
+    yhat = fit.fspl_1m_db + 10.0 * fit.ple * np.log10(dgrid)
+    ax.plot(dgrid, yhat, color=color, linestyle=line_style, linewidth=1.8,
+            label=f"{label}: n={fit.ple:.2f}, σ={fit.sigma_sf:.2f} dB")
+    return fit
 
-    # Scatter
-    ax.scatter(nyu.data[nyu.data.loc_type == "LOS"]["d_m"],
-               nyu.data[nyu.data.loc_type == "LOS"]["pl_db"],
-               color=config.COLORS["nyu"], marker="o", s=36, label="NYU LOS", edgecolor="k", linewidths=0.6)
-    ax.scatter(nyu.data[nyu.data.loc_type == "NLOS"]["d_m"],
-               nyu.data[nyu.data.loc_type == "NLOS"]["pl_db"],
-               color=config.COLORS["nyu"], marker="s", s=36, label="NYU NLOS", edgecolor="k", linewidths=0.6)
-    ax.scatter(usc.data[usc.data.loc_type == "LOS"]["d_m"],
-               usc.data[usc.data.loc_type == "LOS"]["pl_db"],
-               color=config.COLORS["usc"], marker="o", s=36, label="USC LOS", edgecolor="k", linewidths=0.6)
-    ax.scatter(usc.data[usc.data.loc_type == "NLOS"]["d_m"],
-               usc.data[usc.data.loc_type == "NLOS"]["pl_db"],
-               color=config.COLORS["usc"], marker="s", s=36, label="USC NLOS", edgecolor="k", linewidths=0.6)
 
-    # Fits (pooled dashed, per-inst solid)
-    def _line(fit, color, ls, label):
-        y = fit.fspl_1m_db + 10.0 * fit.ple * np.log10(d_grid)
-        ax.plot(d_grid, y, color=color, linestyle=ls, linewidth=1.8,
-                label=f"{label}: n={fit.ple:.2f}, σ={fit.sigma_sf:.2f} dB")
+def _pooled_freq_for(loc):
+    # Placeholder (set by caller via side-effect) — use the module-level FREQ
+    global _CURRENT_FREQ
+    return _CURRENT_FREQ
 
-    _line(nyu.fit_los,  config.COLORS["nyu"], "-", "NYU LOS fit")
-    _line(nyu.fit_nlos, config.COLORS["nyu"], "--", "NYU NLOS fit")
-    _line(usc.fit_los,  config.COLORS["usc"], "-", "USC LOS fit")
-    _line(usc.fit_nlos, config.COLORS["usc"], "--", "USC NLOS fit")
-    _line(pooled.fit_los,  config.COLORS["pooled"], "-", "Pooled LOS fit")
-    _line(pooled.fit_nlos, config.COLORS["pooled"], "--", "Pooled NLOS fit")
+
+_CURRENT_FREQ = 142.0
+
+
+def _render_band(band, freq_label, pooled_freq, stem, xlim):
+    global _CURRENT_FREQ
+    _CURRENT_FREQ = pooled_freq
+
+    df = load_point_data()
+    sub = df[df.band == band].copy()
+    sub["pl"] = _pl_values(sub)
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Scatter: LOS = circles, NLOS = squares; color by institution
+    for inst, color in (("NYU", config.COLORS["nyu"]), ("USC", config.COLORS["usc"])):
+        for loc, marker in (("LOS", "o"), ("NLOS", "s")):
+            s = sub[(sub.institution == inst) & (sub.loc_type == loc)]
+            ax.scatter(s["d_m"], s["pl"], s=50, marker=marker,
+                       facecolor=color, edgecolor="k", linewidths=0.5,
+                       alpha=0.75,
+                       label=f"{inst} {loc} data (n={len(s)})")
+
+    # Six fit lines
+    for loc, style in (("LOS", "-"), ("NLOS", "--")):
+        for inst_key, color, inst_filter in (
+            ("NYU",    config.COLORS["nyu"],    lambda s: s.institution == "NYU"),
+            ("USC",    config.COLORS["usc"],    lambda s: s.institution == "USC"),
+            ("Pooled", config.COLORS["gray"],   lambda s: np.full(len(s), True)),
+        ):
+            mask = inst_filter(sub) & (sub.loc_type == loc).values
+            g = sub.loc[mask]
+            if len(g) < 2:
+                continue
+            _fit_and_draw(ax, g["d_m"].to_numpy(), g["pl"].to_numpy(), loc,
+                          color, f"{inst_key} {loc} fit", style)
 
     ax.set_xscale("log")
-    ax.set_xlim(1, 500)
-    ax.set_xlabel("TX-RX Separation $d$ (m)")
-    ax.set_ylabel("Path Loss (dB)")
-    ax.set_title(title)
-    ax.legend(loc="upper left", fontsize=8.5, ncol=2, framealpha=0.9)
+    ax.set_xlim(*xlim)
+    ax.set_xlabel("TX–RX Separation d (m)")
+    ax.set_ylabel("Omni Path Loss (dB)")
+    ax.set_title(f"CI path-loss fit — pooled NYU + USC, {freq_label}")
+    ax.legend(loc="upper left", fontsize=8, ncol=2, framealpha=0.9)
+    fig.tight_layout()
+    save(fig, stem)
 
-
-class _Group:
-    def __init__(self, data, freq_ghz):
-        self.data = data.dropna(subset=["pl_db", "d_m"]).reset_index(drop=True)
-        self.freq_ghz = freq_ghz
-        los = self.data[self.data.loc_type == "LOS"]
-        nlos = self.data[self.data.loc_type == "NLOS"]
-        self.fit_los = ci_fit(los["d_m"].to_numpy(),
-                              los["pl_db"].to_numpy(), freq_ghz=freq_ghz)
-        self.fit_nlos = ci_fit(nlos["d_m"].to_numpy(),
-                               nlos["pl_db"].to_numpy(), freq_ghz=freq_ghz)
+    # Collect stats for parity
+    out = {}
+    for inst_key, inst_filter in (("NYU",    lambda s: s.institution == "NYU"),
+                                   ("USC",    lambda s: s.institution == "USC"),
+                                   ("Pooled", lambda s: np.full(len(s), True))):
+        for loc in ("LOS", "NLOS"):
+            mask = inst_filter(sub) & (sub.loc_type == loc).values
+            g = sub.loc[mask]
+            if len(g) < 2:
+                continue
+            fit = ci_fit(g["d_m"].to_numpy(), g["pl"].to_numpy(),
+                         freq_ghz=pooled_freq)
+            out[f"{inst_key}_{loc}"] = {
+                "n": int(len(g)), "PLE": fit.ple,
+                "sigma_SF_dB": fit.sigma_sf,
+                "PLE_CFI_lo": fit.ple_lo, "PLE_CFI_hi": fit.ple_hi,
+                "PLE_CFI_width": fit.cfi_width,
+            }
+    return out
 
 
 def render() -> dict:
     apply_style()
-    df = load_point_data(variants=["N1", "U1"])
-
     stats: dict = {}
-    fig, axes = plt.subplots(1, 2, figsize=(13, 5.5))
-
-    # Sub-THz
-    nyu_sub = _Group(df[(df.institution == "NYU") & (df.band == "subTHz")], 142.0)
-    usc_sub = _Group(df[(df.institution == "USC") & (df.band == "subTHz")], 145.5)
-    pool_sub = _Group(df[df.band == "subTHz"], 143.75)
-    _plot_band(axes[0], "subTHz", 143.75, nyu_sub, usc_sub, pool_sub,
-               "Sub-THz (142/145.5 GHz)")
-
-    # FR1C 6.75 GHz
-    nyu_7 = _Group(df[(df.institution == "NYU") & (df.band == "FR1C")], 6.75)
-    usc_7 = _Group(df[(df.institution == "USC") & (df.band == "FR1C")], 6.75)
-    pool_7 = _Group(df[df.band == "FR1C"], 6.75)
-    _plot_band(axes[1], "FR1C", 6.75, nyu_7, usc_7, pool_7, "FR1(C) 6.75 GHz")
-
-    fig.suptitle("Fig. 5 — Close-In PL scatter and fits (pooled NYU + USC)",
-                 fontsize=14, y=1.02)
-    fig.tight_layout()
-    save(fig, "fig05_ci_pl_scatter")
-
-    for band_name, triple in (("subTHz", (nyu_sub, usc_sub, pool_sub)),
-                              ("FR1C",   (nyu_7,   usc_7,   pool_7))):
-        for label, grp in zip(("NYU", "USC", "Pooled"), triple):
-            for loc in ("LOS", "NLOS"):
-                fit = getattr(grp, f"fit_{loc.lower()}")
-                stats[f"{band_name}_{label}_{loc}"] = {
-                    "PLE": fit.ple, "sigma_SF_dB": fit.sigma_sf,
-                    "PLE_CFI_width": fit.cfi_width,
-                    "PLE_CFI_lo": fit.ple_lo, "PLE_CFI_hi": fit.ple_hi,
-                }
+    stats["subTHz"] = _render_band("subTHz", "Sub-THz (142 / 145.5 GHz)",
+                                    143.75,
+                                    stem="fig05_PLcombinedPlot",
+                                    xlim=(10, 500))
+    stats["FR1C"]   = _render_band("FR1C", "FR1(C) 6.75 GHz",
+                                    6.75,
+                                    stem="fig05_PLcombinedPlot7",
+                                    xlim=(10, 500))
     return stats
