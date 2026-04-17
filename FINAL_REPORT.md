@@ -10,7 +10,7 @@
 |-------------------------------------|--------|------|
 | `python/` (installable package)     | ✅     | `pip install -e python` → `channel-run-all` regenerates every figure/table |
 | `python/tests/` (pytest)            | ✅     | 21 tests pass |
-| `matlab/` (parallel port)           | ✅     | Not executed; user runs on licensed machine |
+| `matlab/` (parallel port)           | ✅     | 22 `.m` files, 1475 lines (1 `run_all`, 2 `config/`, 11 `lib/`, 8 `figures/`). Not executed in sandbox; run on a MATLAB-licensed machine. |
 | `figures/python/` (output)          | ✅     | 16 `.pdf` + `.png` figures + `stats_dump.json` + `table06_rmse.csv` + `table07_pooled_stats.csv` |
 | `figures/matlab/` (user-populated)  | —      | Empty; user populates after running MATLAB `run_all.m` |
 | `docs/`                             | ✅     | paper summary, code inventory, architecture, conflicts log, issues log, numerical + figure parity reports |
