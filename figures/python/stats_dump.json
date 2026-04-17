@@ -238,8 +238,8 @@
           "Metric": "PL [dB]",
           "USC data - NYU thres": 3.386418811430807,
           "USC data - USC thres": 3.0075496707483547,
-          "NYU data - USC thres": 14.196069374254673,
-          "NYU data - NYU thres": 1.6813294702075174
+          "NYU data - USC thres": 13.974643978356971,
+          "NYU data - NYU thres": 1.472168560171655
         },
         {
           "Band": "Sub-THz",
@@ -247,7 +247,7 @@
           "USC data - NYU thres": 61.35513618401438,
           "USC data - USC thres": 4.706839950238248,
           "NYU data - USC thres": 45.27235254550452,
-          "NYU data - NYU thres": 18.561391876398844
+          "NYU data - NYU thres": 18.249296307995717
         },
         {
           "Band": "Sub-THz",
@@ -494,7 +494,7 @@
       }
     },
     "paper_parity": {
-      "summary": "## Summary\n\n- Python vs Paper - Table VI: 20/32 tight (<=2%), 8/32 close (<=10%), 4 miss.\n- Python vs Paper - Table VII: 70/108 tight (<=2%), 28/108 close (<=10%), 10 miss.\n- MATLAB vs Paper - Table VI: 20/32 tight (<=2%), 8/32 close (<=10%), 4 miss.\n- MATLAB vs Paper - Table VII: 60/108 tight (<=2%), 24/108 close (<=10%), 24 miss.",
+      "summary": "## Summary\n\n- Python vs Paper - Table VI: 21/32 tight (<=2%), 7/32 close (<=10%), 4 miss.\n- Python vs Paper - Table VII: 70/108 tight (<=2%), 28/108 close (<=10%), 10 miss.\n- MATLAB vs Paper - Table VI: 20/32 tight (<=2%), 8/32 close (<=10%), 4 miss.\n- MATLAB vs Paper - Table VII: 71/108 tight (<=2%), 26/108 close (<=10%), 11 miss.",
       "doc": "D:\\unified-channel-analysis\\docs\\paper_parity.md",
       "csv_t6": "D:\\unified-channel-analysis\\figures\\python\\paper_parity_table06.csv",
       "csv_t7": "D:\\unified-channel-analysis\\figures\\python\\paper_parity_table07.csv"

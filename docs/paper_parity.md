@@ -5,7 +5,7 @@ Re-run `matlab/run_all.m` to refresh the MATLAB column.
 
 ## Summary
 
-- Python vs Paper - Table VI: 20/32 tight (<=2%), 8/32 close (<=10%), 4 miss.
+- Python vs Paper - Table VI: 21/32 tight (<=2%), 7/32 close (<=10%), 4 miss.
 - Python vs Paper - Table VII: 70/108 tight (<=2%), 28/108 close (<=10%), 10 miss.
 - MATLAB vs Paper - Table VI: 20/32 tight (<=2%), 8/32 close (<=10%), 4 miss.
 - MATLAB vs Paper - Table VII: 71/108 tight (<=2%), 26/108 close (<=10%), 11 miss.
@@ -20,8 +20,8 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 |---------|------:|-------:|-------:|:-------:|:-------:|
 | USC data NYU thres | 3.39 | 3.39 | 3.39 | TIGHT | TIGHT |
 | USC data USC thres | 3.01 | 3.01 | 3.01 | TIGHT | TIGHT |
-| NYU data USC thres | 14.24 | 14.20 | 14.20 | TIGHT | TIGHT |
-| NYU data NYU thres | 1.50 | 1.68 | 1.68 | CLOSE | CLOSE |
+| NYU data USC thres | 14.24 | 13.97 | 14.20 | TIGHT | TIGHT |
+| NYU data NYU thres | 1.50 | 1.47 | 1.68 | TIGHT | CLOSE |
 
 ### Sub-THz · DS [ns]
 
@@ -30,7 +30,7 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | USC data NYU thres | 61.63 | 61.35 | 61.36 | TIGHT | TIGHT |
 | USC data USC thres | 4.71 | 4.71 | 4.71 | TIGHT | TIGHT |
 | NYU data USC thres | 46.13 | 45.27 | 45.27 | TIGHT | TIGHT |
-| NYU data NYU thres | 18.60 | 18.56 | 18.56 | TIGHT | TIGHT |
+| NYU data NYU thres | 18.60 | 18.25 | 18.56 | TIGHT | TIGHT |
 
 ### Sub-THz · ASA [deg]
 

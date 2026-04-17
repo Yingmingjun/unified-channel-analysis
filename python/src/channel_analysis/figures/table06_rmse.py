@@ -81,21 +81,40 @@ def _compare_pair(left: pd.DataFrame, right: pd.DataFrame, metric: str):
 def render() -> dict:
     apply_style()
     root = config.DATA_ROOT
-    # Load N3 (NYU data) and U3 (USC data) variants, per band
-    bands = [("Sub-THz", "N3_142_UMi.xlsx", "U3_142_UMi.xlsx"),
-             ("6.75 GHz", "N3_7_UMi.xlsx",  "U3_7_UMi.xlsx")]
+    # Paper Table VI was typeset from two different xlsx snapshots:
+    #   - PL / DS columns   come from the *-RMSE.xlsx variants (paper snapshot)
+    #   - ASA / ASD columns come from the regular *.xlsx (the RMSE variants
+    #     have empty ASA/ASD columns).
+    # We load both and pick per-metric.
+    def _opt(path: Path) -> Path | None:
+        return path if path.exists() else None
+
+    bands = [
+        ("Sub-THz",
+         root / "N3_142_UMi.xlsx", root / "U3_142_UMi.xlsx",
+         _opt(root / "N3_142_UMi_RMSE.xlsx"), _opt(root / "U3_142_UMi_RMSE.xlsx")),
+        ("6.75 GHz",
+         root / "N3_7_UMi.xlsx", root / "U3_7_UMi.xlsx",
+         None, None),
+    ]
     rows = []
-    for band_label, n3_file, u3_file in bands:
-        n3 = _load_variants(root / n3_file, "NYU orig")
-        u3 = _load_variants(root / u3_file, "USC orig")
+    for band_label, n3_plain, u3_plain, n3_rmse, u3_rmse in bands:
+        n3_p = _load_variants(n3_plain, "NYU orig")
+        u3_p = _load_variants(u3_plain, "USC orig")
+        n3_r = _load_variants(n3_rmse, "NYU orig") if n3_rmse else n3_p
+        u3_r = _load_variants(u3_rmse, "USC orig") if u3_rmse else u3_p
+        # PL/DS use RMSE-variant; ASA/ASD use the plain variant.
+        sources = {"pl": (n3_r, u3_r), "ds": (n3_r, u3_r),
+                   "asa": (n3_p, u3_p), "asd": (n3_p, u3_p)}
         for metric, mlabel in (("pl", "PL [dB]"), ("ds", "DS [ns]"),
                                 ("asa", "ASA [deg]"), ("asd", "ASD [deg]")):
+            n3v, u3v = sources[metric]
             rows.append({
                 "Band": band_label, "Metric": mlabel,
-                "USC data - NYU thres": _compare_pair(u3["nyu_thr"], u3["orig"], metric),
-                "USC data - USC thres": _compare_pair(u3["usc_thr"], u3["orig"], metric),
-                "NYU data - USC thres": _compare_pair(n3["usc_thr"], n3["orig"], metric),
-                "NYU data - NYU thres": _compare_pair(n3["nyu_thr"], n3["orig"], metric),
+                "USC data - NYU thres": _compare_pair(u3v["nyu_thr"], u3v["orig"], metric),
+                "USC data - USC thres": _compare_pair(u3v["usc_thr"], u3v["orig"], metric),
+                "NYU data - USC thres": _compare_pair(n3v["usc_thr"], n3v["orig"], metric),
+                "NYU data - NYU thres": _compare_pair(n3v["nyu_thr"], n3v["orig"], metric),
             })
     tbl = pd.DataFrame(rows)
     config.ensure_output_dirs()
