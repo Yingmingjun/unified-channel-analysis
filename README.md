@@ -9,9 +9,28 @@ This repository contains a **Python reference implementation** (primary, verifie
 ## Scope and status
 
 - **Python:** fully verified. `channel-run-all` regenerates every paper figure (Fig. 3–8) and every data-driven table (Table 6, Table 7) from the shared point-data tables. See `docs/numerical_parity.md` and `docs/figure_parity.md`.
-- **MATLAB:** parallel port of the Python architecture. Not executed in the authoring sandbox — run it on a MATLAB-licensed machine yourself.
+- **MATLAB:** **standalone** end-to-end pipeline. Now bundles the raw
+  measurement data (≈ 11 GB under `data/raw/`) and the verbatim authors'
+  processing / paper-figure scripts under `matlab/processing/` and
+  `matlab/paper_figures/`. `matlab/run_all.m` reproduces every figure
+  from raw PDPs on any MATLAB-licensed machine — no references to the
+  original `D:/NYU-USC/Cross-Processing/` or
+  `D:/NaveedDipankarMingjunJorgeShare/` trees are required.
+  - **First invocation takes ~30–60 minutes** (raw-PDP reprocessing).
+  - Subsequent invocations auto-skip raw processing if its `Results/*.mat`
+    already exists and regenerate only the figures.
+  - `run_all('rebuild')` forces a full rerun of every step.
+  - `run_all('figures')` regenerates only the figure scripts.
 
-**Scope of the port.** The Python package consumes the paper's *point-data* tables (per-location Omni PL / DS / ASA / ASD) directly. Raw directional-PDP reprocessing from the measurement records (sliding-correlator demodulation, APDS synthesis, spatial-lobe expansion, threshold application) is not duplicated in Python — the existing MATLAB pipelines in Codebases A (`D:/NaveedDipankarMingjunJorgeShare/...`) and B (`D:/NYU-USC/Cross-Processing/`) are the authoritative source for those steps. This matches the paper's position: the point-data table *is* the multi-institution interchange format.
+**Scope of the port.** The Python package consumes the paper's
+*point-data* tables (per-location Omni PL / DS / ASA / ASD) directly and
+does not reprocess raw PDPs. The MATLAB pipeline, by contrast, is now
+self-sufficient: its `processing/` subtree houses the verbatim authors'
+raw-to-result scripts, and `paper_figures/` houses the verbatim authors'
+figure-generation scripts that read those results. The point-data
+xlsx tables under `data/point_data/` are still used as the multi-
+institution interchange format and as the input to the cross-processing
+figure scripts.
 
 ## Repository layout
 
@@ -20,15 +39,26 @@ This repository contains a **Python reference implementation** (primary, verifie
 │   ├── pyproject.toml
 │   ├── src/channel_analysis/    # installable package (src layout)
 │   └── tests/                   # pytest unit tests
-├── matlab/                      # SECONDARY — parallel port (user runs themselves)
-│   ├── run_all.m
-│   ├── config/                  # paths and plot style
-│   ├── lib/                     # PL / DS / AS / stats helpers
-│   └── figures/                 # per-figure drivers
+├── matlab/                      # STANDALONE raw-to-paper pipeline
+│   ├── run_all.m                # orchestrates STEP 1 raw → STEP 2 paper figs → STEP 3 parity
+│   ├── config/                  # paths.m (resolves repo-root absolute paths)
+│   ├── lib/                     # PL / DS / AS / stats helpers (Python-parity)
+│   ├── lib_tcsl/                # flattened NYU 4.TCSL toolbox (TCSL142D, PAS, etc.)
+│   ├── patterns/                # 142 GHz antenna pattern .DAT files
+│   ├── processing/              # verbatim authors' raw-processing scripts
+│   │   ├── nyu_142/             (NYU142GHz_Method_Comparison.m + aux CSV)
+│   │   ├── nyu_7/               (NYU7GHz_Method_Comparison.m + aux CSV + .mat)
+│   │   ├── usc_145/             (USC142GHz_Method_Comparison_Full.m + aziCut/elevCut)
+│   │   └── usc_7/               (USC7GHz_NewData_Processing.m + USC_Midband_Pattern)
+│   ├── paper_figures/           # verbatim authors' figure scripts (pixel-identical output)
+│   └── figures/                 # unified per-figure drivers (Python parity)
+├── data/
+│   ├── raw/                     # 11 GB raw PDP datasets (bundled, gitignored)
+│   ├── point_data/              # interchange xlsx + N1/N3/U3 tables
+│   └── paper_reference/         # hand-coded paper truth values
 ├── figures/
 │   ├── python/                  # Python-produced .pdf / .png
-│   └── matlab/                  # populated by the user
-├── data/README.md               # expected data layout; no data shipped here
+│   └── matlab/                  # populated by run_all.m
 ├── docs/                        # paper summary, inventories, parity reports
 └── FINAL_REPORT.md              # end-of-port summary of status and gaps
 ```
@@ -55,16 +85,32 @@ Outputs land in `figures/python/` — every figure as both `.pdf` and `.png`, an
 
 See [`README_PYTHON.md`](README_PYTHON.md) for full Python instructions, including data-path configuration and per-figure driver usage.
 
-## Quickstart — MATLAB (parallel port)
+## Quickstart — MATLAB (standalone)
 
-See [`README_MATLAB.md`](README_MATLAB.md). Expected workflow:
+See [`README_MATLAB.md`](README_MATLAB.md) for the full walkthrough. The
+pipeline is now self-sufficient: the repo ships with ~11 GB of raw PDP
+data under `data/raw/` plus the verbatim authors' processing and figure
+scripts. No references to `D:/NYU-USC/Cross-Processing/` or
+`D:/NaveedDipankarMingjunJorgeShare/` remain.
 
 ```matlab
 cd matlab
-run_all    % regenerates every figure into figures/matlab/
+run_all           % full raw-to-figures pipeline (first run: ~30-60 min)
+run_all('figures')  % skip raw processing; regenerate figures only
+run_all('rebuild')  % force full rerun of every step
 ```
 
-Python is the verified reference; MATLAB is provided as a convenience for users who prefer the MATLAB environment. Numerical agreement between the two ports within a few percent is expected; cross-check results against `docs/numerical_parity.md`.
+On first invocation the raw-PDP processing step writes results into
+`matlab/processing/*/Results/` (331 KB – 525 KB per pipeline);
+subsequent invocations auto-detect those files and skip re-processing.
+The verbatim paper-figure scripts under `matlab/paper_figures/` produce
+pixel-identical output to the publication, and the unified drivers under
+`matlab/figures/` produce the Python-parity CSVs / PDFs consumed by
+`paper_parity.m`.
+
+Python is still the verified reference for the aggregated figures;
+numerical agreement between the two ports within a few percent is
+expected — cross-check against `docs/numerical_parity.md`.
 
 ## Figure-by-figure how-to
 

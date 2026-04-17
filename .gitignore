@@ -5,10 +5,20 @@ data/*
 data/point_data/*
 !data/point_data/*.xlsx
 !data/point_data/README.md
+!data/point_data/*.csv
+!data/paper_reference/
 *.mat
 **/NYU_Data/**
 **/USC_Data/**
 **/NYU_Data_thresholded/**
+
+# Raw data (bundled separately but too large for git)
+data/raw/*/*
+!data/raw/README.md
+
+# Processing outputs that raw-processing regenerates
+matlab/processing/*/Results/
+matlab/processing/*/Figures/
 
 # Python
 __pycache__/
