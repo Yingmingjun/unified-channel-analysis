@@ -8,7 +8,7 @@ Re-run `matlab/run_all.m` to refresh the MATLAB column.
 - Python vs Paper - Table VI: 20/32 tight (<=2%), 8/32 close (<=10%), 4 miss.
 - Python vs Paper - Table VII: 70/108 tight (<=2%), 28/108 close (<=10%), 10 miss.
 - MATLAB vs Paper - Table VI: 20/32 tight (<=2%), 8/32 close (<=10%), 4 miss.
-- MATLAB vs Paper - Table VII: 60/108 tight (<=2%), 24/108 close (<=10%), 24 miss.
+- MATLAB vs Paper - Table VII: 71/108 tight (<=2%), 26/108 close (<=10%), 11 miss.
 
 ## Table VI — Cross-processing RMSE (Paper / Python / MATLAB)
 
@@ -126,8 +126,8 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | PLE | 1.90 | 1.89 | 1.89 | TIGHT | TIGHT |
 | sigma SF dB | 0.86 | 0.86 | 0.86 | TIGHT | TIGHT |
 | PLE 95% CFI width | 0.05 | 0.05 | 0.05 | TIGHT | TIGHT |
-| DS mean ns | 26.57 | 25.65 | 70.77 | CLOSE | MISS |
-| DS 95% CFI width ns | 26.77 | 25.95 | 26.65 | TIGHT | TIGHT |
+| DS mean ns | 26.57 | 25.65 | 25.65 | CLOSE | CLOSE |
+| DS 95% CFI width ns | 26.77 | 25.95 | 25.83 | TIGHT | TIGHT |
 | ASA mean d | 15.74 | 15.65 | 15.65 | TIGHT | TIGHT |
 | ASA 95% CFI width d | 6.54 | 7.29 | 7.41 | TIGHT | TIGHT |
 | ASD mean d | 10.98 | 10.97 | 10.97 | TIGHT | TIGHT |
@@ -137,11 +137,11 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 
 | Metric | Paper | Python | MATLAB | Py vs P | ML vs P |
 |--------|------:|-------:|-------:|:-------:|:-------:|
-| PLE | 2.84 | 2.82 | 2.71 | TIGHT | CLOSE |
-| sigma SF dB | 6.00 | 6.00 | 5.96 | TIGHT | TIGHT |
+| PLE | 2.84 | 2.82 | 2.82 | TIGHT | TIGHT |
+| sigma SF dB | 6.00 | 6.00 | 6.00 | TIGHT | TIGHT |
 | PLE 95% CFI width | 0.37 | 0.38 | 0.38 | TIGHT | TIGHT |
-| DS mean ns | 31.88 | 30.62 | 232.13 | CLOSE | MISS |
-| DS 95% CFI width ns | 28.67 | 26.20 | 103.70 | TIGHT | MISS |
+| DS mean ns | 31.88 | 30.62 | 30.62 | CLOSE | CLOSE |
+| DS 95% CFI width ns | 28.67 | 26.20 | 25.13 | TIGHT | TIGHT |
 | ASA mean d | 31.10 | 30.71 | 30.71 | TIGHT | TIGHT |
 | ASA 95% CFI width d | 19.74 | 20.66 | 21.02 | TIGHT | TIGHT |
 | ASD mean d | 21.60 | 21.40 | 21.40 | TIGHT | TIGHT |
@@ -154,8 +154,8 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | PLE | 1.93 | 1.93 | 1.93 | TIGHT | TIGHT |
 | sigma SF dB | 2.09 | 2.10 | 2.10 | TIGHT | TIGHT |
 | PLE 95% CFI width | 0.09 | 0.10 | 0.10 | TIGHT | TIGHT |
-| DS mean ns | 24.29 | 23.56 | 74.21 | CLOSE | MISS |
-| DS 95% CFI width ns | 27.14 | 26.59 | 77.04 | TIGHT | MISS |
+| DS mean ns | 24.29 | 23.56 | 23.56 | CLOSE | CLOSE |
+| DS 95% CFI width ns | 27.14 | 26.59 | 27.60 | TIGHT | TIGHT |
 | ASA mean d | 11.09 | 10.96 | 10.96 | TIGHT | TIGHT |
 | ASA 95% CFI width d | 6.80 | 8.12 | 8.23 | CLOSE | CLOSE |
 | ASD mean d | 8.03 | 7.98 | 7.98 | TIGHT | TIGHT |
@@ -165,11 +165,11 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 
 | Metric | Paper | Python | MATLAB | Py vs P | ML vs P |
 |--------|------:|-------:|-------:|:-------:|:-------:|
-| PLE | 2.88 | 2.87 | 2.81 | TIGHT | CLOSE |
-| sigma SF dB | 7.18 | 7.17 | 7.32 | TIGHT | TIGHT |
+| PLE | 2.88 | 2.87 | 2.87 | TIGHT | TIGHT |
+| sigma SF dB | 7.18 | 7.17 | 7.17 | TIGHT | TIGHT |
 | PLE 95% CFI width | 0.34 | 0.32 | 0.33 | TIGHT | TIGHT |
-| DS mean ns | 34.72 | 33.34 | 309.08 | CLOSE | MISS |
-| DS 95% CFI width ns | 27.19 | 26.29 | 519.17 | TIGHT | MISS |
+| DS mean ns | 34.72 | 33.34 | 33.34 | CLOSE | CLOSE |
+| DS 95% CFI width ns | 27.19 | 26.29 | 25.36 | TIGHT | TIGHT |
 | ASA mean d | 36.56 | 35.97 | 35.97 | TIGHT | TIGHT |
 | ASA 95% CFI width d | 26.42 | 20.23 | 20.29 | CLOSE | CLOSE |
 | ASD mean d | 16.51 | 16.28 | 16.28 | TIGHT | TIGHT |
@@ -207,11 +207,11 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 
 | Metric | Paper | Python | MATLAB | Py vs P | ML vs P |
 |--------|------:|-------:|-------:|:-------:|:-------:|
-| PLE | 1.92 | 1.92 | 1.91 | TIGHT | TIGHT |
-| sigma SF dB | 1.42 | 1.42 | 1.48 | TIGHT | CLOSE |
-| PLE 95% CFI width | 0.12 | 0.12 | 0.12 | TIGHT | TIGHT |
-| DS mean ns | 14.63 | 13.09 | 14.18 | CLOSE | CLOSE |
-| DS 95% CFI width ns | 21.06 | 19.12 | 28.13 | TIGHT | MISS |
+| PLE | 1.92 | 1.92 | 1.92 | TIGHT | TIGHT |
+| sigma SF dB | 1.42 | 1.42 | 1.42 | TIGHT | TIGHT |
+| PLE 95% CFI width | 0.12 | 0.12 | 0.11 | TIGHT | TIGHT |
+| DS mean ns | 14.63 | 13.09 | 13.09 | CLOSE | CLOSE |
+| DS 95% CFI width ns | 21.06 | 19.12 | 19.14 | TIGHT | TIGHT |
 | ASA mean d | 10.48 | 10.26 | 10.26 | CLOSE | CLOSE |
 | ASA 95% CFI width d | 6.96 | 12.90 | 12.67 | MISS | MISS |
 | ASD mean d | 5.87 | 5.86 | 5.86 | TIGHT | TIGHT |
@@ -221,11 +221,11 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 
 | Metric | Paper | Python | MATLAB | Py vs P | ML vs P |
 |--------|------:|-------:|-------:|:-------:|:-------:|
-| PLE | 2.62 | 2.62 | 2.69 | TIGHT | CLOSE |
-| sigma SF dB | 7.33 | 7.33 | 7.28 | TIGHT | TIGHT |
+| PLE | 2.62 | 2.62 | 2.62 | TIGHT | TIGHT |
+| sigma SF dB | 7.33 | 7.33 | 7.33 | TIGHT | TIGHT |
 | PLE 95% CFI width | 0.37 | 0.37 | 0.38 | TIGHT | TIGHT |
-| DS mean ns | 29.00 | 27.58 | 26.21 | CLOSE | CLOSE |
-| DS 95% CFI width ns | 55.32 | 51.19 | 185.27 | TIGHT | MISS |
+| DS mean ns | 29.00 | 27.58 | 27.58 | CLOSE | CLOSE |
+| DS 95% CFI width ns | 55.32 | 51.19 | 53.30 | TIGHT | TIGHT |
 | ASA mean d | 12.60 | 12.36 | 12.36 | TIGHT | TIGHT |
 | ASA 95% CFI width d | 4.89 | 9.11 | 9.10 | MISS | MISS |
 | ASD mean d | 12.23 | 12.17 | 12.17 | TIGHT | TIGHT |
@@ -238,8 +238,8 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | PLE | 1.85 | 1.86 | 1.86 | TIGHT | TIGHT |
 | sigma SF dB | 2.44 | 2.36 | 2.36 | CLOSE | CLOSE |
 | PLE 95% CFI width | 0.13 | 0.13 | 0.13 | TIGHT | TIGHT |
-| DS mean ns | 49.90 | 42.82 | 65.47 | CLOSE | MISS |
-| DS 95% CFI width ns | 87.45 | 76.37 | 137.62 | TIGHT | MISS |
+| DS mean ns | 49.90 | 42.82 | 42.82 | CLOSE | CLOSE |
+| DS 95% CFI width ns | 87.45 | 76.37 | 79.58 | TIGHT | TIGHT |
 | ASA mean d | 18.10 | 18.04 | 18.04 | TIGHT | TIGHT |
 | ASA 95% CFI width d | 9.09 | 18.27 | 17.69 | MISS | MISS |
 | ASD mean d | 21.57 | 20.84 | 20.84 | CLOSE | CLOSE |
@@ -249,11 +249,11 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 
 | Metric | Paper | Python | MATLAB | Py vs P | ML vs P |
 |--------|------:|-------:|-------:|:-------:|:-------:|
-| PLE | 2.59 | 2.56 | 2.60 | TIGHT | TIGHT |
-| sigma SF dB | 6.96 | 7.74 | 7.89 | CLOSE | CLOSE |
+| PLE | 2.59 | 2.56 | 2.56 | TIGHT | TIGHT |
+| sigma SF dB | 6.96 | 7.74 | 7.74 | CLOSE | CLOSE |
 | PLE 95% CFI width | 0.26 | 0.28 | 0.29 | TIGHT | TIGHT |
-| DS mean ns | 68.40 | 66.43 | 104.35 | CLOSE | MISS |
-| DS 95% CFI width ns | 70.19 | 65.18 | 139.74 | TIGHT | MISS |
+| DS mean ns | 68.40 | 66.43 | 66.43 | CLOSE | CLOSE |
+| DS 95% CFI width ns | 70.19 | 65.18 | 66.64 | TIGHT | TIGHT |
 | ASA mean d | 22.53 | 22.39 | 22.39 | TIGHT | TIGHT |
 | ASA 95% CFI width d | 6.91 | 14.11 | 14.21 | MISS | MISS |
 | ASD mean d | 26.87 | 26.03 | 26.03 | CLOSE | CLOSE |

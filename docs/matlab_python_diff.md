@@ -18,15 +18,15 @@ Tolerance: |Δ| < 0.05 OR relative Δ < 2 %.
 
 - Python rows: 12, MATLAB rows: 12
 - Common numeric columns (after name normalization): 10
-- Max |Δ|: **492.9**   Max rel Δ: **18.74** — ⚠️ 32 cell(s) exceed tolerance
+- Max |Δ|: **4.626**   Max rel Δ: **0.08811** — ⚠️ 17 cell(s) exceed tolerance
 
 | Row | Column (normalized) | Python | MATLAB | |Δ| | Δ/Py |
 |-----|---------------------|--------|--------|-----|------|
-| Band=Sub-THz (142/145.5); Dataset=Pooled; LocType=NLOS | dscfiwidthns | 26.29 | 519.2 | 492.9 | 18.74 |
-| Band=Sub-THz (142/145.5); Dataset=Pooled; LocType=NLOS | dsmeanns | 33.34 | 309.1 | 275.7 | 8.271 |
-| Band=Sub-THz (142/145.5); Dataset=USC only; LocType=NLOS | dsmeanns | 30.62 | 232.1 | 201.5 | 6.58 |
-| Band=Sub-THz (142/145.5); Dataset=USC only; LocType=NLOS | dscfiwidthns | 26.2 | 103.7 | 77.5 | 2.958 |
-| Band=6.75 GHz; Dataset=USC only; LocType=NLOS | dscfiwidthns | 51.19 | 185.3 | 134.1 | 2.619 |
+| Band=Sub-THz (142/145.5); Dataset=NYU only; LocType=LOS | asacfiwidthd | 8.158 | 8.876 | 0.7187 | 0.08811 |
+| Band=Sub-THz (142/145.5); Dataset=NYU only; LocType=NLOS | dscfiwidthns | 34.72 | 36.58 | 1.862 | 0.05364 |
+| Band=Sub-THz (142/145.5); Dataset=Pooled; LocType=LOS | asdcfiwidthd | 3.932 | 4.104 | 0.1725 | 0.04388 |
+| Band=Sub-THz (142/145.5); Dataset=USC only; LocType=LOS | asdcfiwidthd | 1.69 | 1.761 | 0.07129 | 0.04218 |
+| Band=6.75 GHz; Dataset=Pooled; LocType=LOS | dscfiwidthns | 76.37 | 79.58 | 3.213 | 0.04207 |
 
 ## `table08_U3_145.csv`
 
