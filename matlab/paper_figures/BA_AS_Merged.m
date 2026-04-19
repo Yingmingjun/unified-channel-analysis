@@ -3,27 +3,25 @@
 %  ========================================================================
 %
 %  PURPOSE: Generate Bland-Altman plots for Angular Spread (ASA, ASD)
-%           at sub-THz (142/145 GHz) and FR1(C) (6.75/7 GHz),
-%           matching the dual-axis style of BA_PL.jpg / BA_DS.jpg
+%           at sub-THz (142/145 GHz) and FR1(C) (6.75/7 GHz). Visual
+%           style is intentionally kept identical to
+%           fig03_bland_altman_pl_ds.m so Fig 3 and Fig 4 share a
+%           single look in the paper: single y-axis, inline yline
+%           labels, per-side numeric corner boxes, large legible
+%           markers, and matching font sizes.
 %
-%  For AS the difference = NYU method (10 dB PAS) - USC method
+%  For AS the difference = USC method - NYU method (10 dB PAS)
 %  N3 = NYU data processed by both methods
 %  U3 = USC data processed by both methods
 %
-%  OUTPUT FIGURES (saved to paper figures directory as .jpg AND .fig):
-%    - BA_ASA.jpg/.fig     (sub-THz ASA Bland-Altman: N3 vs U3)
-%    - BA_ASA7.jpg/.fig    (6.75 GHz ASA Bland-Altman: N3 vs U3)
-%    - BA_ASD.jpg/.fig     (sub-THz ASD Bland-Altman: N3 vs U3)
-%    - BA_ASD7.jpg/.fig    (6.75 GHz ASD Bland-Altman: N3 vs U3)
-%
-%  STYLE: Matches BA_PL.jpg / BA_DS.jpg exactly:
-%    - Dual y-axes (yyaxis): blue left (N3), red right (U3)
-%    - Blue circles for N3, salmon squares for U3
-%    - Bias + 1.96 SD lines for each group
-%    - White background, font size 14
+%  OUTPUT FIGURES (saved to paper figures directory as .jpg/.png/.fig):
+%    - BA_ASA.jpg/.png/.fig    (sub-THz ASA Bland-Altman: N3 + U3)
+%    - BA_ASA7.jpg/.png/.fig   (6.75 GHz ASA)
+%    - BA_ASD.jpg/.png/.fig    (sub-THz ASD)
+%    - BA_ASD7.jpg/.png/.fig   (6.75 GHz ASD)
 %
 %  Author: Mingjun Ying
-%  Date: February 2026
+%  Date: April 2026
 %  ========================================================================
 
 clear variables; close all; clc;
@@ -36,19 +34,19 @@ U = paths();
 figOutputPath = U.paper_fig_out;
 if ~exist(figOutputPath, 'dir'), mkdir(figOutputPath); end
 
-% Data paths — sub-THz (.mat files written by the raw-processing scripts)
+% Data paths --- sub-THz (.mat files written by the raw-processing scripts)
 nyu142Path = fullfile(U.results_nyu_142, 'all_comparison_results.mat');
 usc145Path = fullfile(U.results_usc_145, 'USC145GHz_Full_Results.mat');
 
-% Data paths — 6.75 GHz (.mat files)
+% Data paths --- 6.75 GHz (.mat files)
 nyu7Path = fullfile(U.results_nyu_7, 'all_comparison_results.mat');
 usc7Path = fullfile(U.results_usc_7, 'USC7GHz_Full_Results.mat');
 
-% Colors matching BA_PL.jpg style
-colorN3     = [0 0.45 0.74];       % Blue for N3 (NYU data)
-colorN3fill = [0.60 0.78 0.92];    % Light blue fill
-colorU3     = [0.85 0.33 0.10];    % Red/orange for U3 (USC data)
-colorU3fill = [0.98 0.78 0.68];    % Light salmon fill
+% Colors --- MUST match fig03_bland_altman_pl_ds.m exactly.
+colorN3     = [0.00 0.45 0.74];    % NYU blue
+colorN3fill = [0.60 0.78 0.92];    % light blue fill
+colorU3     = [0.85 0.33 0.10];    % USC orange
+colorU3fill = [0.98 0.78 0.68];    % light salmon fill
 
 %% ========================================================================
 %  LOAD DATA
@@ -73,42 +71,38 @@ fprintf('  6.75 GHz: NYU %d locations, USC %d locations\n', ...
 %  ========================================================================
 
 % --- Sub-THz ASA ---
-% N3: NYU data — NYU method (ASA_NYU_10dB) vs USC method (ASA_USC)
-% U3: USC data — NYU method (ASA_NYU_10dB) vs USC method (ASA_USC)
+% N3: NYU data --- NYU method (ASA_NYU_10dB) vs USC method (ASA_USC)
+% U3: USC data --- NYU method (ASA_NYU_10dB) vs USC method (ASA_USC)
 generate_ba_figure(...
-    'ASA', '142 GHz', ...
+    'ASA', 'sub-THz', ...
     nyu142_r.ASA_NYU_10dB, nyu142_r.ASA_USC, ...   % N3: NYU data
     usc145_r.ASA_NYU_10dB, usc145_r.ASA_USC, ...   % U3: USC data
-    'NYU 10 dB PAS', 'USC', ...
     colorN3, colorN3fill, colorU3, colorU3fill, ...
     figOutputPath, 'BA_ASA');
 
 % --- Sub-THz ASD ---
 generate_ba_figure(...
-    'ASD', '142 GHz', ...
+    'ASD', 'sub-THz', ...
     nyu142_r.ASD_NYU_10dB, nyu142_r.ASD_USC, ...   % N3: NYU data
     usc145_r.ASD_NYU_10dB, usc145_r.ASD_USC, ...   % U3: USC data
-    'NYU 10 dB PAS', 'USC', ...
     colorN3, colorN3fill, colorU3, colorU3fill, ...
     figOutputPath, 'BA_ASD');
 
 % --- 6.75 GHz ASA ---
-% N3: NYU data — NYU method (ASA_NYUthr_N10) vs USC method (ASA_NYUthr_U)
-% U3: USC data — NYU method (ASA_NYU_10dB) vs USC method (ASA_USC)
+% N3 (NYU data) 6.75 GHz is keyed off NYU-threshold columns, since
+% that is the per-institution threshold already applied upstream.
 generate_ba_figure(...
-    'ASA', '7 GHz', ...
+    'ASA', '6.75 GHz', ...
     nyu7_r.ASA_NYUthr_N10, nyu7_r.ASA_NYUthr_U, ...  % N3: NYU data
     usc7_r.ASA_NYU_10dB, usc7_r.ASA_USC, ...          % U3: USC data
-    'NYU 10 dB PAS', 'USC', ...
     colorN3, colorN3fill, colorU3, colorU3fill, ...
     figOutputPath, 'BA_ASA7');
 
 % --- 6.75 GHz ASD ---
 generate_ba_figure(...
-    'ASD', '7 GHz', ...
+    'ASD', '6.75 GHz', ...
     nyu7_r.ASD_NYUthr_N10, nyu7_r.ASD_NYUthr_U, ...  % N3: NYU data
     usc7_r.ASD_NYU_10dB, usc7_r.ASD_USC, ...          % U3: USC data
-    'NYU 10 dB PAS', 'USC', ...
     colorN3, colorN3fill, colorU3, colorU3fill, ...
     figOutputPath, 'BA_ASD7');
 
@@ -121,31 +115,27 @@ fprintf('Done!\n');
 
 function generate_ba_figure(metricName, freqLabel, ...
     n3_methodA, n3_methodB, u3_methodA, u3_methodB, ...
-    methodAname, methodBname, ...
     colorN3, colorN3fill, colorU3, colorU3fill, ...
     outputFolder, baseName)
-    % Generate a single Bland-Altman figure with dual y-axis labels
-    % Style matches BA_PL.jpg / BA_DS.jpg exactly
+    % Generate one Bland-Altman figure. Visual style matches
+    % matlab/figures/fig03_bland_altman_pl_ds.m one-for-one so that
+    % the 8 BA panels in the paper (4 PL/DS + 4 ASA/ASD) share a
+    % single look.
     %
-    % All data plotted on ONE axis (no yyaxis desync issues).
-    % A second transparent axis overlaid provides the right-side
-    % colored ylabel and tick marks, with identical ylim/ytick.
-    %
-    % N3 = NYU data processed by both methods (left label, blue)
-    % U3 = USC data processed by both methods (right label, red)
-    %
-    % Difference = method_B - method_A  (USC method - NYU method)
-    % Mean = (method_A + method_B) / 2
+    % Difference convention: USC method - NYU method (per paper
+    % convention; same as fig03).
 
-    % Clean data
-    v1 = isfinite(n3_methodA) & isfinite(n3_methodB) & n3_methodA > 0 & n3_methodB > 0;
+    % Clean data (both finite & positive --- AS is non-negative)
+    v1 = isfinite(n3_methodA) & isfinite(n3_methodB) & ...
+         n3_methodA > 0 & n3_methodB > 0;
     n3_a = n3_methodA(v1); n3_b = n3_methodB(v1);
-    diff_n3 = n3_b - n3_a;   % USC method - NYU method
+    diff_n3 = n3_b - n3_a;            % USC method - NYU method
     mean_n3 = (n3_a + n3_b) / 2;
 
-    v2 = isfinite(u3_methodA) & isfinite(u3_methodB) & u3_methodA > 0 & u3_methodB > 0;
+    v2 = isfinite(u3_methodA) & isfinite(u3_methodB) & ...
+         u3_methodA > 0 & u3_methodB > 0;
     u3_a = u3_methodA(v2); u3_b = u3_methodB(v2);
-    diff_u3 = u3_b - u3_a;   % USC method - NYU method
+    diff_u3 = u3_b - u3_a;
     mean_u3 = (u3_a + u3_b) / 2;
 
     % Statistics
@@ -157,117 +147,69 @@ function generate_ba_figure(metricName, freqLabel, ...
     upper_u3 = bias_u3 + 1.96 * sd_u3;
     lower_u3 = bias_u3 - 1.96 * sd_u3;
 
-    % Determine y-axis range
-    allDiff = [diff_n3; diff_u3];
-    allUpper = max([upper_n3, upper_u3]);
-    allLower = min([lower_n3, lower_u3]);
-    yMargin = 0.15 * (allUpper - allLower);
-    if yMargin == 0, yMargin = 5; end
-    yRange = [min([allDiff; allLower]) - yMargin, max([allDiff; allUpper]) + yMargin];
+    % -----------------------------------------------------------------
+    % Figure (style mirrors fig03 verbatim)
+    % -----------------------------------------------------------------
+    fig = figure('Position', [100 100 1100 600], 'Color', 'w');
+    hold on; grid on; box on;
+    set(gca, 'FontSize', 24, 'LineWidth', 1.0);
 
-    % X-axis range. Angular spread is non-negative so xMin is floored at
-    % 0. Margin bumped to 12 % of data range so the inline text labels
-    % (at 2 % from each edge) don't sit on top of edge data points -- the
-    % old 5 % margin left barely any whitespace on a 1200 px wide figure.
-    allMeans = [mean_n3; mean_u3];
-    xMargin = 0.12 * range(allMeans);
-    if xMargin == 0, xMargin = 5; end
-    xRange = [max(0, min(allMeans) - xMargin), max(allMeans) + xMargin];
+    % Scatter N3 (NYU) blue circles
+    scatter(mean_n3, diff_n3, 200, 'o', ...
+            'MarkerFaceColor', colorN3fill, ...
+            'MarkerEdgeColor', colorN3, 'LineWidth', 2.0, ...
+            'DisplayName', sprintf('N3: NYU data (n=%d)', numel(diff_n3)));
+    % Scatter U3 (USC) orange squares
+    scatter(mean_u3, diff_u3, 200, 's', ...
+            'MarkerFaceColor', colorU3fill, ...
+            'MarkerEdgeColor', colorU3, 'LineWidth', 2.0, ...
+            'DisplayName', sprintf('U3: USC data (n=%d)', numel(diff_u3)));
 
-    % Degree symbol
-    degSym = char(176);
+    % N3 bias + 1.96 SD lines with inline labels on the LEFT
+    yline(bias_n3,  '-',  'Bias (N3)', 'Color', colorN3, 'LineWidth', 2.0, ...
+          'HandleVisibility', 'off', 'FontSize', 18, 'FontWeight', 'bold', ...
+          'LabelHorizontalAlignment', 'left', 'Interpreter', 'none');
+    yline(upper_n3, '--', '+1.96 SD (N3)', 'Color', colorN3, 'LineWidth', 1.6, ...
+          'HandleVisibility', 'off', 'FontSize', 16, ...
+          'LabelHorizontalAlignment', 'left', 'Interpreter', 'none');
+    yline(lower_n3, '--', '-1.96 SD (N3)', 'Color', colorN3, 'LineWidth', 1.6, ...
+          'HandleVisibility', 'off', 'FontSize', 16, ...
+          'LabelHorizontalAlignment', 'left', 'Interpreter', 'none');
+    % U3 bias + 1.96 SD lines with inline labels on the RIGHT
+    yline(bias_u3,  '-',  'Bias (U3)', 'Color', colorU3, 'LineWidth', 2.0, ...
+          'HandleVisibility', 'off', 'FontSize', 18, 'FontWeight', 'bold', ...
+          'LabelHorizontalAlignment', 'right', 'Interpreter', 'none');
+    yline(upper_u3, '--', '+1.96 SD (U3)', 'Color', colorU3, 'LineWidth', 1.6, ...
+          'HandleVisibility', 'off', 'FontSize', 16, ...
+          'LabelHorizontalAlignment', 'right', 'Interpreter', 'none');
+    yline(lower_u3, '--', '-1.96 SD (U3)', 'Color', colorU3, 'LineWidth', 1.6, ...
+          'HandleVisibility', 'off', 'FontSize', 16, ...
+          'LabelHorizontalAlignment', 'right', 'Interpreter', 'none');
+    yline(0, ':', 'Color', [0.5 0.5 0.5], 'LineWidth', 0.8, ...
+          'HandleVisibility', 'off');
 
-    % Create figure
-    fig = figure('Position', [140, 140, 1200, 600], 'Color', 'w');
-    ax1 = axes('Parent', fig);
-    hold(ax1, 'on'); grid(ax1, 'on'); box(ax1, 'on');
+    xlabel(sprintf('Mean of paired %s [%s]', metricName, char(176)), ...
+           'FontSize', 26);
+    ylabel(sprintf('Difference (USC - NYU) [%s]', char(176)), 'FontSize', 26);
+    title(sprintf('Bland-Altman: Omni %s (%s)', metricName, freqLabel), ...
+          'FontSize', 28);
+    legend('Location', 'southeast', 'FontSize', 22);
 
-    % ===== Plot ALL data on this single axis =====
-
-    % Scatter N3 (blue circles)
-    hN3 = scatter(ax1, mean_n3, diff_n3, 120, 'o', ...
-        'MarkerFaceColor', colorN3fill, 'MarkerEdgeColor', colorN3, ...
-        'LineWidth', 1.8);
-
-    % Scatter U3 (orange squares)
-    hU3 = scatter(ax1, mean_u3, diff_u3, 120, 's', ...
-        'MarkerFaceColor', colorU3fill, 'MarkerEdgeColor', colorU3, ...
-        'LineWidth', 1.8);
-
-    % --- N3 bias and limits (blue) ---
-    yline(ax1, bias_n3, '-', 'Color', colorN3, 'LineWidth', 2.0);
-    yline(ax1, upper_n3, '--', 'Color', colorN3, 'LineWidth', 1.8);
-    yline(ax1, lower_n3, '--', 'Color', colorN3, 'LineWidth', 1.8);
-
-    % --- U3 bias and limits (red) ---
-    yline(ax1, bias_u3, '-', 'Color', colorU3, 'LineWidth', 2.0);
-    yline(ax1, upper_u3, '--', 'Color', colorU3, 'LineWidth', 1.8);
-    yline(ax1, lower_u3, '--', 'Color', colorU3, 'LineWidth', 1.8);
-
-    % Set axis limits
-    xlim(ax1, xRange);
-    ylim(ax1, yRange);
-
-    % --- Text labels for N3 (left side, blue) ---
-    text(ax1, xRange(1) + 0.02*range(xRange), bias_n3, ...
-        'Bias (N3)', ...
-        'Color', colorN3, 'FontSize', 32, 'FontWeight', 'bold', ...
-        'VerticalAlignment', 'bottom', 'Interpreter', 'none');
-    text(ax1, xRange(1) + 0.02*range(xRange), upper_n3, ...
-        '+1.96 SD (N3)', ...
-        'Color', colorN3, 'FontSize', 30, ...
-        'VerticalAlignment', 'bottom', 'Interpreter', 'none');
-    text(ax1, xRange(1) + 0.02*range(xRange), lower_n3, ...
-        '-1.96 SD (N3)', ...
-        'Color', colorN3, 'FontSize', 30, ...
-        'VerticalAlignment', 'top', 'Interpreter', 'none');
-
-    % --- Text labels for U3 (right side, red) ---
-    text(ax1, xRange(2) - 0.02*range(xRange), bias_u3, ...
-        'Bias (U3)', ...
-        'Color', colorU3, 'FontSize', 32, 'FontWeight', 'bold', ...
-        'VerticalAlignment', 'bottom', 'HorizontalAlignment', 'right', ...
-        'Interpreter', 'none');
-    text(ax1, xRange(2) - 0.02*range(xRange), upper_u3, ...
-        '+1.96 SD (U3)', ...
-        'Color', colorU3, 'FontSize', 30, ...
-        'VerticalAlignment', 'bottom', 'HorizontalAlignment', 'right', ...
-        'Interpreter', 'none');
-    text(ax1, xRange(2) - 0.02*range(xRange), lower_u3, ...
-        '-1.96 SD (U3)', ...
-        'Color', colorU3, 'FontSize', 30, ...
-        'VerticalAlignment', 'top', 'HorizontalAlignment', 'right', ...
-        'Interpreter', 'none');
-
-    % --- Left axis label (blue) ---
-    ylabel(ax1, sprintf('N3: NYU Data | %s - %s', methodBname, methodAname), ...
-        'FontSize', 34, 'Color', colorN3, 'Interpreter', 'none');
-    set(ax1, 'YColor', colorN3, 'FontSize', 24);
-
-    % --- Right axis label (red) via overlaid transparent axis ---
-    ax2 = axes('Parent', fig, 'Position', ax1.Position, ...
-        'YAxisLocation', 'right', 'Color', 'none', ...
-        'XTick', [], 'Box', 'off');
-    ax2.YLim = yRange;
-    ax2.YTick = ax1.YTick;  % Same ticks as left axis
-    ylabel(ax2, sprintf('U3: USC Data | %s - %s', methodBname, methodAname), ...
-        'FontSize', 34, 'Color', colorU3, 'Interpreter', 'none');
-    set(ax2, 'YColor', colorU3, 'FontSize', 24);
-    linkaxes([ax1, ax2], 'y');  % Keep them linked
-
-    % --- Common labels ---
-    xlabel(ax1, sprintf('Mean of %s [%s] ((%s + %s)/2)', ...
-        metricName, degSym, methodAname, methodBname), ...
-        'FontSize', 34, 'Interpreter', 'none');
-
-    title(ax1, sprintf('Bland-Altman: Omni %s (N3 vs U3) @ %s', metricName, freqLabel), ...
-        'FontSize', 36, 'FontWeight', 'bold', 'Interpreter', 'none');
-
-    % Legend
-    legend(ax1, [hN3, hU3], ...
-        {sprintf('N3: NYU Data | %s - %s', methodBname, methodAname), ...
-         sprintf('U3: USC Data | %s - %s', methodBname, methodAname)}, ...
-        'Location', 'best', 'FontSize', 30, 'Interpreter', 'none');
+    % Per-side bias / 1.96 SD numeric corner boxes (same as fig03).
+    text(0.02, 0.98, ...
+         sprintf('N3 bias = %+.2f %s\n1.96 SD = %.2f', ...
+                 bias_n3, char(176), 1.96 * sd_n3), ...
+         'Units', 'normalized', 'Color', colorN3, ...
+         'HorizontalAlignment', 'left', 'VerticalAlignment', 'top', ...
+         'FontSize', 22, 'FontWeight', 'bold', ...
+         'BackgroundColor', 'w', 'EdgeColor', colorN3);
+    text(0.98, 0.98, ...
+         sprintf('U3 bias = %+.2f %s\n1.96 SD = %.2f', ...
+                 bias_u3, char(176), 1.96 * sd_u3), ...
+         'Units', 'normalized', 'Color', colorU3, ...
+         'HorizontalAlignment', 'right', 'VerticalAlignment', 'top', ...
+         'FontSize', 22, 'FontWeight', 'bold', ...
+         'BackgroundColor', 'w', 'EdgeColor', colorU3);
 
     % ===== Save =====
     jpgPath = fullfile(outputFolder, [baseName '.jpg']);
@@ -278,14 +220,20 @@ function generate_ba_figure(metricName, freqLabel, ...
     exportgraphics(fig, pngPath, 'Resolution', 300, 'BackgroundColor', 'white');
     fprintf('Saved: %s\n', pngPath);
 
+    pdfPath = fullfile(outputFolder, [baseName '.pdf']);
+    exportgraphics(fig, pdfPath, 'ContentType', 'vector', 'BackgroundColor', 'white');
+    fprintf('Saved: %s\n', pdfPath);
+
     figPath = fullfile(outputFolder, [baseName '.fig']);
     saveas(fig, figPath);
     fprintf('Saved: %s\n', figPath);
 
     % Print statistics
     fprintf('  %s @ %s:\n', metricName, freqLabel);
-    fprintf('    N3: Bias=%+.2f, SD=%.2f, n=%d\n', bias_n3, sd_n3, length(diff_n3));
-    fprintf('    U3: Bias=%+.2f, SD=%.2f, n=%d\n', bias_u3, sd_u3, length(diff_u3));
+    fprintf('    N3: Bias=%+.2f, SD=%.2f, n=%d\n', ...
+            bias_n3, sd_n3, length(diff_n3));
+    fprintf('    U3: Bias=%+.2f, SD=%.2f, n=%d\n', ...
+            bias_u3, sd_u3, length(diff_u3));
 
     close(fig);
 end
