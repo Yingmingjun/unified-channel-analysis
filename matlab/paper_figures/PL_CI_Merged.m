@@ -16,7 +16,7 @@
 %                 USC-only       : dash-dot
 %             * Shaded 95 %% bootstrap CI bands (pink LOS, light-blue NLOS),
 %               computed on the POOLED NYU+USC fit.
-%             * Gray dashed reference PLE lines n = 1, 2, 3, 4 (analytic
+%             * Gray dashed reference PLE lines n = 1, 2, 3 (analytic
 %               FSPL-anchored).
 %             * Black dashed horizontal "max measurable PL" lines per
 %               institution (band-specific: 150/140 dB sub-THz, 142.7/140
@@ -97,7 +97,8 @@ function generate_pl_fig(T, band, pooledFreqGHz, xlimM, ylimDB, titleStr, ...
     d0 = 1.0;
 
     % ===================================================================
-    % 1) Reference PLE lines (n = 1, 2, 3, 4) — gray dashed
+    % 1) Reference PLE lines (n = 1, 2, 3) — gray dashed
+    %    (n = 4 dropped -- its label falls outside ylim for both bands)
     % ===================================================================
     plot_reference_ple_lines(pooledFreqGHz, d0, xlimM, cRef);
 
@@ -318,11 +319,13 @@ function y = cond(x, fallback)
 end
 
 function plot_reference_ple_lines(freqGHz, d0, xlimM, color)
-    % Draw analytic PL(d) curves for PLE n = 1, 2, 3, 4 anchored at FSPL(d0).
+    % Draw analytic PL(d) curves for PLE n = 1, 2, 3 anchored at FSPL(d0).
+    % n = 4 intentionally omitted: at xlim(end) its label lands above
+    % the plot ylim and rendered outside the axes box.
     fspl0 = fspl_1m(freqGHz);
     d = logspace(log10(xlimM(1)), log10(xlimM(2)), 200)';
     D = 10.0 * log10(d / d0);
-    for n_ref = 1:4
+    for n_ref = 1:3
         y = fspl0 + n_ref * D;
         plot(d, y, '--', 'Color', color, 'LineWidth', 1.0, ...
              'HandleVisibility', 'off');
