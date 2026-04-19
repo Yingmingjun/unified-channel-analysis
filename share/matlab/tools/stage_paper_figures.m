@@ -6,8 +6,11 @@ function stage_paper_figures(target_dir)
 %   fig<NN>_<name> convention to the plain names used by main_final.tex
 %   (e.g. fig03_BA_PL.png -> BA_PL.png).
 %
-%   If target_dir is omitted, defaults to the paper source's figures/
-%   folder at D:\Joint-Point-Data-format-USC-NYU-Journal\figures.
+%   If target_dir is omitted, defaults to paths().paper_src_fig_dir,
+%   which is set from the PAPER_FIG_DIR / PAPER_TREE_DIR environment
+%   variables. When those env vars are unset, the function prints a
+%   notice and returns without touching any external directory (it
+%   never writes to a hardcoded absolute path).
 %
 %   Call AFTER run_all('figures') or run_all('rebuild'). The source files
 %   are produced by fig03...fig08 drivers under matlab/figures/.

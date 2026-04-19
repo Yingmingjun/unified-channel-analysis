@@ -79,20 +79,30 @@ pandas `DataFrame`:
 
 ```python
 columns = [
-    'institution',   # 'NYU' or 'USC'
-    'band',          # 'subTHz' or 'FR1C'
-    'link_id',       # e.g. 'T1-R5'
-    'env',           # 'LOS' / 'NLOS'
-    'd_m',           # TR separation
-    'pl_nyu_sum',    'pl_usc_pdm',
+    'institution',     # 'NYU' or 'USC'
+    'band',            # 'subTHz' or 'FR1C'
+    'freq_ghz',        # 142 / 145 / 6.75 (float)
+    'tx_rx_id',        # e.g. 'T1-R5'
+    'd_m',             # TR separation, metres
+    'loc_type',        # 'LOS' / 'NLOS'  (OLOS -> NLOS already applied)
+    'loc_type_raw',    # original label before OLOS->NLOS collapse
+    # Path loss (dB):
+    'pl_nyu_sum',      # NYU SUM synthesis
+    'pl_usc_pdm',      # USC perDelayMax synthesis
+    # Delay spread (ns):
     'ds_nyu_method', 'ds_usc_method',
-    'asa_nyu_method','asa_usc_method',
-    'asd_nyu_method','asd_usc_method',
+    # Angular spread (deg) — Fleury definition:
+    'asa_nyu_10', 'asa_nyu_15', 'asa_nyu_20',   # NYU with 10/15/20 dB PAS SLT
+    'asa_usc',                                  # USC (no spatial threshold)
+    'asd_nyu_10', 'asd_nyu_15', 'asd_nyu_20',
+    'asd_usc',
 ]
 ```
 
 The column mapping happens in `io.py`; adapt it if your campaign uses
-a different xlsx layout.
+a different xlsx layout. MATLAB's `lib/load_point_data.m` exposes the
+same column names (MATLAB-variable-safe, e.g. `tx_rx_id`, `d_m`,
+`pl_nyu_sum`, …).
 
 ---
 
