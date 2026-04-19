@@ -91,6 +91,7 @@ params.Nf = 1001;                     % Number of frequency/delay samples
 params.dt = 1/params.BW;             % Time resolution = 1 ns
 params.n_oversamp = 10;               % USC oversampling factor for RMS-DS
 params.c = 3e8;                       % Speed of light [m/s]
+params.delayGate_ns = 966.67;         % Max delay gate in ns (matches USC 145 + NYU DS_DELAY_GATE_NS)
 
 % Distance vector (from USC ground truth code)
 % d = (0:Nf-1)*3e8/BW where 3e8/1e9 = 0.3 m/sample
@@ -480,9 +481,11 @@ for iLoc = 1:nFiles
     PDP_omni_NYU_dB = 10*log10(PDP_omni_NYU + eps);
     PDP_omni_USC_dB = 10*log10(PDP_omni_USC + eps);
 
-    % Apply noise threshold mask (keep only values above threshold)
-    valid_mask_NYU = PDP_omni_NYU_dB > noise_thresh_dB;
-    valid_mask_USC = PDP_omni_USC_dB > noise_thresh_dB;
+    % Naveed's convention: directional threshold only (already applied
+    % upstream). Omni DS uses only the delay gate.
+    delay_mask = delay_vec_ns(:) <= params.delayGate_ns;
+    valid_mask_NYU = (PDP_omni_NYU(:) > 0) & delay_mask;
+    valid_mask_USC = (PDP_omni_USC(:) > 0) & delay_mask;
 
     % Compute DS using NYU's method (computeDSonMPC style)
     DS_NYU = computeDSonMPC(delay_vec_ns(valid_mask_NYU), PDP_omni_NYU_dB(valid_mask_NYU));

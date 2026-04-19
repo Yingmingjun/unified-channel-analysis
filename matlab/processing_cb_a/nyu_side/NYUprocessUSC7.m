@@ -5,6 +5,12 @@ tic
 % Paths resolved from the unified repo layout (see matlab/config/paths.m).
 P = paths();
 nyuFormatDir = P.cb_a_nyu_format_usc_7;
+% Pull all NYUformat USC data files. This script's validation matches
+% against usc_microcellular_{LOS,NLOS}_metrics7.csv which is indexed by
+% R<NN>/distance of the older 8-location microcellular USC campaign
+% (e.g., R01_162m, R02_199.4m). Newer July-2024 RX-numbered files (17
+% locations) have a different reference (usc7_newdata_* / paper Table VI
+% cell USC_data_*) — handled separately by USCprocessNYU7M_exp.m.
 Adata_glob   = 'NYUformat_PDP_*';
 
 %% To extract Az and El cuts from USC pattern for first time only
@@ -359,9 +365,21 @@ RX_id = zeros(nTR_local,1);
 distances = zeros(nTR_local,1);
 for iTR=1:nTR_local
     TR_id_str = statTable{iTR,45};
-    temp=sscanf(TR_id_str,"NYUformat_PDP_RX%d_%fm_*");
-    RX_id(iTR) = temp(1);
-    distances(iTR) = temp(2);
+    % Parse RX id + distance from filename. Handle both shapes:
+    %   NYUformat_PDP_RX<N>_<dist>m_...   (July-2024 17-loc drop)
+    %   NYUformat_PDP_<dist>m_...         (older 8-loc microcellular drop)
+    rx_tok   = regexp(TR_id_str, 'RX(\d+)',           'tokens', 'once');
+    dist_tok = regexp(TR_id_str, '_(\d+\.?\d*)m_',    'tokens', 'once');
+    if isempty(rx_tok)
+        RX_id(iTR) = 0;   % no RX tag in filename (old 8-loc files)
+    else
+        RX_id(iTR) = str2double(rx_tok{1});
+    end
+    if isempty(dist_tok)
+        distances(iTR) = NaN;
+    else
+        distances(iTR) = str2double(dist_tok{1});
+    end
     omniPDP_dB = statTable{iTR,1};
     if isempty(omniPDP_dB)
         continue;
@@ -408,7 +426,11 @@ for i=1:height(uscNLOS)
     uscNLOS.RX_id(i) = str2double(tok{1});
 end
 
-% Build environment labels from TR_id_str to disambiguate same RX IDs
+% Build environment labels from TR_id_str to disambiguate same RX IDs.
+% The older 8-loc microcellular reference CSVs (usc_microcellular_LOS/NLOS)
+% classify OLOS files as LOS (e.g., "R01_162m LOS" for the same 162 m link
+% that the NYU-format file tags "OLOS"). We therefore check NLOS FIRST,
+% then fall through to LOS (which matches both "LOS" and "OLOS" via substring).
 env_label = strings(nTR_local,1);
 for iTR=1:nTR_local
     TR_id_str = statTable{iTR,45};
@@ -433,16 +455,28 @@ dist_tol = 0.1; % meters
 los_idx_ref = nan(height(calc_LOS),1);
 nlos_idx_ref = nan(height(calc_NLOS),1);
 
+% Match strategy: if the file has an RX<N> tag (RX_id > 0), require both
+% RX_id and distance to align. Otherwise (old 8-loc microcellular files
+% with no RX tag in filename, RX_id==0), fall back to distance-only
+% match, which is unique in the reference CSVs.
 for i=1:height(calc_LOS)
-    candidates = find(uscLOS.RX_id==calc_LOS.RX_id(i) & ...
-        abs(uscLOS.Distance_m - calc_LOS.Distance_m(i)) < dist_tol);
+    if calc_LOS.RX_id(i) > 0
+        candidates = find(uscLOS.RX_id==calc_LOS.RX_id(i) & ...
+            abs(uscLOS.Distance_m - calc_LOS.Distance_m(i)) < dist_tol);
+    else
+        candidates = find(abs(uscLOS.Distance_m - calc_LOS.Distance_m(i)) < dist_tol);
+    end
     if ~isempty(candidates)
         los_idx_ref(i)=candidates(1);
     end
 end
 for i=1:height(calc_NLOS)
-    candidates = find(uscNLOS.RX_id==calc_NLOS.RX_id(i) & ...
-        abs(uscNLOS.Distance_m - calc_NLOS.Distance_m(i)) < dist_tol);
+    if calc_NLOS.RX_id(i) > 0
+        candidates = find(uscNLOS.RX_id==calc_NLOS.RX_id(i) & ...
+            abs(uscNLOS.Distance_m - calc_NLOS.Distance_m(i)) < dist_tol);
+    else
+        candidates = find(abs(uscNLOS.Distance_m - calc_NLOS.Distance_m(i)) < dist_tol);
+    end
     if ~isempty(candidates)
         nlos_idx_ref(i)=candidates(1);
     end
@@ -484,6 +518,103 @@ try
     writetable(pl_table_NLOS, P.cb_a_out_u3_7_xlsx, 'Sheet', 'NLOS');
 catch ME_xlsx
     fprintf(2, 'Warning: could not write %s: %s\n', P.cb_a_out_u3_7_xlsx, ME_xlsx.message);
+end
+
+%% =====================================================================
+%  17-loc USC NewData validation (paper Table VI 6.75 U3 row)
+%  Matches the 17 RX-numbered July-2024 files against
+%  USC7GHz_NewData_Results.csv (PL_USC_dB column = baseline), with the
+%  pipeline convention that OLOS -> NLOS (matches load_point_data.m).
+%
+%  Paper Table VI's 6.20 / 6.19 dB RMSEs for "USC Data (U3)" at 6.75 GHz
+%  are the AVERAGE of LOS_RMSE and NLOS_RMSE (not the combined RMSE over
+%  all 17 links). We compute both and report.
+%  =====================================================================
+try
+    newdata_path = fullfile(P.point_data, 'USC7GHz_NewData_Results.csv');
+    if ~isfile(newdata_path)
+        fprintf('(17-loc validation skipped: %s not found)\n', newdata_path);
+    else
+        ref17 = readtable(newdata_path);
+        ref17.RX_id = nan(height(ref17), 1);
+        for i = 1:height(ref17)
+            tok = regexp(string(ref17.Location(i)), 'RX(\d+)', 'tokens', 'once');
+            if ~isempty(tok), ref17.RX_id(i) = str2double(tok{1}); end
+        end
+        ref17.env_label = upper(strtrim(string(ref17.Env)));
+
+        % Build env_label_17 for calc_table: treat OLOS as NLOS (17-loc convention).
+        env_label_17 = strings(nTR_local, 1);
+        for iTR = 1:nTR_local
+            s = string(statTable{iTR, 45});
+            if contains(s, "NLOS", "IgnoreCase", true) || ...
+               contains(s, "OLOS", "IgnoreCase", true)
+                env_label_17(iTR) = "NLOS";
+            elseif contains(s, "LOS", "IgnoreCase", true)
+                env_label_17(iTR) = "LOS";
+            else
+                env_label_17(iTR) = "";
+            end
+        end
+
+        % Only consider files that have an RX<N> tag (the 17-loc July-2024 drop);
+        % the older 8-loc microcellular files have RX_id == 0 and live in the
+        % separate validation path above.
+        calc_rx = (RX_id > 0);
+        rx_vals      = RX_id(calc_rx);
+        dist_vals    = distances(calc_rx);
+        pl_calc_vals = PL_calc_dB(calc_rx);
+        env_vals     = env_label_17(calc_rx);
+
+        % Match by (distance, env) — distance is unique within each env group
+        % in USC7GHz_NewData_Results.csv. LOS rows have "LOS_RX<N>..." names
+        % carrying an RX tag, but NLOS rows are "NLOS_<dist>m" with no RX tag,
+        % so a joint RX+distance match breaks for NLOS.
+        pl_usc_ref_17 = nan(numel(rx_vals), 1);
+        dist_tol_17   = 5.0;  % meters (ref distances in NLOS rows are rounded)
+        for i = 1:numel(rx_vals)
+            hit = find(abs(ref17.Distance_m - dist_vals(i)) < dist_tol_17 & ...
+                       ref17.env_label == env_vals(i), 1, 'first');
+            if ~isempty(hit)
+                pl_usc_ref_17(i) = ref17.PL_USC_dB(hit);
+            end
+        end
+
+        valid17 = ~isnan(pl_usc_ref_17);
+        err17   = pl_calc_vals(valid17) - pl_usc_ref_17(valid17);
+        env17   = env_vals(valid17);
+
+        los_mask  = env17 == "LOS";
+        nlos_mask = env17 == "NLOS";
+        rmse_los  = sqrt(mean(err17(los_mask).^2));
+        rmse_nlos = sqrt(mean(err17(nlos_mask).^2));
+        rmse_all  = sqrt(mean(err17.^2));
+        rmse_avg  = (rmse_los + rmse_nlos) / 2;
+
+        fprintf('\n===========================================================================\n');
+        fprintf('  17-loc NewData PL Validation (NYU method vs USC PL_USC_dB) - Paper Table VI 6.75 U3\n');
+        fprintf('===========================================================================\n');
+        fprintf('  Matches: n=%d (LOS=%d, NLOS=%d) of %d RX files\n', ...
+                sum(valid17), sum(los_mask), sum(nlos_mask), numel(rx_vals));
+        fprintf('  LOS  RMSE = %.4f dB   (n=%d)\n', rmse_los,  sum(los_mask));
+        fprintf('  NLOS RMSE = %.4f dB   (n=%d)\n', rmse_nlos, sum(nlos_mask));
+        fprintf('  Combined RMSE (all pts) = %.4f dB\n', rmse_all);
+        fprintf('  Avg(LOS_RMSE, NLOS_RMSE) = %.4f dB   <-- paper convention for Table VI 6.75 U3\n', rmse_avg);
+        fprintf('===========================================================================\n\n');
+
+        % Persist per-link table for downstream use
+        out17 = table(rx_vals(valid17), dist_vals(valid17), env17, ...
+                      pl_calc_vals(valid17), pl_usc_ref_17(valid17), err17, ...
+                      'VariableNames', {'RX_id','Distance_m','Env','PL_NYU_dB','PL_USC_dB','PL_Err_dB'});
+        writetable(out17, fullfile(outDir_cb_a, 'PL_comparison_17loc_7.csv'));
+        try
+            writetable(out17, P.cb_a_out_u3_7_xlsx, 'Sheet', 'NewData17');
+        catch ME_nd
+            fprintf(2, 'Warning: could not write NewData17 sheet: %s\n', ME_nd.message);
+        end
+    end
+catch ME_17
+    fprintf(2, 'Warning: 17-loc validation failed: %s\n', ME_17.message);
 end
 
 % Plot 1: Scatter comparison with y=x line

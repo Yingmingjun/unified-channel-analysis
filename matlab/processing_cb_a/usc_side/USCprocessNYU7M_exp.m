@@ -302,19 +302,25 @@ toc
 % Canonical N3 xlsx target: redirected to <repo>/data/point_data/7_UMi_N3.xlsx
 % (from the original legacy path 'OriginalNYU_pointData/7_UMi.xlsx'). If the
 % canonical target is missing, try the bundled n3 xlsx as a fallback reference.
-if exist(P.cb_a_out_n3_7_xlsx, 'file')
-    refXlsx = P.cb_a_out_n3_7_xlsx;
-else
-    refXlsx = P.n3_7_xlsx;
-end
-[~, sheetNames] = xlsfinfo(refXlsx);
+% Prefer the cb_a-regenerated output xlsx only if it actually carries the
+% FinalData/FinalTable reference sheet. A re-run leaves behind a prior
+% `_cba_regenerated.xlsx` that has only PL/DS sheets (written below), which
+% would otherwise mask the bundled reference.
+refXlsx = '';
 sheetName = '';
-if any(strcmpi(sheetNames, 'FinalData'))
-    sheetName = 'FinalData';
-elseif any(strcmpi(sheetNames, 'FinalTable'))
-    sheetName = 'FinalTable';
-else
-    error('No FinalData/FinalTable sheet found in %s', refXlsx);
+for candidate = {P.cb_a_out_n3_7_xlsx, P.n3_7_xlsx}
+    path = candidate{1};
+    if ~exist(path, 'file'), continue, end
+    [~, sn] = xlsfinfo(path);
+    if any(strcmpi(sn, 'FinalData'))
+        refXlsx = path; sheetName = 'FinalData'; break
+    elseif any(strcmpi(sn, 'FinalTable'))
+        refXlsx = path; sheetName = 'FinalTable'; break
+    end
+end
+if isempty(refXlsx)
+    error('No FinalData/FinalTable sheet found in either %s or %s', ...
+          P.cb_a_out_n3_7_xlsx, P.n3_7_xlsx);
 end
 refTbl = readtable(refXlsx, 'Sheet', sheetName);
 

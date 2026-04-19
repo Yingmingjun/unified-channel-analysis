@@ -183,6 +183,8 @@ banner(2, 'Paper-figure scripts (verbatim authors'' scripts)');
 paper_steps = {
     'cdf_ci_pl_analysis'         , 'Fig 5 CI PL + Fig 6 DS CDF (sub-THz)';
     'cdf_ci_pl_analysis_DS_ref'  , 'Fig 6 DS CDF (6.75 GHz)';
+    'PL_CI_Merged'               , 'Fig 5 PLcombinedPlot{,7} (Merged-style CI PL)';
+    'DS_CDF_Merged'              , 'Fig 6 OmniDS_merged{,7} (AS-style DS CDF)';
     'AS_CDF_Merged'              , 'Figs 7 & 8 ASA/ASD CDF';
     'bland_altman_analysis'      , 'Fig 3 BA PL/DS';
     'BA_AS_Merged'               , 'Fig 4 BA ASA/ASD';
@@ -233,6 +235,21 @@ for i = 1:size(unified_steps, 1)
     catch ME
         status.(sanitize(fn)) = "failed";
         fprintf(2, '[STEP 3.%d] %s : FAILED -- %s\n', i, fn, ME.message);
+    end
+end
+
+% ============================================================================
+% Optional: sync the 16 paper figures into the paper source tree.
+% Activated when PAPER_FIG_DIR env var is set (paths().paper_src_fig_dir).
+% ============================================================================
+if ~isempty(P.paper_src_fig_dir)
+    fprintf('\n----- sync_paper_figs -> %s -----\n', P.paper_src_fig_dir);
+    try
+        sync_paper_figs();
+        status.sync_paper_figs = "ok";
+    catch ME
+        status.sync_paper_figs = "failed";
+        fprintf(2, 'sync_paper_figs : FAILED -- %s\n', ME.message);
     end
 end
 

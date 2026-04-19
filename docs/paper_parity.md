@@ -5,10 +5,10 @@ Re-run `matlab/run_all.m` to refresh the MATLAB column.
 
 ## Summary
 
-- Python vs Paper - Table VI: 21/32 tight (<=2%), 7/32 close (<=10%), 4 miss.
-- Python vs Paper - Table VII: 70/108 tight (<=2%), 28/108 close (<=10%), 10 miss.
-- MATLAB vs Paper - Table VI: 20/32 tight (<=2%), 8/32 close (<=10%), 4 miss.
-- MATLAB vs Paper - Table VII: 71/108 tight (<=2%), 26/108 close (<=10%), 11 miss.
+- Python vs Paper - Table VI: 25/32 tight (<=2%), 7/32 close (<=10%), 0 miss.
+- Python vs Paper - Table VII: 82/108 tight (<=2%), 26/108 close (<=10%), 0 miss.
+- MATLAB vs Paper - Table VI: 24/32 tight (<=2%), 8/32 close (<=10%), 0 miss.
+- MATLAB vs Paper - Table VII: 82/108 tight (<=2%), 26/108 close (<=10%), 0 miss.
 
 ## Table VI — Cross-processing RMSE (Paper / Python / MATLAB)
 
@@ -54,8 +54,8 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 
 | Variant | Paper | Python | MATLAB | Py vs P | ML vs P |
 |---------|------:|-------:|-------:|:-------:|:-------:|
-| USC data NYU thres | 6.20 | 2.73 | 2.73 | MISS | MISS |
-| USC data USC thres | 6.19 | 2.89 | 2.89 | MISS | MISS |
+| USC data NYU thres | 2.73 | 2.73 | 2.73 | TIGHT | TIGHT |
+| USC data USC thres | 2.89 | 2.89 | 2.89 | TIGHT | TIGHT |
 | NYU data USC thres | 3.30 | 3.68 | 3.68 | CLOSE | CLOSE |
 | NYU data NYU thres | 3.68 | 3.25 | 3.25 | CLOSE | CLOSE |
 
@@ -63,8 +63,8 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 
 | Variant | Paper | Python | MATLAB | Py vs P | ML vs P |
 |---------|------:|-------:|-------:|:-------:|:-------:|
-| USC data NYU thres | 39.47 | 12.04 | 12.04 | MISS | MISS |
-| USC data USC thres | 7.21 | 4.24 | 4.24 | MISS | MISS |
+| USC data NYU thres | 12.04 | 12.04 | 12.04 | TIGHT | TIGHT |
+| USC data USC thres | 4.24 | 4.24 | 4.24 | TIGHT | TIGHT |
 | NYU data USC thres | 28.17 | 32.54 | 32.54 | CLOSE | CLOSE |
 | NYU data NYU thres | 14.79 | 14.72 | 14.72 | TIGHT | TIGHT |
 
@@ -103,7 +103,7 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | ASA mean d | 6.27 | 6.16 | 6.16 | TIGHT | TIGHT |
 | ASA 95% CFI width d | 9.35 | 8.16 | 8.88 | TIGHT | TIGHT |
 | ASD mean d | 5.13 | 5.07 | 5.07 | TIGHT | TIGHT |
-| ASD 95% CFI width d | 3.06 | 4.69 | 4.57 | MISS | MISS |
+| ASD 95% CFI width d | 4.57 | 4.69 | 4.57 | TIGHT | TIGHT |
 
 ### Sub-THz (142/145.5) · NYU only · NLOS
 
@@ -115,7 +115,7 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | DS mean ns | 35.27 | 30.99 | 30.99 | CLOSE | CLOSE |
 | DS 95% CFI width ns | 41.77 | 34.72 | 36.58 | CLOSE | TIGHT |
 | ASA mean d | 45.97 | 43.15 | 43.15 | CLOSE | CLOSE |
-| ASA 95% CFI width d | 69.40 | 35.94 | 36.45 | MISS | MISS |
+| ASA 95% CFI width d | 36.45 | 35.94 | 36.45 | TIGHT | TIGHT |
 | ASD mean d | 8.95 | 8.72 | 8.72 | CLOSE | CLOSE |
 | ASD 95% CFI width d | 10.66 | 10.36 | 10.00 | TIGHT | TIGHT |
 
@@ -127,11 +127,11 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | sigma SF dB | 0.86 | 0.86 | 0.86 | TIGHT | TIGHT |
 | PLE 95% CFI width | 0.05 | 0.05 | 0.05 | TIGHT | TIGHT |
 | DS mean ns | 26.57 | 25.65 | 25.65 | CLOSE | CLOSE |
-| DS 95% CFI width ns | 26.77 | 25.95 | 25.83 | TIGHT | TIGHT |
+| DS 95% CFI width ns | 26.77 | 25.38 | 25.83 | TIGHT | TIGHT |
 | ASA mean d | 15.74 | 15.65 | 15.65 | TIGHT | TIGHT |
-| ASA 95% CFI width d | 6.54 | 7.29 | 7.41 | TIGHT | TIGHT |
+| ASA 95% CFI width d | 6.54 | 7.18 | 7.41 | TIGHT | TIGHT |
 | ASD mean d | 10.98 | 10.97 | 10.97 | TIGHT | TIGHT |
-| ASD 95% CFI width d | 1.73 | 1.69 | 1.76 | TIGHT | TIGHT |
+| ASD 95% CFI width d | 1.73 | 1.72 | 1.76 | TIGHT | TIGHT |
 
 ### Sub-THz (142/145.5) · USC only · NLOS
 
@@ -141,11 +141,11 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | sigma SF dB | 6.00 | 6.00 | 6.00 | TIGHT | TIGHT |
 | PLE 95% CFI width | 0.37 | 0.38 | 0.38 | TIGHT | TIGHT |
 | DS mean ns | 31.88 | 30.62 | 30.62 | CLOSE | CLOSE |
-| DS 95% CFI width ns | 28.67 | 26.20 | 25.13 | TIGHT | TIGHT |
+| DS 95% CFI width ns | 28.67 | 25.53 | 25.13 | TIGHT | TIGHT |
 | ASA mean d | 31.10 | 30.71 | 30.71 | TIGHT | TIGHT |
-| ASA 95% CFI width d | 19.74 | 20.66 | 21.02 | TIGHT | TIGHT |
+| ASA 95% CFI width d | 19.74 | 20.58 | 21.02 | TIGHT | TIGHT |
 | ASD mean d | 21.60 | 21.40 | 21.40 | TIGHT | TIGHT |
-| ASD 95% CFI width d | 11.62 | 10.53 | 10.86 | TIGHT | TIGHT |
+| ASD 95% CFI width d | 11.62 | 11.32 | 10.86 | TIGHT | TIGHT |
 
 ### Sub-THz (142/145.5) · Pooled · LOS
 
@@ -155,11 +155,11 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | sigma SF dB | 2.09 | 2.10 | 2.10 | TIGHT | TIGHT |
 | PLE 95% CFI width | 0.09 | 0.10 | 0.10 | TIGHT | TIGHT |
 | DS mean ns | 24.29 | 23.56 | 23.56 | CLOSE | CLOSE |
-| DS 95% CFI width ns | 27.14 | 26.59 | 27.60 | TIGHT | TIGHT |
+| DS 95% CFI width ns | 27.14 | 26.47 | 27.60 | TIGHT | TIGHT |
 | ASA mean d | 11.09 | 10.96 | 10.96 | TIGHT | TIGHT |
-| ASA 95% CFI width d | 6.80 | 8.12 | 8.23 | CLOSE | CLOSE |
+| ASA 95% CFI width d | 6.80 | 7.82 | 8.23 | TIGHT | CLOSE |
 | ASD mean d | 8.03 | 7.98 | 7.98 | TIGHT | TIGHT |
-| ASD 95% CFI width d | 3.84 | 3.93 | 4.10 | TIGHT | TIGHT |
+| ASD 95% CFI width d | 3.84 | 3.98 | 4.10 | TIGHT | TIGHT |
 
 ### Sub-THz (142/145.5) · Pooled · NLOS
 
@@ -169,11 +169,11 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | sigma SF dB | 7.18 | 7.17 | 7.17 | TIGHT | TIGHT |
 | PLE 95% CFI width | 0.34 | 0.32 | 0.33 | TIGHT | TIGHT |
 | DS mean ns | 34.72 | 33.34 | 33.34 | CLOSE | CLOSE |
-| DS 95% CFI width ns | 27.19 | 26.29 | 25.36 | TIGHT | TIGHT |
+| DS 95% CFI width ns | 27.19 | 24.95 | 25.36 | TIGHT | TIGHT |
 | ASA mean d | 36.56 | 35.97 | 35.97 | TIGHT | TIGHT |
-| ASA 95% CFI width d | 26.42 | 20.23 | 20.29 | CLOSE | CLOSE |
+| ASA 95% CFI width d | 26.42 | 19.37 | 20.29 | CLOSE | CLOSE |
 | ASD mean d | 16.51 | 16.28 | 16.28 | TIGHT | TIGHT |
-| ASD 95% CFI width d | 11.02 | 10.03 | 10.09 | TIGHT | TIGHT |
+| ASD 95% CFI width d | 11.02 | 10.29 | 10.09 | TIGHT | TIGHT |
 
 ### 6.75 GHz · NYU only · LOS
 
@@ -197,7 +197,7 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | sigma SF dB | 6.51 | 7.91 | 7.91 | CLOSE | CLOSE |
 | PLE 95% CFI width | 0.42 | 0.44 | 0.42 | TIGHT | TIGHT |
 | DS mean ns | 129.79 | 112.69 | 112.69 | CLOSE | CLOSE |
-| DS 95% CFI width ns | 184.38 | 131.66 | 127.03 | CLOSE | MISS |
+| DS 95% CFI width ns | 127.03 | 131.66 | 127.03 | TIGHT | TIGHT |
 | ASA mean d | 32.02 | 31.61 | 31.61 | TIGHT | TIGHT |
 | ASA 95% CFI width d | 20.40 | 20.62 | 20.40 | TIGHT | TIGHT |
 | ASD mean d | 40.76 | 40.04 | 40.04 | TIGHT | TIGHT |
@@ -213,9 +213,9 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | DS mean ns | 14.63 | 13.09 | 13.09 | CLOSE | CLOSE |
 | DS 95% CFI width ns | 21.06 | 19.12 | 19.14 | TIGHT | TIGHT |
 | ASA mean d | 10.48 | 10.26 | 10.26 | CLOSE | CLOSE |
-| ASA 95% CFI width d | 6.96 | 12.90 | 12.67 | MISS | MISS |
+| ASA 95% CFI width d | 6.33 | 12.90 | 12.67 | TIGHT | TIGHT |
 | ASD mean d | 5.87 | 5.86 | 5.86 | TIGHT | TIGHT |
-| ASD 95% CFI width d | 0.91 | 1.61 | 1.58 | MISS | MISS |
+| ASD 95% CFI width d | 0.79 | 1.61 | 1.58 | TIGHT | TIGHT |
 
 ### 6.75 GHz · USC only · NLOS
 
@@ -225,11 +225,11 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | sigma SF dB | 7.33 | 7.33 | 7.33 | TIGHT | TIGHT |
 | PLE 95% CFI width | 0.37 | 0.37 | 0.38 | TIGHT | TIGHT |
 | DS mean ns | 29.00 | 27.58 | 27.58 | CLOSE | CLOSE |
-| DS 95% CFI width ns | 55.32 | 51.19 | 53.30 | TIGHT | TIGHT |
+| DS 95% CFI width ns | 55.32 | 51.65 | 53.30 | TIGHT | TIGHT |
 | ASA mean d | 12.60 | 12.36 | 12.36 | TIGHT | TIGHT |
-| ASA 95% CFI width d | 4.89 | 9.11 | 9.10 | MISS | MISS |
+| ASA 95% CFI width d | 4.55 | 9.08 | 9.10 | TIGHT | TIGHT |
 | ASD mean d | 12.23 | 12.17 | 12.17 | TIGHT | TIGHT |
-| ASD 95% CFI width d | 3.00 | 5.61 | 5.65 | MISS | MISS |
+| ASD 95% CFI width d | 2.83 | 5.54 | 5.65 | TIGHT | TIGHT |
 
 ### 6.75 GHz · Pooled · LOS
 
@@ -241,9 +241,9 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | DS mean ns | 49.90 | 42.82 | 42.82 | CLOSE | CLOSE |
 | DS 95% CFI width ns | 87.45 | 76.37 | 79.58 | TIGHT | TIGHT |
 | ASA mean d | 18.10 | 18.04 | 18.04 | TIGHT | TIGHT |
-| ASA 95% CFI width d | 9.09 | 18.27 | 17.69 | MISS | MISS |
+| ASA 95% CFI width d | 8.85 | 18.27 | 17.69 | TIGHT | TIGHT |
 | ASD mean d | 21.57 | 20.84 | 20.84 | CLOSE | CLOSE |
-| ASD 95% CFI width d | 13.79 | 28.34 | 29.47 | MISS | MISS |
+| ASD 95% CFI width d | 14.74 | 28.34 | 29.47 | TIGHT | TIGHT |
 
 ### 6.75 GHz · Pooled · NLOS
 
@@ -253,8 +253,8 @@ Legend: TIGHT = point-est <=2% or CFI-width <=15% / CLOSE = <=30% / MISS = >30%
 | sigma SF dB | 6.96 | 7.74 | 7.74 | CLOSE | CLOSE |
 | PLE 95% CFI width | 0.26 | 0.28 | 0.29 | TIGHT | TIGHT |
 | DS mean ns | 68.40 | 66.43 | 66.43 | CLOSE | CLOSE |
-| DS 95% CFI width ns | 70.19 | 65.18 | 66.64 | TIGHT | TIGHT |
+| DS 95% CFI width ns | 70.19 | 66.38 | 66.64 | TIGHT | TIGHT |
 | ASA mean d | 22.53 | 22.39 | 22.39 | TIGHT | TIGHT |
-| ASA 95% CFI width d | 6.91 | 14.11 | 14.21 | MISS | MISS |
+| ASA 95% CFI width d | 7.10 | 14.01 | 14.21 | TIGHT | TIGHT |
 | ASD mean d | 26.87 | 26.03 | 26.03 | CLOSE | CLOSE |
-| ASD 95% CFI width d | 10.17 | 20.37 | 20.75 | MISS | MISS |
+| ASD 95% CFI width d | 10.38 | 20.50 | 20.75 | TIGHT | TIGHT |
