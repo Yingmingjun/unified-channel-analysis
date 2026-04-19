@@ -165,11 +165,14 @@ function generate_ba_figure(metricName, freqLabel, ...
     if yMargin == 0, yMargin = 5; end
     yRange = [min([allDiff; allLower]) - yMargin, max([allDiff; allUpper]) + yMargin];
 
-    % X-axis range
+    % X-axis range. Angular spread is non-negative so xMin is floored at
+    % 0. Margin bumped to 12 % of data range so the inline text labels
+    % (at 2 % from each edge) don't sit on top of edge data points -- the
+    % old 5 % margin left barely any whitespace on a 1200 px wide figure.
     allMeans = [mean_n3; mean_u3];
-    xMargin = 0.05 * range(allMeans);
+    xMargin = 0.12 * range(allMeans);
     if xMargin == 0, xMargin = 5; end
-    xRange = [min(allMeans) - xMargin, max(allMeans) + xMargin];
+    xRange = [max(0, min(allMeans) - xMargin), max(allMeans) + xMargin];
 
     % Degree symbol
     degSym = char(176);
