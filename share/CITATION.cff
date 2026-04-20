@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+title: "Unified Channel Analysis — Sub-THz / 6.75 GHz outdoor UMi cross-processing reproduction package"
+message: "If you use this software or the associated per-link point-data format, please cite the companion paper."
+type: software
+authors:
+  - family-names: "Ying"
+    given-names: "Mingjun"
+    affiliation: "NYU Tandon School of Engineering"
+  - family-names: "Kanhere"
+    given-names: "Ojas"
+    affiliation: "NYU Tandon School of Engineering"
+  - family-names: "Rappaport"
+    given-names: "Theodore S."
+    affiliation: "NYU Tandon School of Engineering"
+  - family-names: "Molisch"
+    given-names: "Andreas F."
+    affiliation: "University of Southern California"
+license: MIT
+repository-code: "https://github.com/<org>/unified-channel-analysis"
+keywords:
+  - "wireless channel measurement"
+  - "sub-THz propagation"
+  - "6.75 GHz FR1C"
+  - "path loss"
+  - "delay spread"
+  - "angular spread"
+  - "Bland-Altman"
+  - "reproducible research"
+preferred-citation:
+  type: article
+  title: "Joint Point-Data Format for Sub-THz and 6.75 GHz Outdoor UMi Propagation: Cross-Processing between NYU and USC Campaigns"
+  authors:
+    - family-names: "Ying"
+      given-names: "Mingjun"
+    - family-names: "Kanhere"
+      given-names: "Ojas"
+    - family-names: "Rappaport"
+      given-names: "Theodore S."
+    - family-names: "Molisch"
+      given-names: "Andreas F."
+  year: 2026
+  journal: "IEEE Transactions on Wireless Communications (submitted)"
