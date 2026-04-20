@@ -48,7 +48,7 @@ sub = T(T.band == string(band), :);
 fig = figure('Position', [140, 140, 1500, 440], 'Color', 'w');
 
 % ===== LOS subplot =====
-subplot('Position', [0.055, 0.17, 0.43, 0.78]); hold on; grid on; box on;
+subplot('Position', [0.055, 0.17, 0.40, 0.78]); hold on; grid on; box on;
 style_cdf_axes();
 
 nyu_los = clean_vals(sub.(nyu_col)(sub.institution == "NYU" & sub.loc_type == "LOS"));
@@ -64,7 +64,7 @@ leg_los = build_legend(hP_los, hN_los, hNb_los, hU_los, hUb_los, hPb_los);
 add_logstat_text(mu_los, sd_los, metricName, freqLabel, leg_los);
 
 % ===== NLOS subplot =====
-subplot('Position', [0.525, 0.17, 0.43, 0.78]); hold on; grid on; box on;
+subplot('Position', [0.575, 0.17, 0.40, 0.78]); hold on; grid on; box on;
 style_cdf_axes();
 
 nyu_nlos = clean_vals(sub.(nyu_col)(sub.institution == "NYU" & sub.loc_type == "NLOS"));
