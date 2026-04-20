@@ -53,7 +53,7 @@ Full list in `docs/issues_log.md`. Key items:
 
 - **Source-data divergence** between the stand-alone N1/U1 xlsx/csv drops and the "NYU orig"/"USC orig" columns of the N3/U3 xlsx. Paper values are consistent with the N3/U3 xlsx orig columns. Python loader uses those.
 - **USC 6.75 GHz truncated csvs** (8 rows) superseded by `7_UMi_U3.xlsx` "USC orig" column (17 rows). Loader uses the xlsx.
-- **Single source-data typo** at TX4-RX37 in `142_UMi_N3.xlsx` Omni ASA "NYU thres" column (`714.0` where `7.14` was intended). Filtered in RMSE; source-file not mutated.
+- **Single source-data typo** at TX4-RX37 in `N3_142_UMi.xlsx` Omni ASA "NYU thres" column had `714.0` where `7.14` was intended (decimal point dropped in the original Cross-Processing snapshot). **Fixed in place 2026-04-20** (cell M23 `714` → `7.14`). The 50x-median outlier guards in `figures/table06_rmse.{m,py}` are retained as general defense-in-depth.
 - **Paper reports lognormal-expectation mean** `E[X] = exp(μ ln10 + (σ ln10)²/2)`, not arithmetic mean. Python `ds.lognormal_stats` implements both; Table 7 uses the lognormal form.
 - **Fleury AS form duality** — the paper gives two forms; unit tests verify the two forms agree to 1e-10 for every synthetic case.
 - **Comprehensive_NYU_USC_Analysis version pick** — `v7.m` selected as authoritative; v2–v6 superseded. See `docs/code_conflicts.md`.

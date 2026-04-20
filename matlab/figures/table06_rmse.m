@@ -113,8 +113,10 @@ end
 
 
 function r = compare_pair(left, right, metric)
-% RMSE between paired (TX-RX|loc) rows, guarding against one known ASA typo
-% (142_UMi_N3.xlsx TX4-RX37 = 714 deg) with a 50x-median clip.
+% RMSE between paired (TX-RX|loc) rows, with a 50x-median clip that guards
+% against cross-processing pipeline outliers. (The specific 714 deg ASA
+% value previously at N3_142 TX4-RX37 col M was fixed in the xlsx in
+% 2026-04-20; guard retained as general defense against future artifacts.)
 % Mirrors python table06_rmse._compare_pair / _rmse.
 
 % Inner join on key

@@ -66,7 +66,9 @@ def _rmse(a, b, guard_factor=50.0):
     if m.sum() == 0:
         return float("nan")
     diff = np.abs(a - b)
-    # Outlier guard for the one 714° ASA typo
+    # General outlier guard (median * guard_factor). Originally introduced
+    # to handle a 714 deg ASA typo at N3_142 TX4-RX37 that has since been
+    # fixed in the xlsx (2026-04-20); retained as defense-in-depth.
     med = np.nanmedian(diff[m])
     outlier = diff > max(med * guard_factor, 100.0)
     keep = m & ~outlier
