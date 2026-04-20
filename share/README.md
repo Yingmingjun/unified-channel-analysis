@@ -55,7 +55,7 @@ MATLAB; PDP processing uses standard signal-processing primitives.
 ### 1. Clone
 
 ```bash
-git clone https://github.com/<org>/unified-channel-analysis.git
+git clone https://github.com/Yingmingjun/unified-channel-analysis.git
 cd unified-channel-analysis
 ```
 

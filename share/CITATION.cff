@@ -31,7 +31,7 @@ authors:
     given-names: "Andreas F."
     affiliation: "University of Southern California"
 license: MIT
-repository-code: "https://github.com/yingmjstu/unified-channel-analysis"
+repository-code: "https://github.com/Yingmingjun/unified-channel-analysis"
 keywords:
   - "wireless channel measurement"
   - "sub-THz propagation"
