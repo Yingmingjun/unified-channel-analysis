@@ -23,7 +23,6 @@ matlab/processing/usc_7/*.mat
 matlab/processing/*/Results/
 matlab/processing/*/Figures/
 figures/matlab/
-figures/python/
 docs/paper_parity_*.md
 
 # ---------------------------------------------------------------------------
@@ -34,24 +33,6 @@ docs/paper_parity_*.md
 slprj/
 .idea/
 .vs/
-
-# ---------------------------------------------------------------------------
-# Python
-# ---------------------------------------------------------------------------
-__pycache__/
-*.py[cod]
-*$py.class
-*.egg-info/
-.eggs/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.venv/
-venv/
-env/
-build/
-dist/
-*.egg
 
 # ---------------------------------------------------------------------------
 # Editors / OS

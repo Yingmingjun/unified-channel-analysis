@@ -34,7 +34,7 @@ Open an issue on GitHub with:
    any of the 16 paper figures, attach before/after screenshots plus the
    new `paper_parity` output (`docs/paper_parity_matlab.md` after
    running `run_all('figures')`).
-3. Match the surrounding MATLAB / Python style. No new dependencies
+3. Match the surrounding MATLAB style. No new dependencies
    without a short rationale in the PR description.
 
 ## Maintainers

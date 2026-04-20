@@ -2,7 +2,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![MATLAB R2021a+](https://img.shields.io/badge/MATLAB-R2021a%2B-blue.svg)](#prerequisites)
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](#prerequisites)
 [![Paper parity: 108/108 TIGHT](https://img.shields.io/badge/Paper_parity-108%2F108-brightgreen.svg)](#verification)
 
 **Reproduce the 16 figures and 6 tables** of *"Joint Point-Data Format for
@@ -44,7 +43,6 @@ USC dataset.
 | | Version |
 |---|---|
 | MATLAB | R2021a or later (for `exportgraphics`, `legend.ItemTokenSize`, `readtable(..., 'VariableNamingRule', 'preserve')`) |
-| Python | 3.10+ (only if you want the Python parity mirror; MATLAB alone reproduces everything the paper prints) |
 | Toolboxes | Statistics & Machine Learning Toolbox (for `ecdf`, `prctile`, `bootstrp`) |
 
 No proprietary third-party libraries. Antenna-pattern handling is pure
@@ -104,22 +102,6 @@ paper's `\includegraphics` calls expect: `BA_PL.pdf`, `BA_ASA.pdf`,
 setenv('PAPER_FIG_DIR', '/path/to/your/paper/figures/');
 sync_paper_figs;     % copies + renames the 16 figures into the paper tree
 ```
-
----
-
-## Python mirror (optional)
-
-The `python/` subtree reproduces the same figures and tables for
-independent verification.
-
-```bash
-cd python
-pip install -e .
-python -m channel_analysis.run_all
-```
-
-Outputs land in `figures/python/`. Numbers should agree with MATLAB to
-≤ 2 % for point estimates, ≤ 15 % for bootstrap CFI widths.
 
 ---
 
@@ -229,8 +211,6 @@ unified-channel-analysis/
 │   ├── patterns/README.md      antenna-pattern drop contract
 │   │                           (no pattern files shipped)
 │   └── tools/                  stage_paper_figures, update_paper_tex, …
-│
-├── python/                     Python parity mirror
 │
 └── data/
     ├── README.md               what must go under data/
