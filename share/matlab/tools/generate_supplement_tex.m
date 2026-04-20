@@ -30,13 +30,10 @@ end
 blocks = {};
 blocks{end+1} = header_block();
 
-blocks{end+1} = n1_section(fullfile(csv_dir, 'table04_N1_142.csv'), ...
-    '142', 'N1_142_full', ...
-    'Full \textbf{N1 @ 142 GHz} Point-data table generated from the NYU WIRELESS measurements in Brooklyn, NY, showing site-specific large-scale spatio-temporal statistics at 142 GHz.');
-
-blocks{end+1} = n1_section(fullfile(csv_dir, 'table05_N1_7.csv'), ...
-    '6.75', 'N1_7_full', ...
-    'Full \textbf{N1 @ 6.75 GHz} Point-data table generated from the NYU WIRELESS measurements in Brooklyn, NY, showing site-specific large-scale spatio-temporal statistics at 6.75 GHz. Column definitions identical to Table~\ref{tab:N1_142_full}.');
+% N1 and U1 standalone tables are intentionally omitted. The N1 values are
+% already embedded in the N3 tables as the ``NYU orig. (N1)'' column, and
+% U1 values are embedded in U3 tables as the ``USC orig. (U1)'' column.
+% Listing them standalone would duplicate content.
 
 blocks{end+1} = cross_section( ...
     fullfile(csv_dir, 'table08_U3_145.csv'), ...
@@ -114,9 +111,8 @@ s = [
     sprintf('\\section*{Overview}\n') ...
     sprintf('This supplementary document accompanies the manuscript ``Pooling of Multi-Institutional Radio Propagation Empirical Data with Cross-Processing Validation for 6G AI/ML Channel Modeling.'''' It provides the complete per-link point-data tables that were abbreviated in the main paper due to page-length constraints. All entries are produced by the same end-to-end processing pipeline (\\texttt{matlab/run\\_all.m}) that generates the aggregate statistics, figures, and summary tables in the main manuscript; the datasets tabulated here are:\n') ...
     sprintf('\\begin{itemize}\n') ...
-    sprintf('  \\item \\textbf{N1}---NYU data processed with the NYU methodology at 142~GHz and 6.75~GHz (Tables~\\ref{tab:N1_142_full} and \\ref{tab:N1_7_full}).\n') ...
-    sprintf('  \\item \\textbf{U3}---USC data processed with the USC methodology and with NYU''s delay-domain threshold applied, at 145.5~GHz and 6.75~GHz (Tables~\\ref{tab:U3_145_full} and \\ref{tab:U3_7_full}).\n') ...
-    sprintf('  \\item \\textbf{N3}---NYU data processed with the USC-replicated methodology and with USC''s threshold applied, at 142~GHz and 6.75~GHz (Tables~\\ref{tab:N3_142_full} and \\ref{tab:N3_7_full}).\n') ...
+    sprintf('  \\item \\textbf{U3}---USC data processed with the USC methodology and with NYU''s delay-domain threshold applied, at 145.5~GHz and 6.75~GHz (Tables~\\ref{tab:U3_145_full} and \\ref{tab:U3_7_full}). The ``USC orig.\\ (U1)'' column gives the institution-consistent U1 reference values.\n') ...
+    sprintf('  \\item \\textbf{N3}---NYU data processed with the USC-replicated methodology and with USC''s threshold applied, at 142~GHz and 6.75~GHz (Tables~\\ref{tab:N3_142_full} and \\ref{tab:N3_7_full}). The ``NYU orig.\\ (N1)'' column gives the institution-consistent N1 reference values.\n') ...
     sprintf('\\end{itemize}\n') ...
     sprintf('Table, column, and threshold definitions follow Section~III of the main paper. Processing-method details for the \\emph{NYU~SUM} and \\emph{USC~perDelayMax} omni~PDP syntheses, and the corresponding noise-floor and delay-gating conventions, are documented therein.\n') ...
 ];
@@ -125,6 +121,77 @@ end
 function s = footer_block()
 s = sprintf('\\end{document}\n');
 end
+
+% ============================================================ %
+%  U1 section (narrower 9-col layout; USC doesn't compute Mean Dir/Lobe/ZS)
+% ============================================================ %
+function s = u1_section(csv_path, freq_label, lbl, caption)
+T = readtable(csv_path, 'PreserveVariableNames', true);
+vn = T.Properties.VariableNames;
+extra = ismember(vn, {'PL_X'});
+if any(extra); T(:, extra) = []; end
+nRows = height(T);
+tx_list = cellfun(@(v) char_from(v), T.(T.Properties.VariableNames{2}), 'UniformOutput', false);
+tx_list = fillfwd(tx_list);
+unique_tx = uniq_preserve(tx_list);
+
+lines = {};
+lines{end+1} = '\renewcommand{\arraystretch}{1.1}';
+lines{end+1} = '\begin{table*}[!t]';
+lines{end+1} = '\centering';
+lines{end+1} = '\color{black}';
+lines{end+1} = sprintf('\\caption{%s}', caption);
+lines{end+1} = '\vspace{-0.2cm}';
+lines{end+1} = '\begin{tabular}{p{0.8 cm}p{0.6 cm}p{0.6 cm}p{0.8 cm}p{0.8 cm}p{0.9 cm}p{0.9 cm}p{0.9 cm}p{0.9 cm}}';
+lines{end+1} = '\hline';
+lines{end+1} = ['\multicolumn{1}{p{0.8 cm}}{\textbf{Freq.}} & \textbf{TX} & \textbf{RX} & \textbf{Loc.} & ' ...
+    '\multicolumn{1}{p{0.8 cm}}{\textbf{TR Sep.}} & ' ...
+    '\multicolumn{1}{p{0.9 cm}}{\textbf{Omni PL}} & ' ...
+    '\multicolumn{1}{p{0.9 cm}}{\textbf{Omni DS}} & ' ...
+    '\multicolumn{1}{p{0.9 cm}}{\textbf{Omni ASA}} & ' ...
+    '\multicolumn{1}{p{0.9 cm}}{\textbf{Omni ASD}} \\'];
+lines{end+1} = '\hline';
+lines{end+1} = '\text{[GHz]}& & & &[m]&[dB]&[ns]&[$^\circ$]&[$^\circ$] \\';
+lines{end+1} = '\hline';
+
+first_row_of_table = true;
+for iTX = 1:numel(unique_tx)
+    tx = unique_tx{iTX};
+    idx = find(strcmp(tx_list, tx));
+    nsub = numel(idx);
+    for k = 1:nsub
+        i = idx(k);
+        row = T(i, :);
+        rx = char_from(row.(vn{3}));
+        loc = char_from(row.(vn{4}));
+        tr = row.(vn{5}); tr_s = num_str(tr, '%.2f');
+        % Columns 6 (PL), 8 (Omni DS), 10 (Omni ASA), 12 (Omni ASD) from N1 layout
+        pl_s  = num_str(row.(vn{6}),  '%.2f');
+        ds_s  = num_str(row.(vn{8}),  '%.2f');
+        asa_s = num_str(row.(vn{10}), '%.2f');
+        asd_s = num_str(row.(vn{12}), '%.2f');
+        if k == 1
+            if first_row_of_table
+                lead = sprintf('\\multirow{%d}{*}{\\textbf{%s}} & \\multirow{%d}{*}{%s}', nRows, freq_label, nsub, tx);
+                first_row_of_table = false;
+            else
+                lead = sprintf(' & \\multirow{%d}{*}{%s}', nsub, tx);
+            end
+            lines{end+1} = sprintf('%s & %s & %s & %s & %s & %s & %s & %s \\\\', lead, rx, loc, tr_s, pl_s, ds_s, asa_s, asd_s); %#ok<AGROW>
+        else
+            lines{end+1} = sprintf(' & & %s & %s & %s & %s & %s & %s & %s \\\\', rx, loc, tr_s, pl_s, ds_s, asa_s, asd_s); %#ok<AGROW>
+        end
+    end
+    if iTX < numel(unique_tx); lines{end+1} = '\cline{2-9}'; end %#ok<AGROW>
+end
+lines{end+1} = '\hline';
+lines{end+1} = '\end{tabular}%';
+lines{end+1} = sprintf('\\label{tab:%s}%%', lbl);
+lines{end+1} = '\vspace{-10pt}';
+lines{end+1} = '\end{table*}%';
+s = strjoin(lines, sprintf('\n'));
+end
+
 
 % ============================================================ %
 %  N1 section (tab:LSPs layout — 16 cols, no gray shading)
@@ -289,10 +356,11 @@ for iTX = 1:numel(unique_tx)
             lines{end+1} = sprintf(' & & %s & %s & %s & %s \\\\', rx, loc, tr_s, vs); %#ok<AGROW>
         end
     end
-    % Only put a separator between TX groups (no per-row \cline) so the
-    % Freq and TX multirow cells stay visually continuous.
+    % Separator between TX groups: use \cline{2-17} (skips col 1) so the
+    % Freq column's multirow cell stays visually continuous. The final
+    % \hline at table end still spans all columns (closes the table).
     if iTX < numel(unique_tx)
-        lines{end+1} = '\hline'; %#ok<AGROW>
+        lines{end+1} = '\cline{2-17}'; %#ok<AGROW>
     end
 end
 lines{end+1} = '\hline';
