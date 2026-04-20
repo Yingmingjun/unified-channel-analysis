@@ -31,10 +31,30 @@ repo_root = fileparts(fileparts(this_dir));  % <repo>/matlab/config/.. ..
 
 P.repo_root = repo_root;
 
-% -- Point-data root (defaults to bundled data/point_data/) ------------------
+% -- Data base root ----------------------------------------------------------
+% If this share/ tree is nested inside a live UCA repo (parent directory
+% exposes a populated matlab/processing/nyu_142/Results/ tree), auto-
+% redirect ALL data paths (raw, Results, antenna patterns, TX-power CSVs,
+% point-data xlsx) to the parent UCA repo. This lets a user re-run the
+% share/ pipeline against an existing UCA data drop without duplicating
+% files under share/. If share/ is unpacked standalone, DATA_BASE falls
+% back to repo_root and the user stages their own data under
+% share/data/raw/ per DATA_ORGANIZATION.md.
+parent_root = fileparts(repo_root);
+parent_has_results = isfile(fullfile(parent_root, 'matlab', 'processing', ...
+    'nyu_142', 'Results', 'all_comparison_results.mat')) || ...
+    isfile(fullfile(parent_root, 'matlab', 'processing', ...
+    'usc_145', 'Results', 'USC145GHz_Full_Results.mat'));
+if parent_has_results
+    DATA_BASE = parent_root;
+else
+    DATA_BASE = repo_root;
+end
+
+% -- Point-data root (defaults to <DATA_BASE>/data/point_data/) --------------
 env_root = getenv('CHANNEL_DATA_ROOT');
 if isempty(env_root)
-    DATA_ROOT = fullfile(repo_root, 'data', 'point_data');
+    DATA_ROOT = fullfile(DATA_BASE, 'data', 'point_data');
 else
     DATA_ROOT = env_root;
 end
@@ -52,10 +72,10 @@ P.u1_142_xlsx = P.u3_142_xlsx;   % U1 lives in U3 xlsx "USC orig" column
 P.u1_7_xlsx   = P.u3_7_xlsx;
 
 % -- Raw data (read-only inputs) ---------------------------------------------
-P.raw_nyu_142 = fullfile(repo_root, 'data', 'raw', 'nyu_142');
-P.raw_nyu_7   = fullfile(repo_root, 'data', 'raw', 'nyu_7');
-P.raw_usc_145 = fullfile(repo_root, 'data', 'raw', 'usc_145');
-P.raw_usc_7   = fullfile(repo_root, 'data', 'raw', 'usc_7');
+P.raw_nyu_142 = fullfile(DATA_BASE, 'data', 'raw', 'nyu_142');
+P.raw_nyu_7   = fullfile(DATA_BASE, 'data', 'raw', 'nyu_7');
+P.raw_usc_145 = fullfile(DATA_BASE, 'data', 'raw', 'usc_145');
+P.raw_usc_7   = fullfile(DATA_BASE, 'data', 'raw', 'usc_7');
 
 % USC raw 145 GHz splits into LoS / NLoS subdirs (verbatim from the source tree)
 P.raw_usc_145_LOS  = fullfile(P.raw_usc_145, 'LoS');
@@ -66,33 +86,43 @@ P.raw_usc_7_LOS   = fullfile(P.raw_usc_7, 'LOS Study');
 P.raw_usc_7_NLOS  = fullfile(P.raw_usc_7, 'OLOS Study');
 
 % -- Antenna patterns & calibration files ------------------------------------
-P.nyu_142_tx_power_csv   = fullfile(repo_root, 'matlab', 'processing', 'nyu_142', '140GHz_Outdoor_BaseStation.csv');
-P.nyu_142_hplane_pattern = fullfile(repo_root, 'matlab', 'patterns', 'HPLANE Pattern Data 261D-27.DAT');
-P.nyu_142_eplane_pattern = fullfile(repo_root, 'matlab', 'patterns', 'EPLANE Pattern Data 261D-27.DAT');
-P.nyu_142_pattern_dir    = fullfile(repo_root, 'matlab', 'patterns');
+% All of these files are campaign/hardware-specific measurement or
+% characterization data that share/ does NOT ship. They are resolved
+% against DATA_BASE (the parent UCA repo if share/ is nested inside
+% one, else repo_root for a standalone share/ tree). See
+% DATA_ORGANIZATION.md for the contract.
+P.nyu_142_tx_power_csv   = fullfile(DATA_BASE, 'matlab', 'processing', 'nyu_142', '140GHz_Outdoor_BaseStation.csv');
+P.nyu_142_hplane_pattern = fullfile(DATA_BASE, 'matlab', 'patterns', 'HPLANE Pattern Data 261D-27.DAT');
+P.nyu_142_eplane_pattern = fullfile(DATA_BASE, 'matlab', 'patterns', 'EPLANE Pattern Data 261D-27.DAT');
+P.nyu_142_pattern_dir    = fullfile(DATA_BASE, 'matlab', 'patterns');
 
-P.nyu_7_tx_power_csv     = fullfile(repo_root, 'matlab', 'processing', 'nyu_7', '7GHz_Outdoor (1).csv');
-P.nyu_7_phi0             = fullfile(repo_root, 'matlab', 'processing', 'nyu_7', '7_phi0_pd.mat');
-P.nyu_7_phi90            = fullfile(repo_root, 'matlab', 'processing', 'nyu_7', '7_phi90_pd.mat');
+P.nyu_7_tx_power_csv     = fullfile(DATA_BASE, 'matlab', 'processing', 'nyu_7', '7GHz_Outdoor (1).csv');
+P.nyu_7_phi0             = fullfile(DATA_BASE, 'matlab', 'processing', 'nyu_7', '7_phi0_pd.mat');
+P.nyu_7_phi90            = fullfile(DATA_BASE, 'matlab', 'processing', 'nyu_7', '7_phi90_pd.mat');
 
-P.usc_145_azicut         = fullfile(repo_root, 'matlab', 'processing', 'usc_145', 'aziCut.mat');
-P.usc_145_elevcut        = fullfile(repo_root, 'matlab', 'processing', 'usc_145', 'elevCut.mat');
-P.usc_145_pattern_dir    = fullfile(repo_root, 'matlab', 'processing', 'usc_145');
+P.usc_145_azicut         = fullfile(DATA_BASE, 'matlab', 'processing', 'usc_145', 'aziCut.mat');
+P.usc_145_elevcut        = fullfile(DATA_BASE, 'matlab', 'processing', 'usc_145', 'elevCut.mat');
+P.usc_145_pattern_dir    = fullfile(DATA_BASE, 'matlab', 'processing', 'usc_145');
 
-P.usc_7_antenna_pattern  = fullfile(repo_root, 'matlab', 'processing', 'usc_7', 'USC_Midband_Pattern.mat');
-P.usc_7_pattern_dir      = fullfile(repo_root, 'matlab', 'processing', 'usc_7');
+P.usc_7_antenna_pattern  = fullfile(DATA_BASE, 'matlab', 'processing', 'usc_7', 'USC_Midband_Pattern.mat');
+P.usc_7_pattern_dir      = fullfile(DATA_BASE, 'matlab', 'processing', 'usc_7');
 
 % -- Per-pipeline Results / Figures directories ------------------------------
-% Each raw-processing script writes its results here. Created on demand.
-P.results_nyu_142 = fullfile(repo_root, 'matlab', 'processing', 'nyu_142', 'Results');
-P.results_nyu_7   = fullfile(repo_root, 'matlab', 'processing', 'nyu_7',   'Results');
-P.results_usc_145 = fullfile(repo_root, 'matlab', 'processing', 'usc_145', 'Results');
-P.results_usc_7   = fullfile(repo_root, 'matlab', 'processing', 'usc_7',   'Results');
+% Each raw-processing script writes its Results/ here. If share/ is
+% nested in a live UCA repo with pre-computed Results, DATA_BASE points
+% at the parent, so share/paper_figures/*.m and share/figures/fig0X_*.m
+% consume the existing .mat files without duplication. If share/ is
+% standalone, these paths resolve under share/matlab/processing/*/
+% and the processing scripts write fresh Results there.
+P.results_nyu_142 = fullfile(DATA_BASE, 'matlab', 'processing', 'nyu_142', 'Results');
+P.results_nyu_7   = fullfile(DATA_BASE, 'matlab', 'processing', 'nyu_7',   'Results');
+P.results_usc_145 = fullfile(DATA_BASE, 'matlab', 'processing', 'usc_145', 'Results');
+P.results_usc_7   = fullfile(DATA_BASE, 'matlab', 'processing', 'usc_7',   'Results');
 
-P.figures_nyu_142 = fullfile(repo_root, 'matlab', 'processing', 'nyu_142', 'Figures');
-P.figures_nyu_7   = fullfile(repo_root, 'matlab', 'processing', 'nyu_7',   'Figures');
-P.figures_usc_145 = fullfile(repo_root, 'matlab', 'processing', 'usc_145', 'Figures');
-P.figures_usc_7   = fullfile(repo_root, 'matlab', 'processing', 'usc_7',   'Figures');
+P.figures_nyu_142 = fullfile(DATA_BASE, 'matlab', 'processing', 'nyu_142', 'Figures');
+P.figures_nyu_7   = fullfile(DATA_BASE, 'matlab', 'processing', 'nyu_7',   'Figures');
+P.figures_usc_145 = fullfile(DATA_BASE, 'matlab', 'processing', 'usc_145', 'Figures');
+P.figures_usc_7   = fullfile(DATA_BASE, 'matlab', 'processing', 'usc_7',   'Figures');
 
 % -- Codebase-A 7 GHz cross-processing inputs --------------------------------
 P.cb_a_root                  = fullfile(repo_root, 'data', 'raw_cb_a');
