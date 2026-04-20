@@ -1,6 +1,6 @@
 cff-version: 1.2.0
-title: "Unified Channel Analysis — Sub-THz / 6.75 GHz outdoor UMi cross-processing reproduction package"
-message: "If you use this software or the associated per-link point-data format, please cite the companion paper."
+title: "Unified Channel Analysis — reference implementation of the standardized machine-readable point-data format for multi-institutional wireless propagation measurements"
+message: "If you use this software, or the point-data format it implements, please cite the MILCOM 2025 paper below. If you additionally use the cross-processing validation pipeline (Fig 3 - Fig 8 and Tables VI / VII), also cite the companion IEEE TWC submission (see README.md)."
 type: software
 authors:
   - family-names: "Shakya"
@@ -34,6 +34,9 @@ license: MIT
 repository-code: "https://github.com/Yingmingjun/unified-channel-analysis"
 keywords:
   - "wireless channel measurement"
+  - "standardized data format"
+  - "point-data format"
+  - "multi-institutional pooling"
   - "sub-THz propagation"
   - "6.75 GHz FR1C"
   - "path loss"
@@ -43,28 +46,36 @@ keywords:
   - "reproducible research"
   - "6G"
   - "channel modeling"
+  - "AI/ML"
 preferred-citation:
-  type: article
-  title: "Pooling of Multi-Institutional Radio Propagation Empirical Data with Cross-Processing Validation for 6G AI/ML Channel Modeling"
+  type: conference-paper
+  title: "Standardized Machine-Readable Point-Data Format for Consolidating Wireless Propagation Across Environments, Frequencies, and Institutions"
   authors:
     - family-names: "Shakya"
       given-names: "Dipankar"
-    - family-names: "Ying"
-      given-names: "Mingjun"
     - family-names: "Abbasi"
       given-names: "Naveed A."
-    - family-names: "Gomez-Ponce"
-      given-names: "Jorge"
-    - family-names: "Liu"
-      given-names: "Xingchen"
-    - family-names: "Wang"
-      given-names: "Xinquan"
+    - family-names: "Ying"
+      given-names: "Mingjun"
+    - family-names: "Jariwala"
+      given-names: "Isha"
+    - family-names: "Qin"
+      given-names: "Jason J."
+    - family-names: "Gupte"
+      given-names: "Ishaan S."
+    - family-names: "Meier"
+      given-names: "Bridget"
+    - family-names: "Qian"
+      given-names: "Guanyue"
     - family-names: "Abraham"
       given-names: "Daniel"
     - family-names: "Rappaport"
       given-names: "Theodore S."
     - family-names: "Molisch"
       given-names: "Andreas F."
-  year: 2026
-  journal: "IEEE Transactions on Wireless Communications (submitted)"
-  notes: "D. Shakya and M. Ying contributed equally to this work."
+  conference:
+    name: "MILCOM 2025 - 2025 IEEE Military Communications Conference (MILCOM)"
+  year: 2025
+  start: 232
+  end: 237
+  doi: "10.1109/MILCOM64451.2025.11309979"

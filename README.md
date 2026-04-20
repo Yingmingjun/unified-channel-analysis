@@ -2,39 +2,68 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![MATLAB R2021a+](https://img.shields.io/badge/MATLAB-R2021a%2B-blue.svg)](#prerequisites)
+[![MILCOM 2025](https://img.shields.io/badge/Paper-MILCOM_2025-orange.svg)](https://doi.org/10.1109/MILCOM64451.2025.11309979)
+[![TWC submitted](https://img.shields.io/badge/Journal-TWC_under_review-lightgrey.svg)](#companion-paper-under-review-at-ieee-twc)
 [![Paper parity: 108/108 TIGHT](https://img.shields.io/badge/Paper_parity-108%2F108-brightgreen.svg)](#verification)
 
-**Reproduce the 16 figures and 6 tables** of *"Joint Point-Data Format for
-Sub-THz and 6.75 GHz Outdoor UMi Propagation: Cross-Processing between
-NYU and USC Campaigns"* (IEEE TWC, submitted).
+**Reference implementation** of the standardized machine-readable
+**point-data format** for wireless propagation measurements, introduced
+at IEEE MILCOM 2025. This package lets any research group — academic or
+industry — publish, consume, and cross-process channel measurements
+under one common schema, then reproduce the 16 figures and 6 tables of
+the companion IEEE TWC submission end-to-end.
 
-> The paper PDF and the full supplement are included in
-> [`docs/supplement.pdf`](./docs/supplement.pdf).
+## What you get
 
-This package is **code only**. No channel measurement data ships
-with it. You bring your own PDPs (organized per
-[`DATA_ORGANIZATION.md`](./DATA_ORGANIZATION.md)), the pipeline does
-the rest.
+### 🔗 A standardized data-sharing pipeline for multi-institutional propagation campaigns
+
+If your lab measures outdoor / indoor propagation and you want to
+**share per-link summaries in a machine-readable way** (for pooling
+with partner institutions, for AI/ML model training, or for publishing
+alongside a paper):
+
+- Drop your per-location PDPs in the [`data/raw/`](./DATA_ORGANIZATION.md) layout.
+- Run `matlab/run_all.m`.
+- Out comes a **point-data xlsx** (`N<x>_<band>_UMi.xlsx`) with one row per TX–RX link, carrying PL, omni DS, omni/per-cluster ASA/ASD, 3GPP Fleury-based angular-spread variants, 10/15/20 dB threshold-sensitivity columns — all in the MILCOM 2025 schema.
+- The same format is consumed by the paper's pooled-statistics, CI path-loss-fit, and Bland–Altman cross-processing scripts, so your campaign can be pooled with NYU's and USC's measurements byte-for-byte.
+
+**Who this is for:** 3GPP contributors, IEEE 802 working groups, 6G
+industry consortia, academic propagation labs — anyone generating
+per-link measurement tables.
+
+### 🔁 A reproduction package for the journal paper (under review at IEEE TWC)
+
+If you are reviewing the companion paper or want to cross-check its
+numbers against your own data:
+
+- `matlab/run_all('figures')` regenerates **Fig 3, Fig 4, Fig 5, Fig 6,
+  Fig 7, Fig 8** and **Tables VI, VII, N1, N3, U1, U3** from existing
+  `Results/*.mat` (under 2 minutes).
+- `matlab/figures/paper_parity.m` scores your pipeline output against
+  the paper's printed values. Target: **108/108 TIGHT on Table VII
+  and 32/32 TIGHT on Table VI** (point estimates ≤ 2 %, bootstrap
+  CFI widths ≤ 15 % relative).
+- The paper's camera-ready numbers and this repo's outputs agree
+  line-for-line when run on the full NYU + USC dataset.
 
 ---
 
-## What this reproduces
+## The point-data format in one paragraph
 
-| Paper artifact | Script that produces it |
+Per-link channel-measurement summaries, tabulated in a **three-row
+xlsx header**:
+
+| Row | Content |
 |---|---|
-| **Fig 3** — Bland-Altman PL / DS at sub-THz + 6.75 GHz | `matlab/figures/fig03_bland_altman_pl_ds.m` |
-| **Fig 4** — Bland-Altman ASA / ASD at sub-THz + 6.75 GHz | `matlab/figures/fig04_bland_altman_as.m` |
-| **Fig 5** — CI path-loss scatter, pooled + per-institution fits | `matlab/figures/fig05_ci_pl_scatter.m` |
-| **Fig 6** — Omni RMS DS CDF with DKW bands | `matlab/figures/fig06_ds_cdf.m` |
-| **Fig 7** — Omni ASA CDF | `matlab/figures/fig07_asa_cdf.m` |
-| **Fig 8** — Omni ASD CDF | `matlab/figures/fig08_asd_cdf.m` |
-| **Table VI** — Cross-processing RMSE (ASA / ASD) | `matlab/figures/table06_rmse.m` |
-| **Table VII** — Pooled statistics (PLE, σ_SF, DS / ASA / ASD means + 95 % CFI) | `matlab/figures/table07_pooled_stats.m` |
-| **Tables N1, N3, U1, U3** — per-link point-data tables | `matlab/figures/table_dumps.m` |
+| 1 | Free-form title banner (dropped by parsers) |
+| 2 | Metric family — one of: `TX`, `RX`, `Loc Type`, `TR Sep`, `Omni PL`, `Omni DS`, `Omni ASA`, `Omni ASD` |
+| 3 | Processing variant — one of: `NYU orig. (N1)`, `NYU thres`, `USC thres`, `USC orig. (U1)` |
 
-Parity check: **108 / 108 TIGHT** for Table VII, **32 / 32 TIGHT** for
-Table VI against the paper's printed values when run on the full NYU +
-USC dataset.
+One data row per TX–RX link. Extensible to additional metric families
+(e.g. `Omni ZSA`, `Omni ZSD`, `K-factor`) and additional processing
+variants without breaking any parsers already wired to the schema.
+Schema documented in [`DATA_ORGANIZATION.md`](./DATA_ORGANIZATION.md)
+and in the `load_point_data.m` parser.
 
 ---
 
@@ -43,10 +72,10 @@ USC dataset.
 | | Version |
 |---|---|
 | MATLAB | R2021a or later (for `exportgraphics`, `legend.ItemTokenSize`, `readtable(..., 'VariableNamingRule', 'preserve')`) |
-| Toolboxes | Statistics & Machine Learning Toolbox (for `ecdf`, `prctile`, `bootstrp`) |
+| Toolboxes | Statistics & Machine Learning (for `ecdf`, `prctile`, `bootstrp`) |
 
 No proprietary third-party libraries. Antenna-pattern handling is pure
-MATLAB; PDP processing uses standard signal-processing primitives.
+MATLAB; PDP processing uses standard DSP primitives.
 
 ---
 
@@ -61,47 +90,32 @@ cd unified-channel-analysis
 
 ### 2. Stage your data
 
-Follow [`DATA_ORGANIZATION.md`](./DATA_ORGANIZATION.md) — the layout
-you need is:
+Follow [`DATA_ORGANIZATION.md`](./DATA_ORGANIZATION.md). The layout is:
 
 ```
-data/raw/nyu_142/<27 PDP .mat files>
-data/raw/nyu_7/<18 PDP .mat files>
-data/raw/usc_145/{LoS,NLoS}/<26 PDP files>
-data/raw/usc_7/{LOS Study, OLOS Study}/<17 PDP files>
-
-matlab/patterns/HPLANE Pattern Data 261D-27.DAT      (NYU 142 horn)
-matlab/patterns/EPLANE Pattern Data 261D-27.DAT
-matlab/processing/nyu_142/140GHz_Outdoor_BaseStation.csv   (per-link TX power)
-matlab/processing/nyu_7/{7GHz_Outdoor (1).csv, 7_phi0_pd.mat, 7_phi90_pd.mat}
-matlab/processing/usc_145/{aziCut.mat, elevCut.mat}
-matlab/processing/usc_7/USC_Midband_Pattern.mat
+data/raw/<campaign>/            your raw PDPs
+matlab/processing/<campaign>/   your antenna patterns, TX-power CSVs
 ```
 
-If your hardware differs, drop equivalently-formatted files at the same
-paths, or edit [`matlab/config/paths.m`](./matlab/config/paths.m) — it
-is the **single source of truth** for every path the pipeline touches.
+If your measurement hardware matches the paper's, drop files with the
+default names. Otherwise, edit
+[`matlab/config/paths.m`](./matlab/config/paths.m) — the single source
+of truth for every path the pipeline touches.
 
 ### 3. Run
 
 ```matlab
 cd matlab
-run_all              % raw → Results → figures    (30–60 min first time)
+run_all              % raw → Results → figures + tables (30–60 min first time)
 % or:
-run_all('figures')   % skip raw processing if Results/*.mat already exist
-                     % (under 2 min)
+run_all('figures')   % skip raw processing if Results/*.mat already exist (< 2 min)
 ```
 
-Outputs land in `figures/matlab/` with the exact filenames that the
-paper's `\includegraphics` calls expect: `BA_PL.pdf`, `BA_ASA.pdf`,
-`PLcombinedPlot.jpg`, `OmniDS_merged.jpg`, `OmniASA_merged.png`, etc.
+### 4. Outputs
 
-### 4. Stage into your own paper tree (optional)
-
-```matlab
-setenv('PAPER_FIG_DIR', '/path/to/your/paper/figures/');
-sync_paper_figs;     % copies + renames the 16 figures into the paper tree
-```
+- `figures/matlab/BA_PL.pdf`, `BA_ASA.pdf`, `OmniDS_merged.jpg`, … (16 files, paper-ready filenames)
+- `figures/matlab/table06_rmse.csv`, `table07_pooled_stats.csv`, `table{08,09,10,11}_*.csv`
+- `docs/paper_parity_matlab.md` — parity score vs paper values
 
 ---
 
@@ -111,16 +125,32 @@ sync_paper_figs;     % copies + renames the 16 figures into the paper tree
 paper_parity
 ```
 
-writes [`docs/paper_parity_matlab.md`](./docs/paper_parity_matlab.md).
-A clean run on the full dataset reports:
+Expected on the full dataset:
 
 ```
 MATLAB vs Paper — Table VI : 32 TIGHT,   0 CLOSE,  0 MISS  (of 32)
 MATLAB vs Paper — Table VII: 108 TIGHT,  0 CLOSE,  0 MISS  (of 108)
 ```
 
-Tolerances: point estimate ≤ 2 % or CFI-width ≤ 15 % = **TIGHT**;
+Tolerances: point estimates ≤ 2 % or CFI widths ≤ 15 % = **TIGHT**;
 ≤ 30 % = **CLOSE**; > 30 % = **MISS**.
+
+---
+
+## What is explicitly **not** shipped
+
+No channel measurement data of any kind. The data contract is documented;
+this repository is code + documentation only.
+
+| Excluded | Why |
+|---|---|
+| Raw / thresholded PDPs | You provide your own measurements. |
+| Antenna-pattern files | Characterization of the paper's hardware; document your own. |
+| TX-power CSVs | Per-link calibration specific to the paper's campaigns. |
+| N1 / N3 / U1 / U3 UMi xlsx | Aggregate measurement data — regenerated by the pipeline. |
+| `Results/*.mat` | Pipeline output. |
+
+`.gitignore` keeps these out of downstream commits automatically.
 
 ---
 
@@ -129,48 +159,95 @@ Tolerances: point estimate ≤ 2 % or CFI-width ≤ 15 % = **TIGHT**;
 <details>
 <summary><strong>Unrecognized function or variable 'plot_style'</strong></summary>
 
-`matlab/config/` isn't on the MATLAB path. `run_all.m` adds it for
-you; if you are running an individual figure script, add the path
-first:
+`matlab/config/` isn't on the MATLAB path. `run_all.m` adds it for you
+automatically; for individual figure scripts, add the paths first:
 
 ```matlab
 addpath(fullfile(pwd, 'config'));
 addpath(fullfile(pwd, 'lib'));
+addpath(genpath(fullfile(pwd, 'lib_tcsl')));
 ```
 </details>
 
 <details>
-<summary><strong>Unable to find file <code>Results/all_comparison_results.mat</code></strong></summary>
+<summary><strong>Unable to find <code>Results/all_comparison_results.mat</code></strong></summary>
 
-The paper-figure scripts consume `Results/*.mat` produced by the
-per-campaign raw-processing scripts. Either:
-
-1. Run `run_all` (default mode) — STEP 1 will generate the `.mat`
-   files from your raw PDPs; or
-2. Place pre-computed `Results/*.mat` at
-   `matlab/processing/<campaign>/Results/` and use
-   `run_all('figures')` to skip raw processing.
-
-If `share/` is nested inside a live UCA repo with populated
-`Results/`, `paths.m` auto-redirects to the parent — no action needed.
+The paper-figure scripts consume `Results/*.mat` from the raw-processing
+stage. Either run `run_all` (full pipeline) or stage pre-computed
+`Results/*.mat` and run `run_all('figures')`.
 </details>
 
 <details>
-<summary><strong>MATLAB parity drops to CLOSE or MISS</strong></summary>
+<summary><strong>Paper parity drops to CLOSE or MISS</strong></summary>
 
-Re-check:
-1. `matlab/lib/` is on path (the loaders live there).
-2. `rng(paths().RNG_SEED)` — bootstrap CFI widths are RNG-dependent.
-3. Your `data/paper_reference/table07_paper_values.csv` matches the
-   paper version you're comparing against (see `paper_parity.m`).
+1. Confirm `matlab/lib/` is on path (the loaders live there).
+2. Bootstrap CFI widths are RNG-dependent — `paths().RNG_SEED = 0` is
+   honored in every figure script.
+3. Re-check your `data/paper_reference/table07_paper_values.csv`
+   matches the paper version you are comparing against.
 </details>
 
-<details>
-<summary><strong>Figure position warning on Linux</strong></summary>
+---
 
-MATLAB Display server; figures still export correctly. Export uses
-`exportgraphics` which is headless-safe.
-</details>
+## Companion paper (under review at IEEE TWC)
+
+> D. Shakya, M. Ying, N. A. Abbasi, J. Gomez-Ponce, X. Liu, X. Wang,
+> D. Abraham, T. S. Rappaport, A. F. Molisch,
+> *"Pooling of Multi-Institutional Radio Propagation Empirical Data with
+> Cross-Processing Validation for 6G AI/ML Channel Modeling,"*
+> submitted to **IEEE Transactions on Wireless Communications**, 2026.
+
+The 16 figures and Tables VI / VII in that submission are regenerated
+verbatim by this repository.
+
+---
+
+## Citing this work
+
+Please cite the MILCOM 2025 paper that introduces the point-data format
+this repository implements:
+
+```bibtex
+@INPROCEEDINGS{Shakya2025milcom,
+  author    = {Shakya, Dipankar and Abbasi, Naveed A. and Ying, Mingjun
+               and Jariwala, Isha and Qin, Jason J. and Gupte, Ishaan S.
+               and Meier, Bridget and Qian, Guanyue and Abraham, Daniel
+               and Rappaport, Theodore S. and Molisch, Andreas F.},
+  booktitle = {MILCOM 2025 - 2025 IEEE Military Communications Conference (MILCOM)},
+  title     = {Standardized Machine-Readable Point-Data Format for
+               Consolidating Wireless Propagation Across Environments,
+               Frequencies, and Institutions},
+  year      = {2025},
+  pages     = {232--237},
+  doi       = {10.1109/MILCOM64451.2025.11309979},
+  keywords  = {Wireless communication; Antenna measurements; Industries;
+               Statistical analysis; Organizations; Radio propagation;
+               Loss measurement; Frequency measurement; Delays;
+               Reliability; Wireless propagation; channel sounding;
+               standardized data format; 6G; machine learning}
+}
+```
+
+And — once it is accepted — the TWC journal paper that uses this
+repository for the cross-processing validation results:
+
+```bibtex
+@ARTICLE{Shakya2026twc,
+  author  = {Shakya, Dipankar and Ying, Mingjun and Abbasi, Naveed A.
+             and Gomez-Ponce, Jorge and Liu, Xingchen and Wang, Xinquan
+             and Abraham, Daniel and Rappaport, Theodore S.
+             and Molisch, Andreas F.},
+  journal = {IEEE Transactions on Wireless Communications},
+  title   = {Pooling of Multi-Institutional Radio Propagation Empirical
+             Data with Cross-Processing Validation for 6G AI/ML
+             Channel Modeling},
+  year    = {2026},
+  note    = {submitted}
+}
+```
+
+`CITATION.cff` carries the machine-readable version used by GitHub's
+"Cite this repository" button.
 
 ---
 
@@ -179,8 +256,8 @@ MATLAB Display server; figures still export correctly. Export uses
 ```
 unified-channel-analysis/
 ├── LICENSE                     MIT
-├── CITATION.cff                how to cite the paper
-├── CONTRIBUTING.md             issue / PR guide
+├── CITATION.cff                how to cite (GitHub-native format)
+├── CONTRIBUTING.md             short issue / PR guide
 ├── README.md                   you are here
 ├── DATA_ORGANIZATION.md        the data contract (required reading if
 │                               you bring your own measurements)
@@ -189,63 +266,35 @@ unified-channel-analysis/
 │   └── supplement.pdf          companion supplement to the TWC paper
 │
 ├── matlab/
-│   ├── run_all.m               main driver (figures mode skips raw)
+│   ├── run_all.m               main driver
 │   ├── config/
 │   │   ├── paths.m             single source of truth for every path
-│   │   └── plot_style.m        matplotlib-ish style reset for figures
-│   ├── lib/                    shared math + I/O (load_paper_ba_source,
-│   │                           bland_altman, ci_pl_fit, bootstrap_ci,
-│   │                           dkw_band, lognormal_stats, save_figure,
-│   │                           sync_paper_figs, …)
+│   │   └── plot_style.m        figure-style reset
+│   ├── lib/                    shared math + I/O helpers
 │   ├── lib_tcsl/               NYU TCSL angular-spread helpers
 │   ├── processing/             raw → Results, one folder per campaign
-│   │   ├── nyu_142/{script, README.md}
-│   │   ├── nyu_7/{script, README.md}
-│   │   ├── usc_145/{script, README.md}
-│   │   └── usc_7/{scripts, README.md}
+│   │   ├── nyu_142/, nyu_7/, usc_145/, usc_7/
+│   │   └── …/README.md         per-campaign raw file contract
 │   ├── paper_figures/          paper-authoritative figure scripts
-│   │                           (BA_AS_Merged, DS_CDF_Merged,
-│   │                           AS_CDF_Merged, PL_CI_Merged, …)
 │   ├── figures/                unified drivers: fig03–fig08, tables,
 │   │                           paper_parity
 │   ├── patterns/README.md      antenna-pattern drop contract
-│   │                           (no pattern files shipped)
 │   └── tools/                  stage_paper_figures, update_paper_tex, …
 │
 └── data/
     ├── README.md               what must go under data/
-    └── paper_reference/        paper-asserted scalar values used by
-                                paper_parity.m (Tables VI + VII)
+    └── paper_reference/        Tables VI + VII paper-asserted scalars
+                                (used by paper_parity.m; not measurements)
 ```
 
 ---
 
-## What is explicitly **not** shipped
-
-| | Why |
-|---|---|
-| Raw PDPs (`data/raw/**`) | Channel measurement data — bring your own. |
-| Thresholded PDPs | Derived channel measurement data. |
-| Antenna-pattern files (`*.DAT`, `aziCut.mat`, etc.) | Characterizations of the paper's hardware; document your own. |
-| TX-power CSVs (`140GHz_Outdoor_BaseStation.csv`, …) | Per-link calibration specific to the paper's campaigns. |
-| Per-link point tables (`N1/N3/U1/U3 UMi xlsx`) | Aggregate measurement data. |
-| Method-comparison results (`*_results.xlsx`, `Results/*.mat`) | Pipeline output, regenerated from raw. |
-
-`.gitignore` keeps these out of your local commits automatically.
-
----
-
-## Citation
-
-See [`CITATION.cff`](./CITATION.cff) for the machine-readable citation.
-BibTeX will be provided once the paper's DOI is assigned.
-
 ## License
 
-[MIT](./LICENSE). You are free to use this code in commercial products,
-modify it, and redistribute it — just preserve the copyright notice.
+[MIT](./LICENSE). Free for commercial use, modification, redistribution —
+just preserve the copyright notice.
 
 ## Contact
 
 Open an issue on GitHub, or email the corresponding authors listed in
-`CITATION.cff`.
+[`CITATION.cff`](./CITATION.cff).
