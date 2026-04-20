@@ -1,9 +1,0 @@
-Band,Metric,USC data - NYU thres,USC data - USC thres,NYU data - USC thres,NYU data - NYU thres
-Sub-THz,PL [dB],3.386,3.008,13.975,1.472
-Sub-THz,DS [ns],61.355,4.707,45.272,18.249
-Sub-THz,ASA [deg],6.119,0.000,8.498,0.000
-Sub-THz,ASD [deg],2.012,0.002,4.157,0.000
-6.75 GHz,PL [dB],2.731,2.889,3.682,3.253
-6.75 GHz,DS [ns],12.038,4.244,32.542,14.723
-6.75 GHz,ASA [deg],5.308,0.000,20.851,0.000
-6.75 GHz,ASD [deg],2.777,0.000,40.137,0.000
