@@ -39,4 +39,5 @@ Open an issue on GitHub with:
 
 ## Maintainers
 
-Paper corresponding authors — see `CITATION.cff`.
+Mingjun Ying (`yingmingjun [at] nyu [dot] edu`). Full author list in
+`CITATION.cff`.

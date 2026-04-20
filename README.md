@@ -228,26 +228,9 @@ this repository implements:
 }
 ```
 
-And — once it is accepted — the TWC journal paper that uses this
-repository for the cross-processing validation results:
-
-```bibtex
-@ARTICLE{Shakya2026twc,
-  author  = {Shakya, Dipankar and Ying, Mingjun and Abbasi, Naveed A.
-             and Gomez-Ponce, Jorge and Liu, Xingchen and Wang, Xinquan
-             and Abraham, Daniel and Rappaport, Theodore S.
-             and Molisch, Andreas F.},
-  journal = {IEEE Transactions on Wireless Communications},
-  title   = {Pooling of Multi-Institutional Radio Propagation Empirical
-             Data with Cross-Processing Validation for 6G AI/ML
-             Channel Modeling},
-  year    = {2026},
-  note    = {submitted}
-}
-```
-
 `CITATION.cff` carries the machine-readable version used by GitHub's
-"Cite this repository" button.
+"Cite this repository" button. A BibTeX entry for the companion TWC
+paper will be added once the journal assigns it a DOI.
 
 ---
 
@@ -296,5 +279,5 @@ just preserve the copyright notice.
 
 ## Contact
 
-Open an issue on GitHub, or email the corresponding authors listed in
-[`CITATION.cff`](./CITATION.cff).
+Open an issue on GitHub, or email Mingjun Ying
+(`yingmingjun [at] nyu [dot] edu`).
