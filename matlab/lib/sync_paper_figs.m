@@ -43,22 +43,24 @@ map = {
     {'fig03_BA_PL7.png'},                         'BA_PL7.png';
     {'fig03_BA_DS.png'},                          'BA_DS.png';
     {'fig03_BA_DS7.png'},                         'BA_DS7.png';
-    {'BA_ASA.png'},                               'BA_ASA.png';
-    {'BA_ASA7.png'},                              'BA_ASA7.png';
-    {'BA_ASD.png'},                               'BA_ASD.png';
-    {'BA_ASD7.png'},                              'BA_ASD7.png';
-    % Prefer PL_CI_Merged output (writes canonical name + .jpg directly);
-    % fall back to fig05 unified driver if PL_CI_Merged hasn't been run.
-    {'PLcombinedPlot.jpg',  'PLcombinedPlot.png',  'fig05_PLcombinedPlot.png'},  'PLcombinedPlot.jpg';
-    {'PLcombinedPlot7.jpg', 'PLcombinedPlot7.png', 'fig05_PLcombinedPlot7.png'}, 'PLcombinedPlot7.jpg';
-    % Prefer AS-styled DS_CDF_Merged output; fall back to fig06 unified
-    % driver if DS_CDF_Merged hasn't been run yet.
-    {'OmniDS_merged.png',  'OmniDS_merged.jpg',  'fig06_OmniDS_merged.png'},   'OmniDS_merged.jpg';
-    {'OmniDS_merged7.png', 'OmniDS_merged7.jpg', 'fig06_OmniDS_merged7.png'},  'OmniDS_merged7.jpg';
-    {'OmniASA_merged.png',  'OmniASA_merged.jpg'},  'OmniASA_merged.png';
-    {'OmniASA_merged7.png', 'OmniASA_merged7.jpg'}, 'OmniASA_merged7.png';
-    {'OmniASD_merged.png',  'OmniASD_merged.jpg'},  'OmniASD_merged.png';
-    {'OmniASD_merged7.png', 'OmniASD_merged7.jpg'}, 'OmniASD_merged7.png';
+    {'fig04_BA_ASA.png',  'BA_ASA.png'},          'BA_ASA.png';
+    {'fig04_BA_ASA7.png', 'BA_ASA7.png'},         'BA_ASA7.png';
+    {'fig04_BA_ASD.png',  'BA_ASD.png'},          'BA_ASD.png';
+    {'fig04_BA_ASD7.png', 'BA_ASD7.png'},         'BA_ASD7.png';
+    % Prefer fig05 unified driver FIRST -- it writes a sibling .pdf
+    % (paper \includegraphics uses .pdf) whereas PL_CI_Merged only
+    % emits .png/.jpg/.fig. Fall back to PL_CI_Merged output if the
+    % unified driver hasn't run.
+    {'fig05_PLcombinedPlot.png',  'PLcombinedPlot.jpg',  'PLcombinedPlot.png'},  'PLcombinedPlot.jpg';
+    {'fig05_PLcombinedPlot7.png', 'PLcombinedPlot7.jpg', 'PLcombinedPlot7.png'}, 'PLcombinedPlot7.jpg';
+    % Same ordering for DS CDF: fig06 (with .pdf sibling) wins over
+    % DS_CDF_Merged (no .pdf emitted).
+    {'fig06_OmniDS_merged.png',  'OmniDS_merged.png',  'OmniDS_merged.jpg'},   'OmniDS_merged.jpg';
+    {'fig06_OmniDS_merged7.png', 'OmniDS_merged7.png', 'OmniDS_merged7.jpg'},  'OmniDS_merged7.jpg';
+    {'fig07_OmniASA_merged.png',  'OmniASA_merged.png',  'OmniASA_merged.jpg'},  'OmniASA_merged.png';
+    {'fig07_OmniASA_merged7.png', 'OmniASA_merged7.png', 'OmniASA_merged7.jpg'}, 'OmniASA_merged7.png';
+    {'fig08_OmniASD_merged.png',  'OmniASD_merged.png',  'OmniASD_merged.jpg'},  'OmniASD_merged.png';
+    {'fig08_OmniASD_merged7.png', 'OmniASD_merged7.png', 'OmniASD_merged7.jpg'}, 'OmniASD_merged7.png';
 };
 
 status = struct('n_copied', 0, 'n_missing_src', 0, 'n_skipped', 0, ...
@@ -127,23 +129,32 @@ for i = 1:size(map, 1)
     status.n_copied = status.n_copied + 1;
     status.entries{end+1} = struct('src', src_name, 'dst', dst_name, 'result', action);
 
-    % Also copy the sibling .fig file if available, so the paper folder has
-    % an editable MATLAB figure next to every imported image. The .fig is
-    % taken from whichever source filename was chosen (same stem). Wrap in
-    % try/catch so a locked destination (e.g. .fig open in another MATLAB
-    % session) does not abort the rest of the sync.
+    % Also copy sibling .pdf and .fig files (same stem) so the paper
+    % folder carries:
+    %   * .pdf   -- used by main_final.tex \includegraphics (all 16
+    %               figures are referenced as .pdf in the paper), so
+    %               this file MUST be refreshed in sync with the .png
+    %   * .fig   -- editable MATLAB source for manual tweaks
+    % Wrap each in try/catch so a locked destination (e.g. an open
+    % .fig in another MATLAB session, or a .pdf opened in a PDF
+    % viewer) does not abort the rest of the sync.
     [~, src_stem, ~] = fileparts(src_path);
     [~, dst_stem, ~] = fileparts(dst_path);
-    fig_src = fullfile(P.out_dir, [src_stem '.fig']);
-    fig_dst = fullfile(dest_dir, [dst_stem '.fig']);
-    if isfile(fig_src)
-        try
-            copyfile(fig_src, fig_dst);
-            fprintf('  [ OK ]  %-32s -> %s (fig copy)\n', ...
-                    [src_stem '.fig'], [dst_stem '.fig']);
-        catch ME
-            fprintf('  [SKIP]  %-32s -> %s (fig locked: %s)\n', ...
-                    [src_stem '.fig'], [dst_stem '.fig'], ME.message);
+    for ext = {".pdf", ".fig"}
+        e = ext{1};
+        sib_src = fullfile(P.out_dir, [src_stem char(e)]);
+        sib_dst = fullfile(dest_dir, [dst_stem char(e)]);
+        if isfile(sib_src)
+            try
+                copyfile(sib_src, sib_dst);
+                fprintf('  [ OK ]  %-32s -> %s (%s copy)\n', ...
+                        [src_stem char(e)], [dst_stem char(e)], ...
+                        strrep(char(e), '.', ''));
+            catch ME
+                fprintf('  [SKIP]  %-32s -> %s (%s locked: %s)\n', ...
+                        [src_stem char(e)], [dst_stem char(e)], ...
+                        strrep(char(e), '.', ''), ME.message);
+            end
         end
     end
 end
