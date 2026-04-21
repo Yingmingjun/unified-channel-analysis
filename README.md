@@ -205,7 +205,8 @@ verbatim by this repository.
 ## Citing this work
 
 Please cite the MILCOM 2025 paper that introduces the point-data format
-this repository implements:
+this repository implements, and the companion IEEE TWC submission that
+provides the cross-processing validation pipeline reproduced here:
 
 ```bibtex
 @INPROCEEDINGS{Shakya2025milcom,
@@ -219,18 +220,26 @@ this repository implements:
                Frequencies, and Institutions},
   year      = {2025},
   pages     = {232--237},
-  doi       = {10.1109/MILCOM64451.2025.11309979},
-  keywords  = {Wireless communication; Antenna measurements; Industries;
-               Statistical analysis; Organizations; Radio propagation;
-               Loss measurement; Frequency measurement; Delays;
-               Reliability; Wireless propagation; channel sounding;
-               standardized data format; 6G; machine learning}
+  doi       = {10.1109/MILCOM64451.2025.11309979}
+}
+
+@article{Shakya2026twc,
+  author  = {Shakya, Dipankar and Ying, Mingjun and Abbasi, Naveed A.
+             and Gomez-Ponce, Jorge and Liu, Xingchen and Wang, Xinquan
+             and Abraham, Daniel and Rappaport, Theodore S.
+             and Molisch, Andreas F.},
+  title   = {Pooling of Multi-Institutional Radio Propagation Empirical
+             Data with Cross-Processing Validation for 6{G} {AI/ML}
+             Channel Modeling},
+  journal = {IEEE Transactions on Wireless Communications},
+  year    = {2026},
+  note    = {Submitted; under review}
 }
 ```
 
 `CITATION.cff` carries the machine-readable version used by GitHub's
-"Cite this repository" button. A BibTeX entry for the companion TWC
-paper will be added once the journal assigns it a DOI.
+"Cite this repository" button. The TWC entry will be updated with final
+volume, issue, and DOI information once the journal assigns them.
 
 ---
 

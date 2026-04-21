@@ -79,3 +79,28 @@ preferred-citation:
   start: 232
   end: 237
   doi: "10.1109/MILCOM64451.2025.11309979"
+references:
+  - type: article
+    title: "Pooling of Multi-Institutional Radio Propagation Empirical Data with Cross-Processing Validation for 6G AI/ML Channel Modeling"
+    authors:
+      - family-names: "Shakya"
+        given-names: "Dipankar"
+      - family-names: "Ying"
+        given-names: "Mingjun"
+      - family-names: "Abbasi"
+        given-names: "Naveed A."
+      - family-names: "Gomez-Ponce"
+        given-names: "Jorge"
+      - family-names: "Liu"
+        given-names: "Xingchen"
+      - family-names: "Wang"
+        given-names: "Xinquan"
+      - family-names: "Abraham"
+        given-names: "Daniel"
+      - family-names: "Rappaport"
+        given-names: "Theodore S."
+      - family-names: "Molisch"
+        given-names: "Andreas F."
+    journal: "IEEE Transactions on Wireless Communications"
+    year: 2026
+    notes: "Submitted; under review. Companion journal paper to this repository."
