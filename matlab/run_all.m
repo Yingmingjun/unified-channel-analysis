@@ -12,11 +12,11 @@ function run_all(mode)
 %                         pipeline to regenerate <repo>/data/point_data/
 %                         7_UMi_U3.xlsx + 7_UMi_N3.xlsx from the 6.3 GB of
 %                         intermediate inputs under <repo>/data/raw_cb_a/.
-%                         Runtime ~10-30 min. Used only if the bundled xlsx
-%                         drop does not reproduce paper Table VI 6.75 GHz.
+%                         Used only if the bundled xlsx drop does not
+%                         reproduce paper Table VI 6.75 GHz.
 %
 % Pipeline layout:
-%   STEP 1: Raw processing (may take 30-60 minutes total on first run)
+%   STEP 1: Raw processing
 %           - NYU 142 GHz        -> matlab/processing/nyu_142/Results/
 %           - NYU 6.75 GHz       -> matlab/processing/nyu_7/Results/
 %           - USC 145.5 GHz      -> matlab/processing/usc_145/Results/
@@ -131,7 +131,7 @@ end
 % ============================================================================
 % STEP 1: Raw processing
 % ============================================================================
-banner(1, 'Raw processing (may take 30-60 minutes on first run)');
+banner(1, 'Raw processing');
 
 raw_steps = {
     % label,            script function/name,                result marker,                                             results dir

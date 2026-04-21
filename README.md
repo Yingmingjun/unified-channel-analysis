@@ -38,7 +38,7 @@ numbers against your own data:
 
 - `matlab/run_all('figures')` regenerates **Fig 3, Fig 4, Fig 5, Fig 6,
   Fig 7, Fig 8** and **Tables VI, VII, N1, N3, U1, U3** from existing
-  `Results/*.mat` (under 2 minutes).
+  `Results/*.mat`.
 - `matlab/figures/paper_parity.m` scores your pipeline output against
   the paper's printed values. Target: **108/108 TIGHT on Table VII
   and 32/32 TIGHT on Table VI** (point estimates ≤ 2 %, bootstrap
@@ -79,7 +79,7 @@ MATLAB; PDP processing uses standard DSP primitives.
 
 ---
 
-## Quickstart (5 minutes)
+## Quickstart
 
 ### 1. Clone
 
@@ -106,9 +106,9 @@ of truth for every path the pipeline touches.
 
 ```matlab
 cd matlab
-run_all              % raw → Results → figures + tables (30–60 min first time)
+run_all              % raw → Results → figures + tables
 % or:
-run_all('figures')   % skip raw processing if Results/*.mat already exist (< 2 min)
+run_all('figures')   % skip raw processing if Results/*.mat already exist
 ```
 
 ### 4. Outputs

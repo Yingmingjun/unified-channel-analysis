@@ -123,15 +123,27 @@ def update_U3(xlsx_path: Path, pipe_csv: Path, pipe_cols: dict) -> int:
         if prow is None:
             continue
         # U3 columns: 6=NYU thres, 7=USC thres, 8=USC orig (U1), etc.
-        # Only update the "orig (U1)" columns (8, 11, 14, 17) with pipeline
-        # USC-method values. Leave "NYU thres" and "USC thres" untouched
-        # (those encode different method+threshold combos from cross-processing
-        # scripts; overwriting them would break the paper's threshold-
-        # mismatch narrative).
+        #
+        # Phase-3 reference refresh (2026-04-20): we now ALSO write col 7
+        # (USC thres = NYU method + USC threshold = the U3 PROPER variant per
+        # paper Sec V-A "thresholds corresponding to the dataset"). USC pipeline
+        # runs at USC threshold, so its `PL_NYU_dB`/`DS_NYU_ns`/`ASA_NYU_10dB`
+        # /`ASD_NYU_10dB` outputs are the U3 headline values.
+        #
+        # Col 6 (NYU thres = NYU method + NYU threshold) requires a NYU-threshold
+        # pass on USC data which the current pipeline does not run; left as
+        # legacy from processing_cb_a.
+        # col 8 = U1 baseline (USC method + USC threshold)
         ws.cell(r, 8).value  = round(float(prow[pipe_cols["PL"]]), 2)
         ws.cell(r, 11).value = round(float(prow[pipe_cols["DS"]]), 2)
         ws.cell(r, 14).value = round(float(prow[pipe_cols["ASA"]]), 2)
         ws.cell(r, 17).value = round(float(prow[pipe_cols["ASD"]]), 2)
+        # col 7 = U3 PROPER (NYU method + USC threshold)
+        if "PL_NYU" in pipe_cols and pipe_cols["PL_NYU"] in prow:
+            ws.cell(r, 7).value  = round(float(prow[pipe_cols["PL_NYU"]]), 2)
+            ws.cell(r, 10).value = round(float(prow[pipe_cols["DS_NYU"]]), 2)
+            ws.cell(r, 13).value = round(float(prow[pipe_cols["ASA_NYU"]]), 2)
+            ws.cell(r, 16).value = round(float(prow[pipe_cols["ASD_NYU"]]), 2)
         updated += 1
     wb.save(xlsx_path)
     return updated
@@ -205,11 +217,39 @@ def update_N3(xlsx_path: Path, pipe_csv: Path, pipe_cols: dict) -> int:
             continue
         prow = pipe_by_tx_rx[key]
         # N3 columns: 6=USC thres, 7=NYU thres, 8=NYU orig (N1), etc.
-        # Only update the "orig (N1)" columns (8, 11, 14, 17).
+        #
+        # Phase-3 reference refresh (2026-04-20): now writes col 7 (NYU thres
+        # = USC method + NYU threshold = N3 PROPER variant per paper Sec V-A
+        # "thresholds corresponding to the dataset"). NYU 142 pipeline runs at
+        # NYU threshold, so `PL_USC_perDelayMax_dB` etc. ARE the N3 headline
+        # values. NYU 7 pipeline runs both thresholds, so we ALSO write col 6.
+        #
+        # col 8 = N1 baseline (NYU method + NYU threshold)
         ws.cell(r, 8).value  = round(float(prow[pipe_cols["PL"]]), 2)
         ws.cell(r, 11).value = round(float(prow[pipe_cols["DS"]]), 2)
         ws.cell(r, 14).value = round(float(prow[pipe_cols["ASA"]]), 2)
         ws.cell(r, 17).value = round(float(prow[pipe_cols["ASD"]]), 2)
+
+        # col 7 = N3 PROPER (USC method + NYU threshold)
+        # NYU 142: PL_USC = 'PL_USC_perDelayMax_dB' (USC method @ NYU thresh).
+        # NYU 7  : PL_USC = 'USCthr_PL_pDM_dB' which is USC method @ USC thresh
+        #          (= sensitivity, col 6); we use NYU7's NYUthr_*_pDM/U cols
+        #          via the dedicated keys "PL_USCmethod_NYUthr" etc.
+        col7_key = "PL_USCmethod_NYUthr" if "PL_USCmethod_NYUthr" in pipe_cols else "PL_USC"
+        if col7_key in pipe_cols and pipe_cols[col7_key] in prow:
+            suf = "_USCmethod_NYUthr" if col7_key.endswith("USCmethod_NYUthr") else "_USC"
+            ws.cell(r, 7).value  = round(float(prow[pipe_cols[f"PL{suf}"]]), 2)
+            ws.cell(r, 10).value = round(float(prow[pipe_cols[f"DS{suf}"]]), 2)
+            ws.cell(r, 13).value = round(float(prow[pipe_cols[f"ASA{suf}"]]), 2)
+            ws.cell(r, 16).value = round(float(prow[pipe_cols[f"ASD{suf}"]]), 2)
+
+        # col 6 = sensitivity variant (USC method + USC threshold) -- only NYU 7
+        # pipeline produces this; NYU 142 leaves col 6 legacy.
+        if "PL_USCmethod_USCthr" in pipe_cols and pipe_cols["PL_USCmethod_USCthr"] in prow:
+            ws.cell(r, 6).value  = round(float(prow[pipe_cols["PL_USCmethod_USCthr"]]), 2)
+            ws.cell(r, 9).value  = round(float(prow[pipe_cols["DS_USCmethod_USCthr"]]), 2)
+            ws.cell(r, 12).value = round(float(prow[pipe_cols["ASA_USCmethod_USCthr"]]), 2)
+            ws.cell(r, 15).value = round(float(prow[pipe_cols["ASD_USCmethod_USCthr"]]), 2)
         updated += 1
     wb.save(xlsx_path)
     return updated
@@ -241,10 +281,22 @@ NYU142_COLS = {
 }
 
 NYU7_COLS = {
+    # col 8 (N1 baseline) = NYU method + NYU threshold
     "PL":  "NYUthr_PL_SUM_dB",
     "DS":  "NYUthr_DS_SUM_ns",
     "ASA": "NYUthr_ASA_N10",
     "ASD": "NYUthr_ASD_N10",
+    # col 7 (N3 proper, "NYU thres") = USC method + NYU threshold
+    "PL_USCmethod_NYUthr":  "NYUthr_PL_pDM_dB",
+    "DS_USCmethod_NYUthr":  "NYUthr_DS_pDM_ns",
+    "ASA_USCmethod_NYUthr": "NYUthr_ASA_U",
+    "ASD_USCmethod_NYUthr": "NYUthr_ASD_U",
+    # col 6 (sensitivity, "USC thres") = USC method + USC threshold
+    "PL_USCmethod_USCthr":  "USCthr_PL_pDM_dB",
+    "DS_USCmethod_USCthr":  "USCthr_DS_pDM_ns",
+    "ASA_USCmethod_USCthr": "USCthr_ASA_U",
+    "ASD_USCmethod_USCthr": "USCthr_ASD_U",
+    # back-compat alias
     "PL_USC":  "USCthr_PL_pDM_dB",
     "DS_USC":  "USCthr_DS_pDM_ns",
     "ASA_USC": "USCthr_ASA_U",

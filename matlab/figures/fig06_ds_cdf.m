@@ -47,10 +47,15 @@ function render_ds_fig(T, P, band, freqLabel, ...
 
 sub = T(T.band == string(band), :);
 
-fig = figure('Position', [140, 140, 1400, 520], 'Color', 'w');
+fig = figure('Position', [140, 140, 1500, 440], 'Color', 'w');
 
 % ===== LOS subplot =====
-subplot(1, 2, 1); hold on; grid on; box on;
+% Manual subplot positions [left, bottom, width, height] in normalized
+% figure coords. Layout: 5.5% left margin, 40% subplot width, ~12% gap
+% (enough for the NLOS panel's 'Probability' Y-label + tick labels to
+% sit clear of the LOS panel's right spine), 40% subplot width again,
+% 2.5% right margin.
+subplot('Position', [0.055, 0.17, 0.40, 0.78]); hold on; grid on; box on;
 style_cdf_axes();
 
 nyu_los = clean_vals(sub.omni_ds_ns(sub.institution == "NYU" & sub.loc_type == "LOS"));
@@ -66,7 +71,7 @@ leg_los = build_legend(hP_los, hN_los, hNb_los, hU_los, hUb_los, hPb_los);
 add_logstat_text(mu_los, sd_los, 'DS', freqLabel, leg_los);
 
 % ===== NLOS subplot =====
-subplot(1, 2, 2); hold on; grid on; box on;
+subplot('Position', [0.575, 0.17, 0.40, 0.78]); hold on; grid on; box on;
 style_cdf_axes();
 
 nyu_nlos = clean_vals(sub.omni_ds_ns(sub.institution == "NYU" & sub.loc_type == "NLOS"));
@@ -120,7 +125,8 @@ hPooled = scatter(xP, fP, 70, mk, 'MarkerEdgeColor', cPooled, ...
     'LineWidth', 2.0, 'MarkerFaceColor', 'none');
 
 if ~isempty(pooledVals)
-    xlim([0, ceil(1.05 * max(pooledVals))]);
+    % Tight x-axis: let the CDF reach the right edge.
+    xlim([0, ceil(max(pooledVals))]);
 end
 ylim([0, 1]);
 

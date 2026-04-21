@@ -113,7 +113,7 @@ yline(ax, res_u3.loa_low,  '--', 'Color', c_usc, 'LineWidth', 1.8, 'HandleVisibi
 yline(ax, 0, ':', 'Color', [0.5 0.5 0.5], 'LineWidth', 0.8, 'HandleVisibility', 'off');
 
 xlabel(ax, sprintf('Mean of paired %s [%s]', metric_lbl, unit), 'FontSize', 30);
-ylabel(ax, sprintf('USC - NYU [%s]', unit),                     'FontSize', 30);
+ylabel(ax, sprintf('USC perDelayMax - NYU SUM [%s]', unit),     'FontSize', 30);
 title(ax,  ttl, 'FontSize', 32);
 
 % --- Y-axis padding:
