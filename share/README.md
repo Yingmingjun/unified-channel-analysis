@@ -11,10 +11,17 @@ NYU and USC Campaigns"* (IEEE TWC, submitted).
 > The paper PDF and the full supplement are included in
 > [`docs/supplement.pdf`](./docs/supplement.pdf).
 
-This package is **code only**. No channel measurement data ships
-with it. You bring your own PDPs (organized per
-[`DATA_ORGANIZATION.md`](./DATA_ORGANIZATION.md)), the pipeline does
-the rest.
+This package ships the **aggregate per-link point-data** needed to
+reproduce every paper figure and table (6 xlsx files under
+`data/point_data/`, the 4 processing-comparison CSVs, and stripped
+`Results/*.mat` files holding only aggregate summary structs).
+**Raw PDPs, PAS buffers, antenna-pattern files, and TX-power
+calibration data are intentionally not shipped.** If you want to
+re-run the raw-to-xlsx stage of the pipeline you supply your own
+PDPs organized per [`DATA_ORGANIZATION.md`](./DATA_ORGANIZATION.md);
+the figure/table scripts in `matlab/figures/` and
+`matlab/paper_figures/` run out of the box against the bundled
+aggregate data.
 
 ---
 
