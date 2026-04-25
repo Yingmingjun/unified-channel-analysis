@@ -143,7 +143,7 @@ end
 
 function style_cdf_axes()
 ax = gca;
-ax.FontSize = 19;
+ax.FontSize = 22;
 ax.GridAlpha = 0.2;
 ax.LineWidth = 0.8;
 end
