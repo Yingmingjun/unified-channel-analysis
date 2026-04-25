@@ -47,7 +47,7 @@ function render_ds_fig(T, P, band, freqLabel, ...
 
 sub = T(T.band == string(band), :);
 
-fig = figure('Position', [140, 140, 1500, 440], 'Color', 'w');
+fig = figure('Position', [140, 140, 1500, 620], 'Color', 'w');
 
 % ===== LOS subplot =====
 % Manual subplot positions [left, bottom, width, height] in normalized
