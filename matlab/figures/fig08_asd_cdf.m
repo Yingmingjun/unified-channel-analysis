@@ -40,7 +40,7 @@ function render_as_fig(T, P, band, freqLabel, metricName, nyu_col, usc_col, ...
 
 sub = T(T.band == string(band), :);
 
-fig = figure('Position', [120, 120, 1800, 580], 'Color', 'w');
+fig = figure('Position', [120, 120, 1800, 640], 'Color', 'w');
 
 % ===== LOS subplot =====
 subplot('Position', [0.055, 0.17, 0.40, 0.78]); hold on; grid on; box on;
