@@ -230,8 +230,16 @@ function generate_pl_fig(T, band, pooledFreqGHz, xlimM, ylimDB, titleStr, ...
     if ~isempty(h_nlos_band) && isvalid(h_nlos_band)
         handles(end+1) = h_nlos_band; labels{end+1} = 'NLOS 95% band';
     end
-    legend(handles, labels, 'Location', 'northwest', 'FontSize', 20, ...
+    leg = legend(handles, labels, 'Location', 'northwest', 'FontSize', 20, ...
            'Interpreter', 'tex', 'Box', 'on');
+    % Make legend marker glyphs match the scatter visual weight (default
+    % ItemTokenSize is [30 18]; we widen so the bumped 140-pt scatters
+    % render at full size in the legend column).
+    try
+        leg.ItemTokenSize = [60, 30];
+    catch
+        % older MATLAB: ItemTokenSize unavailable, leave default
+    end
 
     % ===================================================================
     % 7) Print bootstrap summary to console
