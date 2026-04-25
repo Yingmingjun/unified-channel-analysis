@@ -114,10 +114,18 @@ function generate_pl_fig(T, band, pooledFreqGHz, xlimM, ylimDB, titleStr, ...
           'Color', 'k', 'LineWidth', 1.2, 'FontSize', 16, ...
           'LabelHorizontalAlignment', 'right', ...
           'LabelVerticalAlignment', 'top', 'HandleVisibility', 'off');
+    % USC label placement: at sub-THz NYU (150) and USC (140) are 10 dB
+    % apart, so the USC label can also sit ABOVE its line without
+    % overlapping the NYU label. At 6.75 GHz they're only ~2.7 dB apart,
+    % so we keep the USC label below the line in that case.
+    usc_label_va = 'top';
+    if strcmpi(band, 'FR1C') || pooledFreqGHz < 50
+        usc_label_va = 'bottom';
+    end
     yline(maxPL.USC, '--', sprintf('USC Max Measurable Path Loss = %g dB', maxPL.USC), ...
           'Color', 'k', 'LineWidth', 1.2, 'FontSize', 16, ...
           'LabelHorizontalAlignment', 'right', ...
-          'LabelVerticalAlignment', 'bottom', 'HandleVisibility', 'off');
+          'LabelVerticalAlignment', usc_label_va, 'HandleVisibility', 'off');
 
     % ===================================================================
     % 3) Shaded 95 % bootstrap CI bands (pooled NYU+USC per loc_type)
