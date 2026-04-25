@@ -84,7 +84,7 @@ function generate_pl_fig(T, band, pooledFreqGHz, xlimM, ylimDB, titleStr, ...
     sub = T(T.band == string(band), :);
     sub = sub(isfinite(sub.d_m) & isfinite(sub.pl_db) & sub.d_m > 0, :);
 
-    fig = figure('Position', [120, 120, 1800, 720], 'Color', 'w');
+    fig = figure('Position', [120, 120, 1500, 720], 'Color', 'w');
     hold on; grid on; box on;
     % Fonts tuned for \includegraphics[width=0.47\textwidth] render
     % in IEEE 2-column layout (~3.4 in wide on the printed page).
