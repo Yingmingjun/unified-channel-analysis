@@ -110,7 +110,7 @@ hNYU = plot(xN, fN, 'Color', cNYU, 'LineWidth', 2.2);
 hUSC = plot(xU, fU, 'Color', cUSC, 'LineWidth', 2.2);
 
 if isLOS, mk = 'o'; else, mk = 'd'; end
-hPooled = scatter(xP, fP, 70, mk, 'MarkerEdgeColor', cPooled, ...
+hPooled = scatter(xP, fP, 125, mk, 'MarkerEdgeColor', cPooled, ...
     'LineWidth', 2.0, 'MarkerFaceColor', 'none');
 
 if ~isempty(pooledVals)

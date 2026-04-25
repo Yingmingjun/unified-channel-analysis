@@ -243,15 +243,32 @@ function generate_pl_fig(T, band, pooledFreqGHz, xlimM, ylimDB, titleStr, ...
             n_nlosP, sig_nlosP, cond(n_nlosN, NaN), cond(n_nlosU, NaN));
 
     % ===================================================================
-    % 8) Save (.jpg + .png + .fig)
+    % 8) Save (.pdf + .eps + .png + .jpg + .fig)
     % ===================================================================
-    exportgraphics(fig, fullfile(outputFolder, [baseName '.jpg']), ...
-        'Resolution', 300, 'BackgroundColor', 'white');
-    fprintf('Saved: %s\n', fullfile(outputFolder, [baseName '.jpg']));
+    exportgraphics(fig, fullfile(outputFolder, [baseName '.pdf']), ...
+        'ContentType', 'vector', 'BackgroundColor', 'white');
+    fprintf('Saved: %s\n', fullfile(outputFolder, [baseName '.pdf']));
+
+    try
+        exportgraphics(fig, fullfile(outputFolder, [baseName '.eps']), ...
+            'ContentType', 'vector', 'BackgroundColor', 'white');
+        fprintf('Saved: %s\n', fullfile(outputFolder, [baseName '.eps']));
+    catch
+        try
+            print(fig, fullfile(outputFolder, [baseName '.eps']), '-depsc', '-painters');
+            fprintf('Saved: %s (via print)\n', fullfile(outputFolder, [baseName '.eps']));
+        catch
+            % EPS not critical; .pdf is the canonical vector output
+        end
+    end
 
     exportgraphics(fig, fullfile(outputFolder, [baseName '.png']), ...
         'Resolution', 300, 'BackgroundColor', 'white');
     fprintf('Saved: %s\n', fullfile(outputFolder, [baseName '.png']));
+
+    exportgraphics(fig, fullfile(outputFolder, [baseName '.jpg']), ...
+        'Resolution', 300, 'BackgroundColor', 'white');
+    fprintf('Saved: %s\n', fullfile(outputFolder, [baseName '.jpg']));
 
     saveas(fig, fullfile(outputFolder, [baseName '.fig']));
     fprintf('Saved: %s\n', fullfile(outputFolder, [baseName '.fig']));

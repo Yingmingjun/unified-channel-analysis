@@ -1,10 +1,10 @@
 function save_figure(fig, out_dir, stem, padding)
-% save_figure  Export a MATLAB figure to PNG + PDF at 300 DPI.
+% save_figure  Export a MATLAB figure to PNG + PDF + EPS at 300 DPI.
 %
 %   save_figure(fig, out_dir, stem) writes <out_dir>/<stem>.png via
-%   exportgraphics (300 DPI, white background) and <out_dir>/<stem>.pdf
-%   as a vector file; additionally saves a MATLAB .fig via saveas so the
-%   user can re-open and tweak the plot.
+%   exportgraphics (300 DPI, white background), <out_dir>/<stem>.pdf
+%   and <out_dir>/<stem>.eps as vector files; additionally saves a
+%   MATLAB .fig via saveas so the user can re-open and tweak the plot.
 %
 %   save_figure(..., padding) sets the exportgraphics 'Padding' option:
 %     'tight'  (default) - crop surrounding whitespace. Minimizes file
@@ -30,11 +30,25 @@ end
 
 png_path = fullfile(out_dir, [stem '.png']);
 pdf_path = fullfile(out_dir, [stem '.pdf']);
+eps_path = fullfile(out_dir, [stem '.eps']);
 fig_path = fullfile(out_dir, [stem '.fig']);
 
 exportgraphics(fig, png_path, 'Resolution', 300, ...
                'BackgroundColor', 'white', 'Padding', padding);
 exportgraphics(fig, pdf_path, 'ContentType', 'vector', ...
                'BackgroundColor', 'white', 'Padding', padding);
+% EPS is added for legacy publishing workflows that prefer it over PDF.
+% exportgraphics supports .eps via ContentType='vector' from R2020a+;
+% fall back to `print -depsc` if that fails.
+try
+    exportgraphics(fig, eps_path, 'ContentType', 'vector', ...
+                   'BackgroundColor', 'white', 'Padding', padding);
+catch
+    try
+        print(fig, eps_path, '-depsc', '-painters');
+    catch
+        % EPS not critical; .pdf is the canonical vector output
+    end
+end
 saveas(fig, fig_path);
 end
