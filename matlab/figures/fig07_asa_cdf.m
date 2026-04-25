@@ -220,7 +220,7 @@ if ~isempty(hPooledBand) && isvalid(hPooledBand)
     handles(end+1) = hPooledBand; labels{end+1} = 'USC+NYU 95% band';
 end
 if ~isempty(handles)
-    leg = legend(handles, labels, 'Location', 'southeast', 'FontSize', 20);
+    leg = legend(handles, labels, 'Location', 'southeast', 'FontSize', 24);
 else
     leg = [];
 end
