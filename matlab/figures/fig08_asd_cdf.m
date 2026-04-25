@@ -126,7 +126,7 @@ end
 
 function style_cdf_axes()
 ax = gca;
-ax.FontSize = 22;
+ax.FontSize = 28;
 ax.GridAlpha = 0.2;
 ax.LineWidth = 0.8;
 end
@@ -188,7 +188,7 @@ end
 
 text(x_anchor, y_anchor, txt, 'Units', 'normalized', ...
      'HorizontalAlignment', 'right', 'VerticalAlignment', 'bottom', ...
-     'Color', 'k', 'FontSize', 14, 'FontWeight', 'bold', ...
+     'Color', 'k', 'FontSize', 18, 'FontWeight', 'bold', ...
      'Interpreter', 'tex');
 end
 
@@ -215,7 +215,7 @@ if ~isempty(hPooledBand) && isvalid(hPooledBand)
     handles(end+1) = hPooledBand; labels{end+1} = 'USC+NYU 95% band';
 end
 if ~isempty(handles)
-    leg = legend(handles, labels, 'Location', 'southeast', 'FontSize', 15);
+    leg = legend(handles, labels, 'Location', 'southeast', 'FontSize', 20);
 else
     leg = [];
 end
