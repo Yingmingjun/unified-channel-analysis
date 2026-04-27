@@ -222,6 +222,19 @@ this repository implements, and the companion IEEE TWC submission that
 provides the cross-processing validation pipeline reproduced here:
 
 ```bibtex
+@article{Shakya2026twc,
+  author  = {Shakya, Dipankar and Ying, Mingjun and Abbasi, Naveed A.
+             and Gomez-Ponce, Jorge and Liu, Xingchen and Wang, Xinquan
+             and Abraham, Daniel and Rappaport, Theodore S.
+             and Molisch, Andreas F.},
+  title   = {Pooling of Multi-Institutional Radio Propagation Empirical
+             Data with Cross-Processing Validation for 6{G} {AI/ML}
+             Channel Modeling},
+  journal = {IEEE Transactions on Wireless Communications},
+  year    = {2026},
+  note    = {Submitted; under review}
+}
+
 @INPROCEEDINGS{Shakya2025milcom,
   author    = {Shakya, Dipankar and Abbasi, Naveed A. and Ying, Mingjun
                and Jariwala, Isha and Qin, Jason J. and Gupte, Ishaan S.
@@ -234,19 +247,6 @@ provides the cross-processing validation pipeline reproduced here:
   year      = {2025},
   pages     = {232--237},
   doi       = {10.1109/MILCOM64451.2025.11309979}
-}
-
-@article{Shakya2026twc,
-  author  = {Shakya, Dipankar and Ying, Mingjun and Abbasi, Naveed A.
-             and Gomez-Ponce, Jorge and Liu, Xingchen and Wang, Xinquan
-             and Abraham, Daniel and Rappaport, Theodore S.
-             and Molisch, Andreas F.},
-  title   = {Pooling of Multi-Institutional Radio Propagation Empirical
-             Data with Cross-Processing Validation for 6{G} {AI/ML}
-             Channel Modeling},
-  journal = {IEEE Transactions on Wireless Communications},
-  year    = {2026},
-  note    = {Submitted; under review}
 }
 ```
 
