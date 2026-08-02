@@ -219,7 +219,8 @@ unified_steps = {
     'fig07_asa_cdf',             'Fig 7 ASA CDF';
     'fig08_asd_cdf',             'Fig 8 ASD CDF';
     'table06_rmse',              'Table 6 RMSE';
-    'table07_pooled_stats',      'Table 7 pooled stats';
+    'table07_pooled_stats',      'Table 7 pooled stats (legacy, prev. submission)';
+    'table07_canonical',         'Table VI canonical (revised paper, single state)';
     'table_dumps',               'Tables 4, 8, 9, 10, 11';
     'paper_parity',              'Paper vs Python vs MATLAB side-by-side';
 };
