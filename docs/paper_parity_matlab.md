@@ -5,5 +5,5 @@ Tolerance: point-est <=2% or CFI-width <=15% = TIGHT; <=30% = CLOSE; >30% = MISS
 
 - Python vs Paper - Table VI: 0 TIGHT, 0 CLOSE, 0 MISS (of 0)
 - Python vs Paper - Table VII: 0 TIGHT, 0 CLOSE, 0 MISS (of 0)
-- MATLAB vs Paper - Table VI: 32 TIGHT, 0 CLOSE, 0 MISS (of 32)
-- MATLAB vs Paper - Table VII: 108 TIGHT, 0 CLOSE, 0 MISS (of 108)
+- MATLAB vs Paper - Table VI: 11 TIGHT, 5 CLOSE, 16 MISS (of 32)
+- MATLAB vs Paper - Table VII: 87 TIGHT, 15 CLOSE, 6 MISS (of 108)

@@ -1,0 +1,1125 @@
+﻿
+============================================================
+  Unified channel-analysis MATLAB pipeline (02-Aug-2026 09:48:28)
+============================================================
+  Repo root     : D:\unified-channel-analysis
+  Output dir    : D:\unified-channel-analysis\figures\matlab
+  Mode          : rebuild
+============================================================
+
+
+############################################################
+#  STEP 1: Raw processing (may take 30-60 minutes on first run)
+############################################################
+
+
+----- [STEP 1.1] NYU 142 GHz : running NYU142GHz_Method_Comparison.m -----
+Loaded TX power table: 27 unique TX-RX pairs
+═══════════════════════════════════════════════════════════════════════
+  NYU 142GHz Data: Method Comparison Configuration
+═══════════════════════════════════════════════════════════════════════
+  PDP Threshold: max(25 dB below peak, 5 dB above noise) [NYU method]
+  Omni Synthesis: NYU=SUM, USC=perDelayMax
+  PAS Thresholds: 10 dB, 15 dB, 20 dB (NYU only)
+  TX Power: VARIES per TX-RX pair (from CSV), Ant Gain: TX=27 dB, RX=27 dB
+  TX Power lookup table loaded: 27 unique TX-RX pairs
+  Antenna patterns loaded: Azimuth (181 points), Elevation (181 points)
+═══════════════════════════════════════════════════════════════════════
+
+╔═══════════════════════════════════════════════════════════════════════╗
+║         Processing NYU 142GHz Data with NYU and USC Methods          ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+Found 27 TX-RX location files
+
+Processing [ 1/27] T1-R1 (Ptx=-3.50 dBm) ... LOS | PL: NYU=102.6, USC=103.5 | DS: NYU=7.5, USC=7.7 ns
+Processing [ 2/27] T1-R14 (Ptx=-1.20 dBm) ... NLOS | PL: NYU=129.7, USC=131.5 | DS: NYU=13.1, USC=12.3 ns
+Processing [ 3/27] T1-R16 (Ptx=-1.20 dBm) ... NLOS | PL: NYU=126.9, USC=128.2 | DS: NYU=23.1, USC=25.0 ns
+Processing [ 4/27] T1-R18 (Ptx=-1.20 dBm) ... NLOS | PL: NYU=136.9, USC=138.4 | DS: NYU=56.5, USC=53.1 ns
+Processing [ 5/27] T1-R23 (Ptx=-1.50 dBm) ... LOS | PL: NYU=110.8, USC=112.7 | DS: NYU=22.0, USC=23.2 ns
+Processing [ 6/27] T1-R27 (Ptx=-1.87 dBm) ... LOS | PL: NYU=104.4, USC=106.2 | DS: NYU=5.5, USC=6.2 ns
+Processing [ 7/27] T1-R31 (Ptx=-1.87 dBm) ... LOS | PL: NYU=105.1, USC=106.4 | DS: NYU=16.5, USC=17.3 ns
+Processing [ 8/27] T1-R5 (Ptx=-3.50 dBm) ... LOS | PL: NYU=102.1, USC=103.1 | DS: NYU=3.2, USC=2.9 ns
+Processing [ 9/27] T1-R9 (Ptx=-1.50 dBm) ... NLOS | PL: NYU=126.5, USC=127.5 | DS: NYU=19.8, USC=19.5 ns
+Processing [10/27] T2-R1 (Ptx=-2.00 dBm) ... LOS | PL: NYU=112.0, USC=113.6 | DS: NYU=32.0, USC=28.1 ns
+Processing [11/27] T2-R35 (Ptx=-2.00 dBm) ... LOS | PL: NYU=109.2, USC=110.8 | DS: NYU=27.0, USC=30.1 ns
+Processing [12/27] T2-R36 (Ptx=-2.00 dBm) ... LOS | PL: NYU=105.7, USC=106.7 | DS: NYU=17.6, USC=18.5 ns
+Processing [13/27] T3-R1 (Ptx=-1.37 dBm) ... NLOS | PL: NYU=130.6, USC=133.4 | DS: NYU=16.1, USC=16.0 ns
+Processing [14/27] T3-R35 (Ptx=-1.37 dBm) ... LOS | PL: NYU=116.8, USC=118.8 | DS: NYU=27.1, USC=26.3 ns
+Processing [15/27] T3-R36 (Ptx=-1.37 dBm) ... LOS | PL: NYU=115.1, USC=117.0 | DS: NYU=8.2, USC=9.8 ns
+Processing [16/27] T3-R37 (Ptx=-1.37 dBm) ... LOS | PL: NYU=120.6, USC=122.8 | DS: NYU=11.7, USC=14.9 ns
+Processing [17/27] T4-R1 (Ptx=-1.72 dBm) ... NLOS | PL: NYU=128.2, USC=129.5 | DS: NYU=26.4, USC=30.7 ns
+Processing [18/27] T4-R3 (Ptx=-1.72 dBm) ... LOS | PL: NYU=113.3, USC=115.8 | DS: NYU=17.2, USC=22.8 ns
+Processing [19/27] T4-R37 (Ptx=-1.72 dBm) ... LOS | PL: NYU=105.1, USC=106.8 | DS: NYU=7.7, USC=7.6 ns
+Processing [20/27] T4-R38 (Ptx=-1.72 dBm) ... NLOS | PL: NYU=138.2, USC=139.4 | DS: NYU=0.5, USC=0.6 ns
+Processing [21/27] T5-R1 (Ptx=-3.00 dBm) ... NLOS | PL: NYU=115.4, USC=116.9 | DS: NYU=41.8, USC=45.9 ns
+Processing [22/27] T5-R10 (Ptx=-3.00 dBm) ... NLOS | PL: NYU=122.6, USC=126.1 | DS: NYU=36.5, USC=47.0 ns
+Processing [23/27] T5-R3 (Ptx=-3.00 dBm) ... LOS | PL: NYU=107.2, USC=109.0 | DS: NYU=15.5, USC=17.9 ns
+Processing [24/27] T5-R35 (Ptx=-3.00 dBm) ... LOS | PL: NYU=110.9, USC=112.3 | DS: NYU=1.4, USC=1.3 ns
+Processing [25/27] T6-R1 (Ptx=-1.55 dBm) ... LOS | PL: NYU=104.0, USC=106.5 | DS: NYU=18.7, USC=17.7 ns
+Processing [26/27] T6-R39 (Ptx=-1.55 dBm) ... NLOS | PL: NYU=113.2, USC=115.5 | DS: NYU=23.6, USC=23.8 ns
+Processing [27/27] T6-R40 (Ptx=-1.55 dBm) ... NLOS | PL: NYU=120.1, USC=122.8 | DS: NYU=29.8, USC=36.0 ns
+
+Processing complete!
+
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                               TABLE 1: METHOD COMPARISON SUMMARY                                       ║
+╠════════════════════════╤═══════════════════════════════════╤═══════════════════════════════════════════╣
+║ Aspect                 │ NYU Method                        │ USC Method                                ║
+╠════════════════════════╪═══════════════════════════════════╪═══════════════════════════════════════════╣
+║ PDP Threshold          │ max(25dB below pk, 5dB abv noise) │ SAME (NYU method)                         ║
+║ Omni Synthesis         │ SUM across all directions         │ perDelayMax (max per delay)               ║
+║ PAS Threshold          │ 10/15/20 dB below peak            │ NONE                                      ║
+║ Lobe Expansion         │ Antenna pattern-based (HPBW=8°)   │ NONE                                      ║
+║ AS Formula             │ 3GPP: sqrt(-2*ln(R))              │ SAME                                      ║
+╚════════════════════════╧═══════════════════════════════════╧═══════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                              TABLE 2: PER TX-RX PAIR RESULTS                                                               ║
+╠═════════╤═══════╤═══════════════════╤═══════════════════╤═════════════════════════════════════════════════════════════════════════════════╣
+║  TX-RX  │  Env  │   Path Loss (dB)  │ Delay Spread (ns) │                    Angular Spread (degrees)                                      ║
+║         │       │   NYU  │   USC    │   NYU  │   USC    │  ASA-10  │  ASA-15  │  ASA-20  │ ASA-USC │  ASD-10  │  ASD-15  │  ASD-20  │ ASD-USC║
+╠═════════╪═══════╪════════╪══════════╪════════╪══════════╪══════════╪══════════╪══════════╪═════════╪══════════╪══════════╪══════════╪════════╣
+║ T1-R1   │ LOS   │  102.6 │  103.5   │   7.49 │   7.67   │     3.3  │    13.0  │    10.2  │    9.3  │     3.3  │    12.8  │    10.2  │    8.3 ║
+║ T1-R14  │ NLOS  │  129.7 │  131.5   │  13.07 │  12.26   │    54.9  │    52.7  │    53.4  │   51.8  │     3.3  │     2.7  │     2.0  │    0.0 ║
+║ T1-R16  │ NLOS  │  126.9 │  128.2   │  23.13 │  25.04   │    50.3  │    45.5  │    43.5  │   42.7  │     3.3  │     2.7  │     3.6  │    1.8 ║
+║ T1-R18  │ NLOS  │  136.9 │  138.4   │  56.47 │  53.06   │    41.8  │    41.5  │    41.4  │   41.3  │     9.1  │     8.7  │     8.4  │    8.1 ║
+║ T1-R23  │ LOS   │  110.8 │  112.7   │  22.04 │  23.17   │    52.0  │    48.4  │    51.1  │   48.8  │     5.4  │     6.4  │     5.8  │    5.2 ║
+║ T1-R27  │ LOS   │  104.4 │  106.2   │   5.52 │   6.16   │     3.3  │     3.6  │     3.1  │    5.2  │     3.3  │     2.7  │     2.0  │    0.6 ║
+║ T1-R31  │ LOS   │  105.1 │  106.4   │  16.46 │  17.30   │     3.3  │     4.2  │     3.6  │    9.1  │     3.3  │     2.7  │     6.9  │    3.9 ║
+║ T1-R5   │ LOS   │  102.1 │  103.1   │   3.19 │   2.89   │     3.3  │     3.1  │     2.8  │   10.3  │     3.3  │     3.9  │     3.1  │    2.0 ║
+║ T1-R9   │ NLOS  │  126.5 │  127.5   │  19.78 │  19.51   │    70.8  │    69.6  │    67.8  │   67.0  │     3.3  │     2.7  │     2.0  │    0.0 ║
+║ T2-R1   │ LOS   │  112.0 │  113.6   │  31.96 │  28.10   │     3.3  │     3.8  │     5.3  │   11.1  │     3.3  │     2.9  │     5.1  │    7.6 ║
+║ T2-R35  │ LOS   │  109.2 │  110.8   │  26.99 │  30.08   │     3.3  │     4.0  │    27.1  │   23.7  │     3.3  │     3.2  │     7.4  │    6.5 ║
+║ T2-R36  │ LOS   │  105.7 │  106.7   │  17.64 │  18.48   │     3.3  │     3.8  │     3.3  │   11.8  │     3.3  │     3.3  │     3.4  │    4.0 ║
+║ T3-R1   │ NLOS  │  130.6 │  133.4   │  16.06 │  15.97   │    10.9  │    12.2  │    12.0  │   11.8  │     6.7  │     6.1  │     5.8  │    5.5 ║
+║ T3-R35  │ LOS   │  116.8 │  118.8   │  27.11 │  26.33   │    13.5  │    12.4  │    12.4  │   12.3  │    25.1  │    22.9  │    22.1  │   21.6 ║
+║ T3-R36  │ LOS   │  115.1 │  117.0   │   8.25 │   9.78   │     3.3  │     3.7  │     3.2  │    6.5  │     3.3  │     3.3  │     2.9  │    2.7 ║
+║ T3-R37  │ LOS   │  120.6 │  122.8   │  11.70 │  14.95   │     4.0  │     3.8  │     3.4  │   10.2  │     3.3  │     3.3  │     2.7  │    1.9 ║
+║ T4-R1   │ NLOS  │  128.2 │  129.5   │  26.38 │  30.65   │     3.3  │     2.7  │    24.3  │   18.9  │     4.4  │     3.9  │     3.4  │    2.9 ║
+║ T4-R3   │ LOS   │  113.3 │  115.8   │  17.17 │  22.78   │     5.0  │     4.7  │     4.1  │    7.9  │     3.3  │     3.5  │     2.9  │    2.4 ║
+║ T4-R37  │ LOS   │  105.1 │  106.8   │   7.70 │   7.59   │     7.1  │    12.8  │    10.9  │   10.1  │    13.4  │    13.9  │    13.5  │   12.9 ║
+║ T4-R38  │ NLOS  │  138.2 │  139.4   │   0.54 │   0.58   │     5.0  │     4.3  │     3.9  │    3.4  │     5.0  │     4.3  │     3.9  │    3.4 ║
+║ T5-R1   │ NLOS  │  115.4 │  116.9   │  41.82 │  45.88   │    57.5  │    53.0  │    51.4  │   49.6  │    10.1  │     9.9  │    11.0  │   10.4 ║
+║ T5-R10  │ NLOS  │  122.6 │  126.1   │  36.54 │  47.02   │     5.2  │    33.2  │    38.8  │   33.1  │    19.4  │    18.6  │    18.4  │   17.7 ║
+║ T5-R3   │ LOS   │  107.2 │  109.0   │  15.55 │  17.88   │     3.3  │     8.7  │     7.8  │   10.2  │     3.3  │     8.4  │     8.3  │    8.0 ║
+║ T5-R35  │ LOS   │  110.9 │  112.3   │   1.39 │   1.34   │     3.3  │     4.0  │     3.5  │    3.3  │     3.3  │     3.5  │     2.9  │    2.8 ║
+║ T6-R1   │ LOS   │  104.0 │  106.5   │  18.66 │  17.74   │     4.7  │     4.7  │     4.2  │    6.8  │     4.9  │     4.7  │     4.2  │    4.4 ║
+║ T6-R39  │ NLOS  │  113.2 │  115.5   │  23.57 │  23.84   │    61.4  │    62.2  │    61.6  │   62.7  │    31.8  │    31.2  │    31.4  │   31.1 ║
+║ T6-R40  │ NLOS  │  120.1 │  122.8   │  29.76 │  35.99   │    34.9  │    32.3  │    30.6  │   29.7  │     4.0  │    26.6  │    24.4  │   22.1 ║
+╚═════════╧═══════╧════════╧══════════╧════════╧══════════╧══════════╧══════════╧══════════╧═════════╧══════════╧══════════╧══════════╧════════╝
+
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                              TABLE 3: STATISTICAL SUMMARY                                                      ║
+╠════════════════════════════════╤═════════════════════════════════════╤═════════════════════════════════════════════════════════╣
+║ Metric                         │     LOS (mean ± std)                │     NLOS (mean ± std)               │    ALL            ║
+╠════════════════════════════════╪═════════════════════════════════════╪═════════════════════════════════════════════════════════╣
+║ PL - NYU (SUM)                 │  109.1 ±   5.5 dB                    │  126.2 ±   8.0 dB                    │  116.1 ±  10.7 dB  ║
+║ PL - USC (perDelayMax)         │  110.7 ±   5.7 dB                    │  128.1 ±   7.7 dB                    │  117.8 ±  10.8 dB  ║
+║ Δ PL (NYU - USC)               │   -1.7 ±   0.5 dB                    │   -1.9 ±   0.8 dB                    │   -1.8 ±   0.6 dB  ║
+╠════════════════════════════════╪═════════════════════════════════════╪═════════════════════════════════════════════════════════╣
+║ DS - NYU (SUM)                 │  14.93 ±  9.08 ns                    │  26.10 ± 15.07 ns                    │  19.48 ± 12.89 ns  ║
+║ DS - USC (perDelayMax)         │  15.76 ±  9.04 ns                    │  28.16 ± 16.19 ns                    │  20.82 ± 13.66 ns  ║
+╠════════════════════════════════╪═════════════════════════════════════╪═════════════════════════════════════════════════════════╣
+║ ASA - NYU 10dB                 │    7.4 ±  12.2 deg                   │   36.0 ±  25.6 deg                   │   19.1 ±  23.3 deg ║
+║ ASA - NYU 20dB                 │    9.7 ±  12.6 deg                   │   39.0 ±  19.9 deg                   │   21.7 ±  21.4 deg ║
+║ ASA - USC (no threshold)       │   12.3 ±  10.7 deg                   │   37.5 ±  20.4 deg                   │   22.5 ±  19.6 deg ║
+╚════════════════════════════════╧═════════════════════════════════════╧═════════════════════════════════════════════════════════╝
+
+
+  CSV results exported to: D:\unified-channel-analysis\matlab\processing\nyu_142\Results\NYU142GHz_Method_Comparison_Results.csv
+  Excel results exported to: D:\unified-channel-analysis\matlab\processing\nyu_142\Results\NYU142GHz_Method_Comparison_Results.xlsx
+
+═══════════════════════════════════════════════════════════════════════
+  PROCESSING COMPLETE
+═══════════════════════════════════════════════════════════════════════
+  Figures saved to: D:\unified-channel-analysis\matlab\processing\nyu_142\Figures
+  Results saved to: D:\unified-channel-analysis\matlab\processing\nyu_142\Results
+  CSV exported to: D:\unified-channel-analysis\matlab\processing\nyu_142\Results\NYU142GHz_Method_Comparison_Results.csv
+  Excel exported to: D:\unified-channel-analysis\matlab\processing\nyu_142\Results\NYU142GHz_Method_Comparison_Results.xlsx
+═══════════════════════════════════════════════════════════════════════
+[STEP 1.1] NYU 142 GHz : DONE (1.9 min)
+
+----- [STEP 1.2] NYU 6.75 GHz : running NYU7GHz_Method_Comparison.m -----
+Loaded TX power table: 19 unique TX-RX pairs
+
+  ===== Dilation Factor Detection =====
+  PDP length: 81880 samples (from Data7Pack_TX1_RX1_Aligned.mat)
+  Candidate dilation factors and resulting max delay:
+    5 samples/ns → 16376.0 ns (16.38 us) max excess delay
+    10 samples/ns → 8188.0 ns (8.19 us) max excess delay
+    20 samples/ns → 4094.0 ns (4.09 us) max excess delay
+    40 samples/ns → 2047.0 ns (2.05 us) max excess delay
+  → Auto-selected dilation factor: 20 samples/ns (span=4094.0 ns)
+  ====================================
+
+  Using dilation factor: 20 samples/ns
+═══════════════════════════════════════════════════════════════════════
+  NYU 6.75GHz Data: Dual-Threshold Method Comparison Configuration
+═══════════════════════════════════════════════════════════════════════
+  Frequency: 6.75 GHz, HPBW: 30°, Ant Gain: TX=15 dBi, RX=15 dBi
+  Dilation factor: 20 samples/ns
+  NYU PDP Threshold: max(25 dB below peak, 5 dB above noise)
+  USC PDP Threshold: P25 + 5.41 dB per dir, global max + 12 dB
+  Omni Synthesis: NYU=SUM, USC=perDelayMax
+  PAS Thresholds: 10 dB, 15 dB, 20 dB (NYU only)
+  TX Power: VARIES per TX-RX pair (from CSV)
+  TX Power lookup table loaded: 19 unique TX-RX pairs
+  Loaded antenna pattern from D:\unified-channel-analysis\matlab\processing\nyu_7\7_phi0_pd.mat (new_x/new_y, 181 points)
+    Angle range: [-90.0, 90.0] deg, Peak gain: 15.9 dB
+  Loaded antenna pattern from D:\unified-channel-analysis\matlab\processing\nyu_7\7_phi90_pd.mat (new_x/new_y, 181 points)
+    Angle range: [-90.0, 90.0] deg, Peak gain: 15.8 dB
+  Antenna patterns loaded: Azimuth (181 points), Elevation (181 points)
+═══════════════════════════════════════════════════════════════════════
+
+╔═══════════════════════════════════════════════════════════════════════╗
+║    Processing NYU 6.75GHz Data with Dual Thresholds × Dual Methods   ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+Found 18 TX-RX location files
+
+Processing [ 1/18] TX1-RX1 (Ptx=15.86 dBm, d=40.1 m) ...
+  NYU thr: PL_SUM=74.6, PL_pDM=77.9 | DS_SUM=38.0, DS_pDM=47.5 ns
+  USC thr: PL_SUM=77.3, PL_pDM=78.7 | DS_SUM=13.2, DS_pDM=11.9 ns
+  NYU thr noise=-88.5 dB | USC thr global=-61.2 dB | Env=LOS
+
+Processing [ 2/18] TX1-RX2 (Ptx=15.68 dBm, d=100.0 m) ...
+  NYU thr: PL_SUM=82.8, PL_pDM=88.3 | DS_SUM=64.3, DS_pDM=92.2 ns
+  USC thr: PL_SUM=84.4, PL_pDM=89.2 | DS_SUM=0.9, DS_pDM=1.2 ns
+  NYU thr noise=-103.7 dB | USC thr global=-76.1 dB | Env=NLOS
+
+Processing [ 3/18] TX1-RX3 (Ptx=15.63 dBm, d=193.0 m) ...
+  NYU thr: PL_SUM=86.9, PL_pDM=89.4 | DS_SUM=108.8, DS_pDM=122.9 ns
+  USC thr: PL_SUM=90.0, PL_pDM=90.5 | DS_SUM=1.2, DS_pDM=1.1 ns
+  NYU thr noise=-97.3 dB | USC thr global=-70.0 dB | Env=LOS
+
+Processing [ 4/18] TX1-RX4 (Ptx=15.63 dBm, d=560.0 m) ...
+  NYU thr: PL_SUM=110.0, PL_pDM=114.5 | DS_SUM=67.4, DS_pDM=106.9 ns
+  USC thr: PL_SUM=117.3, PL_pDM=117.3 | DS_SUM=0.4, DS_pDM=0.4 ns
+  NYU thr noise=-115.1 dB | USC thr global=-88.1 dB | Env=NLOS
+
+Processing [ 5/18] TX1-RX5 (Ptx=15.63 dBm, d=880.0 m) ...
+  NYU thr: PL_SUM=124.7, PL_pDM=125.2 | DS_SUM=0.9, DS_pDM=0.8 ns
+  USC thr: PL_SUM=126.9, PL_pDM=126.9 | DS_SUM=0.4, DS_pDM=0.4 ns
+  NYU thr noise=-114.9 dB | USC thr global=-97.6 dB | Env=NLOS
+
+Processing [ 6/18] TX1-RX7 (Ptx=15.68 dBm, d=424.0 m) ...
+  NYU thr: PL_SUM=100.2, PL_pDM=103.2 | DS_SUM=190.9, DS_pDM=198.0 ns
+  USC thr: PL_SUM=107.1, PL_pDM=107.1 | DS_SUM=0.4, DS_pDM=0.4 ns
+  NYU thr noise=-114.6 dB | USC thr global=-77.4 dB | Env=LOS
+
+Processing [ 7/18] TX2-RX1 (Ptx=15.75 dBm, d=58.0 m) ...
+  NYU thr: PL_SUM=80.7, PL_pDM=86.1 | DS_SUM=22.7, DS_pDM=28.9 ns
+  USC thr: PL_SUM=84.4, PL_pDM=87.0 | DS_SUM=5.4, DS_pDM=6.0 ns
+  NYU thr noise=-106.6 dB | USC thr global=-70.6 dB | Env=LOS
+
+Processing [ 8/18] TX2-RX2 (Ptx=15.75 dBm, d=51.6 m) ...
+  NYU thr: PL_SUM=88.9, PL_pDM=94.1 | DS_SUM=96.8, DS_pDM=141.2 ns
+  USC thr: PL_SUM=95.6, PL_pDM=98.6 | DS_SUM=3.4, DS_pDM=4.6 ns
+  NYU thr noise=-96.3 dB | USC thr global=-76.9 dB | Env=NLOS
+
+Processing [ 9/18] TX2-RX3 (Ptx=15.75 dBm, d=100.9 m) ...
+  NYU thr: PL_SUM=101.2, PL_pDM=102.9 | DS_SUM=108.5, DS_pDM=91.4 ns
+  USC thr: PL_SUM=104.2, PL_pDM=104.3 | DS_SUM=11.0, DS_pDM=11.1 ns
+  NYU thr noise=-123.6 dB | USC thr global=-88.0 dB | Env=NLOS
+
+Processing [10/18] TX3-RX1 (Ptx=15.85 dBm, d=71.0 m) ...
+  NYU thr: PL_SUM=100.9, PL_pDM=104.8 | DS_SUM=183.9, DS_pDM=188.6 ns
+  USC thr: PL_SUM=113.0, PL_pDM=113.0 | DS_SUM=0.5, DS_pDM=0.5 ns
+  NYU thr noise=-121.1 dB | USC thr global=-84.4 dB | Env=NLOS
+
+Processing [11/18] TX3-RX2 (Ptx=15.85 dBm, d=45.1 m) ...
+  NYU thr: PL_SUM=88.9, PL_pDM=92.2 | DS_SUM=71.0, DS_pDM=84.9 ns
+  USC thr: PL_SUM=93.8, PL_pDM=94.8 | DS_SUM=10.5, DS_pDM=9.4 ns
+  NYU thr noise=-111.5 dB | USC thr global=-74.2 dB | Env=NLOS
+
+Processing [12/18] TX3-RX3 (Ptx=15.85 dBm, d=125.0 m) ...
+  NYU thr: PL_SUM=100.6, PL_pDM=105.6 | DS_SUM=113.3, DS_pDM=140.1 ns
+  USC thr: PL_SUM=106.3, PL_pDM=107.6 | DS_SUM=104.8, DS_pDM=116.6 ns
+  NYU thr noise=-123.3 dB | USC thr global=-97.4 dB | Env=NLOS
+
+Processing [13/18] TX4-RX1 (Ptx=15.68 dBm, d=88.7 m) ...
+  NYU thr: PL_SUM=97.7, PL_pDM=101.9 | DS_SUM=94.2, DS_pDM=100.5 ns
+  USC thr: PL_SUM=112.4, PL_pDM=112.4 | DS_SUM=0.4, DS_pDM=0.4 ns
+  NYU thr noise=-109.8 dB | USC thr global=-82.6 dB | Env=NLOS
+
+Processing [14/18] TX4-RX2 (Ptx=15.68 dBm, d=120.0 m) ...
+  NYU thr: PL_SUM=87.3, PL_pDM=91.4 | DS_SUM=34.6, DS_pDM=52.8 ns
+  USC thr: PL_SUM=93.2, PL_pDM=93.2 | DS_SUM=0.4, DS_pDM=0.4 ns
+  NYU thr noise=-102.0 dB | USC thr global=-64.7 dB | Env=LOS
+
+Processing [15/18] TX4-RX4 (Ptx=15.68 dBm, d=185.0 m) ...
+  NYU thr: PL_SUM=124.5, PL_pDM=125.9 | DS_SUM=117.3, DS_pDM=136.2 ns
+  USC thr: PL_SUM=140.6, PL_pDM=140.6 | DS_SUM=0.1, DS_pDM=0.1 ns
+  NYU thr noise=-119.9 dB | USC thr global=-102.7 dB | Env=NLOS
+
+Processing [16/18] TX5-RX1 (Ptx=15.50 dBm, d=52.1 m) ...
+  NYU thr: PL_SUM=82.0, PL_pDM=84.9 | DS_SUM=44.5, DS_pDM=49.8 ns
+  USC thr: PL_SUM=85.6, PL_pDM=85.7 | DS_SUM=0.6, DS_pDM=0.7 ns
+  NYU thr noise=-99.5 dB | USC thr global=-61.7 dB | Env=LOS
+
+Processing [17/18] TX5-RX2 (Ptx=15.50 dBm, d=170.0 m) ...
+  NYU thr: PL_SUM=101.5, PL_pDM=105.5 | DS_SUM=56.6, DS_pDM=67.6 ns
+  USC thr: PL_SUM=NaN, PL_pDM=NaN | DS_SUM=0.0, DS_pDM=0.0 ns
+  NYU thr noise=-119.4 dB | USC thr global=-83.2 dB | Env=NLOS
+
+Processing [18/18] TX5-RX3 (Ptx=15.68 dBm, d=141.0 m) ...
+  NYU thr: PL_SUM=106.3, PL_pDM=109.6 | DS_SUM=106.9, DS_pDM=115.5 ns
+  USC thr: PL_SUM=113.2, PL_pDM=114.0 | DS_SUM=33.9, DS_pDM=36.6 ns
+  NYU thr noise=-110.3 dB | USC thr global=-91.6 dB | Env=NLOS
+
+
+Processing complete!
+
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                               TABLE 1: METHOD COMPARISON SUMMARY                                       ║
+╠════════════════════════╤═══════════════════════════════════════╤═══════════════════════════════════════════╣
+║ Aspect                 │ NYU Method                            │ USC Method                                ║
+╠════════════════════════╪═══════════════════════════════════════╪═══════════════════════════════════════════╣
+║ PDP Threshold (NYU)    │ max(25dB below pk, 5dB abv noise)     │ SAME (per-directional)                    ║
+║ PDP Threshold (USC)    │ global: P25+5.41 per dir, max+12dB    │ SAME (global)                             ║
+║ Omni Synthesis         │ SUM across all directions              │ perDelayMax (max per delay)               ║
+║ PAS Threshold          │ 10/15/20 dB below peak                 │ NONE                                      ║
+║ Lobe Expansion         │ Antenna pattern-based (HPBW=30°)      │ NONE                                      ║
+║ AS Formula             │ 3GPP: sqrt(-2*ln(R))                   │ SAME                                      ║
+╚════════════════════════╧═══════════════════════════════════════╧═══════════════════════════════════════════╝
+
+╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                        TABLE 2A: PER TX-RX RESULTS — NYU PDP THRESHOLD                                    ║
+╠══════════╤═════╤═══════╤══════════════════════╤══════════════════════╤══════════════════════════════════════╣
+║  TX-RX   │ Env │ d(m)  │ Path Loss (dB)       │ Delay Spread (ns)    │ Angular Spread (deg)                 ║
+║          │     │       │  SUM    │  pDM        │  SUM    │  pDM        │ ASA-N10 │ ASA-U  │ ASD-N10 │ ASD-U ║
+╠══════════╪═════╪═══════╪═════════╪════════════╪═════════╪════════════╪═════════╪════════╪═════════╪════════╣
+║ TX1-RX1  │ LOS │  40.1 │    74.6 │    77.9   │   37.96 │   47.45   │   28.9  │  25.0  │   22.5  │  27.9 ║
+║ TX1-RX2  │ NLO │ 100.0 │    82.8 │    88.3   │   64.28 │   92.24   │   21.1  │  25.2  │   19.0  │  24.8 ║
+║ TX1-RX3  │ LOS │ 193.0 │    86.9 │    89.4   │  108.77 │  122.91   │   11.0  │  12.3  │   57.7  │  38.5 ║
+║ TX1-RX4  │ NLO │ 560.0 │   110.0 │   114.5   │   67.37 │  106.89   │   18.0  │  16.2  │   20.4  │  25.1 ║
+║ TX1-RX5  │ NLO │ 880.0 │   124.7 │   125.2   │    0.86 │    0.84   │   11.0  │   4.4  │   11.0  │   0.0 ║
+║ TX1-RX7  │ LOS │ 424.0 │   100.2 │   103.2   │  190.87 │  197.96   │   16.7  │  15.7  │   82.5  │  79.5 ║
+║ TX2-RX1  │ LOS │  58.0 │    80.7 │    86.1   │   22.71 │   28.86   │   62.2  │  58.7  │   24.2  │  25.5 ║
+║ TX2-RX2  │ NLO │  51.6 │    88.9 │    94.1   │   96.76 │  141.24   │   66.5  │  60.3  │   22.4  │  37.8 ║
+║ TX2-RX3  │ NLO │ 100.9 │   101.2 │   102.9   │  108.52 │   91.39   │   20.7  │  21.9  │   97.7  │  96.1 ║
+║ TX3-RX1  │ NLO │  71.0 │   100.9 │   104.8   │  183.90 │  188.56   │   40.8  │  38.4  │   33.4  │  38.6 ║
+║ TX3-RX2  │ NLO │  45.1 │    88.9 │    92.2   │   71.05 │   84.88   │   30.2  │  29.6  │   38.5  │  43.5 ║
+║ TX3-RX3  │ NLO │ 125.0 │   100.6 │   105.6   │  113.33 │  140.06   │   55.3  │  59.0  │   31.2  │  37.8 ║
+║ TX4-RX1  │ NLO │  88.7 │    97.7 │   101.9   │   94.22 │  100.50   │   20.0  │  32.9  │   64.5  │  62.7 ║
+║ TX4-RX2  │ LOS │ 120.0 │    87.3 │    91.4   │   34.63 │   52.80   │   18.2  │  15.9  │   18.2  │  17.2 ║
+║ TX4-RX4  │ NLO │ 185.0 │   124.5 │   125.9   │  117.30 │  136.19   │   16.8  │  14.5  │   22.1  │  16.6 ║
+║ TX5-RX1  │ LOS │  52.1 │    82.0 │    84.9   │   44.47 │   49.85   │   17.4  │  15.1  │   18.5  │  25.9 ║
+║ TX5-RX2  │ NLO │ 170.0 │   101.5 │   105.5   │   56.64 │   67.63   │   26.8  │  28.1  │   33.8  │  37.1 ║
+║ TX5-RX3  │ NLO │ 141.0 │   106.3 │   109.6   │  106.91 │  115.49   │   52.5  │  53.1  │   89.5  │  81.6 ║
+╚══════════╧═════╧═══════╧═════════╧════════════╧═════════╧════════════╧═════════╧════════╧═════════╧════════╝
+
+╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                        TABLE 2B: PER TX-RX RESULTS — USC PDP THRESHOLD                                    ║
+╠══════════╤═════╤═══════╤══════════════════════╤══════════════════════╤══════════════════════════════════════╣
+║  TX-RX   │ Env │ d(m)  │ Path Loss (dB)       │ Delay Spread (ns)    │ Angular Spread (deg)                 ║
+║          │     │       │  SUM    │  pDM        │  SUM    │  pDM        │ ASA-N10 │ ASA-U  │ ASD-N10 │ ASD-U ║
+╠══════════╪═════╪═══════╪═════════╪════════════╪═════════╪════════════╪═════════╪════════╪═════════╪════════╣
+║ TX1-RX1  │ LOS │  40.1 │    77.3 │    78.7   │   13.21 │   11.89   │   14.4  │  14.8  │   11.0  │  15.4 ║
+║ TX1-RX2  │ NLO │ 100.0 │    84.4 │    89.2   │    0.92 │    1.21   │   16.5  │  14.2  │   11.0  │   8.1 ║
+║ TX1-RX3  │ LOS │ 193.0 │    90.0 │    90.5   │    1.16 │    1.06   │   11.0  │   0.0  │   11.0  │   5.0 ║
+║ TX1-RX4  │ NLO │ 560.0 │   117.3 │   117.3   │    0.42 │    0.42   │   11.0  │   0.0  │   11.0  │   0.0 ║
+║ TX1-RX5  │ NLO │ 880.0 │   126.9 │   126.9   │    0.40 │    0.40   │   11.0  │   0.0  │   11.0  │   0.0 ║
+║ TX1-RX7  │ LOS │ 424.0 │   107.1 │   107.1   │    0.39 │    0.39   │   11.0  │   0.0  │   11.0  │   0.0 ║
+║ TX2-RX1  │ LOS │  58.0 │    84.4 │    87.0   │    5.41 │    5.99   │   18.2  │  43.2  │   19.8  │  14.7 ║
+║ TX2-RX2  │ NLO │  51.6 │    95.6 │    98.6   │    3.36 │    4.58   │   25.1  │  32.7  │   11.0  │   0.0 ║
+║ TX2-RX3  │ NLO │ 100.9 │   104.2 │   104.3   │   11.02 │   11.09   │   11.0  │   3.5  │   11.0  │  13.2 ║
+║ TX3-RX1  │ NLO │  71.0 │   113.0 │   113.0   │    0.51 │    0.51   │   11.0  │   0.0  │   11.0  │   0.0 ║
+║ TX3-RX2  │ NLO │  45.1 │    93.8 │    94.8   │   10.49 │    9.43   │   17.7  │  12.0  │   18.5  │  13.1 ║
+║ TX3-RX3  │ NLO │ 125.0 │   106.3 │   107.6   │  104.80 │  116.63   │   35.6  │  33.0  │   31.1  │  26.9 ║
+║ TX4-RX1  │ NLO │  88.7 │   112.4 │   112.4   │    0.39 │    0.39   │   11.0  │   0.0  │   11.0  │   0.0 ║
+║ TX4-RX2  │ LOS │ 120.0 │    93.2 │    93.2   │    0.44 │    0.44   │   11.0  │   0.0  │   11.0  │   0.0 ║
+║ TX4-RX4  │ NLO │ 185.0 │   140.6 │   140.6   │    0.09 │    0.09   │   11.0  │   0.0  │   11.0  │   0.0 ║
+║ TX5-RX1  │ LOS │  52.1 │    85.6 │    85.7   │    0.64 │    0.65   │   11.0  │   0.0  │   11.0  │   4.9 ║
+║ TX5-RX2  │ NLO │ 170.0 │     NaN │     NaN   │    0.00 │    0.00   │    0.0  │   0.0  │    0.0  │   0.0 ║
+║ TX5-RX3  │ NLO │ 141.0 │   113.2 │   114.0   │   33.86 │   36.61   │   42.2  │  32.1  │   50.1  │  35.9 ║
+╚══════════╧═════╧═══════╧═════════╧════════════╧═════════╧════════════╧═════════╧════════╧═════════╧════════╝
+
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                   TABLE 3: STATISTICAL SUMMARY                                              ║
+╠══════════════════════════════════════╤═══════════════════════════════╤═════════════════════════════════════════╣
+║ Metric                               │    LOS (mean ± std)           │    NLOS (mean ± std)    │    ALL       ║
+╠══════════════════════════════════════╪═══════════════════════════════╪═════════════════════════════════════════╣
+║ --- NYU PDP Threshold ---            │                               │                                         ║
+║ PL-SUM (dB)                          │  85.28 ±  8.67               │ 102.34 ± 12.93              │  96.66 ± 14.09 ║
+║ PL-pDM (dB)                          │  88.83 ±  8.43               │ 105.87 ± 11.77              │ 100.19 ± 13.37 ║
+║ DS-SUM (ns)                          │  73.24 ± 65.14               │  90.09 ± 44.10              │  84.47 ± 50.72 ║
+║ DS-pDM (ns)                          │  83.30 ± 64.83               │ 105.49 ± 46.35              │  98.10 ± 52.36 ║
+║ ASA-N10 (deg)                        │  25.71 ± 18.78               │  31.64 ± 17.90              │  29.66 ± 17.87 ║
+║ ASA-U (deg)                          │  23.78 ± 17.64               │  31.98 ± 17.85              │  29.24 ± 17.71 ║
+║ ASD-N10 (deg)                        │  37.27 ± 26.71               │  40.29 ± 28.35              │  39.29 ± 27.06 ║
+║ ASD-U (deg)                          │  35.75 ± 22.50               │  41.81 ± 26.95              │  39.79 ± 25.05 ║
+╠══════════════════════════════════════╪═══════════════════════════════╪═════════════════════════════════════════╣
+║ --- USC PDP Threshold ---            │                               │                                         ║
+║ PL-SUM (dB)                          │  89.59 ± 10.16               │    NaN ±   NaN              │    NaN ±   NaN ║
+║ PL-pDM (dB)                          │  90.38 ±  9.57               │    NaN ±   NaN              │    NaN ±   NaN ║
+║ DS-SUM (ns)                          │   3.54 ±  5.11               │  13.86 ± 30.26              │  10.42 ± 25.00 ║
+║ DS-pDM (ns)                          │   3.40 ±  4.68               │  15.11 ± 33.62              │  11.21 ± 27.75 ║
+║ ASA-N10 (deg)                        │  12.74 ±  2.99               │  16.92 ± 11.89              │  15.52 ±  9.91 ║
+║ ASA-U (deg)                          │   9.67 ± 17.47               │  10.63 ± 14.13              │  10.31 ± 14.80 ║
+║ ASD-N10 (deg)                        │  12.45 ±  3.62               │  15.62 ± 12.98              │  14.57 ± 10.74 ║
+║ ASD-U (deg)                          │   6.67 ±  6.87               │   8.10 ± 12.19              │   7.62 ± 10.52 ║
+╚══════════════════════════════════════╧═══════════════════════════════╧═════════════════════════════════════════╝
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║         TABLE 4: THRESHOLD COMPARISON — Δ(NYU_thr − USC_thr)                ║
+╠═══════════════════════════╤═══════════════════╤══════════════════════════════╣
+║ Metric                    │ LOS (mean ± std)  │ NLOS (mean ± std)  │  ALL   ║
+╠═══════════════════════════╪═══════════════════╪══════════════════════════════╣
+║ ΔPL-SUM (dB)                         │  -4.31 ±  1.69               │    NaN ±   NaN              │    NaN ±   NaN ║
+║ ΔPL-pDM (dB)                         │  -1.55 ±  1.23               │    NaN ±   NaN              │    NaN ±   NaN ║
+║ ΔDS-SUM (ns)                         │  69.69 ± 67.41               │  76.24 ± 48.08              │  74.06 ± 53.32 ║
+║ ΔDS-pDM (ns)                         │  79.90 ± 67.12               │  90.38 ± 50.16              │  86.89 ± 54.58 ║
+║ ΔASA-N10 (deg)                       │  12.98 ± 15.88               │  14.72 ± 12.26              │  14.14 ± 13.12 ║
+║ ΔASA-U (deg)                         │  14.11 ±  2.32               │  21.35 ±  9.62              │  18.94 ±  8.59 ║
+║ ΔASD-N10 (deg)                       │  24.82 ± 27.81               │  24.67 ± 25.40              │  24.72 ± 25.39 ║
+║ ΔASD-U (deg)                         │  29.08 ± 26.00               │  33.72 ± 22.93              │  32.17 ± 23.33 ║
+╚═══════════════════════════╧═══════════════════╧══════════════════════════════╝
+
+Saved: CDF_PL.fig/png/pdf
+Saved: CDF_DS.fig/png/pdf
+Saved: CDF_ASA.fig/png/pdf
+Saved: CDF_ASD.fig/png/pdf
+
+===================================================================
+  BLAND-ALTMAN SUMMARY (NYU method - USC method)
+===================================================================
+  Combined Bland-Altman: Omni PL [dB] (NYU thr vs USC thr):
+    NYU threshold: Bias=-3.53 dB, SD=1.41 dB (n=18)
+    USC threshold: Bias=-0.92 dB, SD=1.37 dB (n=17)
+Saved: BlandAltman_PL.fig/png/pdf
+  Combined Bland-Altman: Omni DS [ns] (NYU thr vs USC thr):
+    NYU threshold: Bias=-13.62 ns, SD=14.41 ns (n=18)
+    USC threshold: Bias=-0.79 ns, SD=2.88 ns (n=18)
+Saved: BlandAltman_DS.fig/png/pdf
+  Combined Bland-Altman: ASA [deg] (NYU thr vs USC thr):
+    NYU threshold: Bias=+0.42 deg, SD=4.45 deg (n=18)
+    USC threshold: Bias=+5.22 deg, SD=9.34 deg (n=18)
+Saved: BlandAltman_ASA.fig/png/pdf
+  Combined Bland-Altman: ASD [deg] (NYU thr vs USC thr):
+    NYU threshold: Bias=-0.51 deg, SD=7.97 deg (n=18)
+    USC threshold: Bias=+6.94 deg, SD=5.29 deg (n=18)
+Saved: BlandAltman_ASD.fig/png/pdf
+
+  CSV results exported to: D:\unified-channel-analysis\matlab\processing\nyu_7\Results\NYU7GHz_Method_Comparison_Results.csv
+  Excel results exported to: D:\unified-channel-analysis\matlab\processing\nyu_7\Results\NYU7GHz_Method_Comparison_Results.xlsx
+
+═══════════════════════════════════════════════════════════════════════
+  PROCESSING COMPLETE
+═══════════════════════════════════════════════════════════════════════
+  Figures saved to: D:\unified-channel-analysis\matlab\processing\nyu_7\Figures
+  Results saved to: D:\unified-channel-analysis\matlab\processing\nyu_7\Results
+  CSV exported to: D:\unified-channel-analysis\matlab\processing\nyu_7\Results\NYU7GHz_Method_Comparison_Results.csv
+  Excel exported to: D:\unified-channel-analysis\matlab\processing\nyu_7\Results\NYU7GHz_Method_Comparison_Results.xlsx
+═══════════════════════════════════════════════════════════════════════
+[STEP 1.2] NYU 6.75 GHz : DONE (1.9 min)
+
+----- [STEP 1.3] USC 145.5 GHz : running USC142GHz_Method_Comparison_Full.m -----
+═══════════════════════════════════════════════════════════════════════
+  USC 145GHz Data: Full Method Comparison (NYU vs USC)
+═══════════════════════════════════════════════════════════════════════
+  PDP Threshold: Global max noise + 12 dB [USC method, common]
+  Omni Synthesis: NYU=SUM, USC=perDelayMax
+  PAS Thresholds: 10 dB, 15 dB, 20 dB (NYU AS only)
+  Correction Factor: -1.95 dB (elevation summing)
+  TX Power: -2.0 dBm, Ant Gain: TX=21 dB, RX=21 dB
+═══════════════════════════════════════════════════════════════════════
+
+Antenna pattern loaded: 181 points
+╔═══════════════════════════════════════════════════════════════════════╗
+║    Processing USC 145GHz Data: PL, DS, and AS (NYU vs USC Methods)   ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+Processing LOS locations...
+─────────────────────────────────────────────────────────────────────────
+Processing [ 1/13] R01 (d=64.5 m) ... PL: 102.9/109.6 dB | DS: 52.3/57.8 ns | ASA: 26.9/30.2 deg
+Processing [ 2/13] R02 (d=82.5 m) ... PL: 106.1/112.7 dB | DS: 32.4/33.7 ns | ASA: 9.7/17.7 deg
+Processing [ 3/13] R03 (d=32.1 m) ... PL: 97.7/103.7 dB | DS: 15.0/15.7 ns | ASA: 10.3/10.4 deg
+Processing [ 4/13] R04 (d=40.8 m) ... PL: 100.2/107.1 dB | DS: 30.0/32.7 ns | ASA: 9.8/13.9 deg
+Processing [ 5/13] R05 (d=49.8 m) ... PL: 101.6/107.8 dB | DS: 20.5/22.2 ns | ASA: 9.8/12.0 deg
+Processing [ 6/13] R06 (d=72.3 m) ... PL: 103.9/110.1 dB | DS: 68.1/68.6 ns | ASA: 15.4/29.0 deg
+Processing [ 7/13] R07 (d=20.4 m) ... PL: 92.1/99.5 dB | DS: 2.9/4.5 ns | ASA: 10.3/13.2 deg
+Processing [ 8/13] R08 (d=33.9 m) ... PL: 97.9/104.5 dB | DS: 11.4/13.1 ns | ASA: 9.8/10.4 deg
+Processing [ 9/13] R09 (d=45.9 m) ... PL: 100.5/107.0 dB | DS: 9.4/11.8 ns | ASA: 10.1/10.8 deg
+Processing [10/13] R10 (d=54.3 m) ... PL: 101.5/107.9 dB | DS: 24.5/25.9 ns | ASA: 9.8/22.2 deg
+Processing [11/13] R11 (d=36.3 m) ... PL: 101.1/107.5 dB | DS: 5.6/6.4 ns | ASA: 9.9/11.5 deg
+Processing [12/13] R12 (d=57.9 m) ... PL: 103.0/108.6 dB | DS: 3.4/4.0 ns | ASA: 10.5/11.6 deg
+Processing [13/13] R13 (d=65.7 m) ... PL: 101.9/109.6 dB | DS: 2.7/4.3 ns | ASA: 11.9/12.1 deg
+
+Processing NLOS locations...
+─────────────────────────────────────────────────────────────────────────
+Processing [ 1/13] R01 (d=46.0 m) ... PL: 118.5/122.5 dB | DS: 27.8/24.5 ns | ASA: 11.0/19.7 deg
+Processing [ 2/13] R02 (d=73.0 m) ... PL: 122.5/128.2 dB | DS: 22.2/23.3 ns | ASA: 23.6/26.8 deg
+Processing [ 3/13] R03 (d=83.0 m) ... PL: 124.1/129.0 dB | DS: 19.4/20.1 ns | ASA: 28.7/30.0 deg
+Processing [ 4/13] R04 (d=40.7 m) ... PL: 116.1/122.8 dB | DS: 44.8/62.7 ns | ASA: 44.7/50.0 deg
+Processing [ 5/13] R05 (d=53.4 m) ... PL: 117.2/121.6 dB | DS: 64.0/66.0 ns | ASA: 79.9/81.1 deg
+Processing [ 6/13] R06 (d=62.6 m) ... PL: 121.5/126.5 dB | DS: 42.3/50.9 ns | ASA: 53.1/54.5 deg
+Processing [ 7/13] R07 (d=35.0 m) ... PL: 104.8/109.4 dB | DS: 5.7/6.1 ns | ASA: 9.2/19.7 deg
+Processing [ 8/13] R08 (d=45.5 m) ... PL: 101.2/106.2 dB | DS: 2.5/2.9 ns | ASA: 9.9/11.2 deg
+Processing [ 9/13] R09 (d=58.5 m) ... PL: 115.2/121.7 dB | DS: 14.3/21.7 ns | ASA: 17.6/21.3 deg
+Processing [10/13] R10 (d=65.7 m) ... PL: 120.2/125.1 dB | DS: 24.4/30.6 ns | ASA: 11.7/22.2 deg
+Processing [11/13] R11 (d=18.3 m) ... PL: 112.7/118.9 dB | DS: 11.0/13.4 ns | ASA: 19.7/26.1 deg
+Processing [12/13] R12 (d=20.8 m) ... PL: 105.2/109.4 dB | DS: 3.4/3.7 ns | ASA: 9.5/11.0 deg
+Processing [13/13] R13 (d=30.0 m) ... PL: 119.8/124.2 dB | DS: 36.6/39.8 ns | ASA: 14.4/28.3 deg
+
+Processing complete!
+
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                               TABLE 1: METHOD COMPARISON SUMMARY                                       ║
+╠════════════════════════╤═══════════════════════════════════╤═══════════════════════════════════════════╣
+║ Aspect                 │ NYU Method                        │ USC Method                                ║
+╠════════════════════════╪═══════════════════════════════════╪═══════════════════════════════════════════╣
+║ PDP Threshold          │ Global noise + 12dB               │ SAME (common)                             ║
+║ Omni Synthesis (PL/DS) │ SUM across all directions         │ perDelayMax (max per delay)               ║
+║ PAS Threshold (AS)     │ 10/15/20 dB below peak            │ NONE                                      ║
+║ Lobe Expansion (AS)    │ Antenna pattern-based (HPBW=10°)  │ NONE                                      ║
+║ AS Formula             │ 3GPP: sqrt(-2*ln(R))              │ SAME                                      ║
+╚════════════════════════╧═══════════════════════════════════╧═══════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                            TABLE 2: PER-LOCATION RESULTS                                                                           ║
+╠═════════╤══════╤═══════════════════╤═══════════════════╤═════════════════════════════════════════╤═════════════════════════════════════════════════════════════════╣
+║  Loc    │ Env  │   Path Loss (dB)  │  Delay Spread(ns) │          ASA (degrees)                  │              ASD (degrees)                                      ║
+║         │      │  NYU   │   USC    │  NYU   │   USC    │ NYU-10 │ NYU-15 │ NYU-20 │  USC  │ NYU-10 │ NYU-15 │ NYU-20 │  USC  ║
+╠═════════╪══════╪════════╪══════════╪════════╪══════════╪════════╪════════╪════════╪═══════╪════════╪════════╪════════╪═══════╣
+║ R01     │ LOS  │  102.9 │  109.6   │   52.3 │   57.8   │   26.9 │   24.8 │   31.3 │  30.2 │    9.8 │   10.9 │   12.4 │  12.2 ║
+║ R02     │ LOS  │  106.1 │  112.7   │   32.4 │   33.7   │    9.7 │   11.0 │   18.6 │  17.7 │   10.4 │   11.9 │   12.1 │  12.3 ║
+║ R03     │ LOS  │   97.7 │  103.7   │   15.0 │   15.7   │   10.3 │    9.5 │    9.4 │  10.4 │    9.4 │    9.6 │    9.4 │   9.9 ║
+║ R04     │ LOS  │  100.2 │  107.1   │   30.0 │   32.7   │    9.8 │    9.6 │    9.6 │  13.9 │   10.3 │   10.1 │   11.1 │  11.3 ║
+║ R05     │ LOS  │  101.6 │  107.8   │   20.5 │   22.2   │    9.8 │    9.5 │   11.1 │  12.0 │    9.8 │    9.5 │   11.0 │  10.8 ║
+║ R06     │ LOS  │  103.9 │  110.1   │   68.1 │   68.6   │   15.4 │   32.5 │   28.8 │  29.0 │    9.5 │   14.8 │   14.7 │  14.3 ║
+║ R07     │ LOS  │   92.1 │   99.5   │    2.9 │    4.5   │   10.3 │   10.4 │   10.4 │  13.2 │   10.2 │   10.4 │   10.4 │  10.1 ║
+║ R08     │ LOS  │   97.9 │  104.5   │   11.4 │   13.1   │    9.8 │   10.0 │    9.8 │  10.4 │    9.9 │    9.8 │    9.7 │   9.3 ║
+║ R09     │ LOS  │  100.5 │  107.0   │    9.4 │   11.8   │   10.1 │    9.6 │    9.4 │  10.8 │    9.6 │    9.6 │    9.5 │   9.2 ║
+║ R10     │ LOS  │  101.5 │  107.9   │   24.5 │   25.9   │    9.8 │   17.6 │   22.3 │  22.2 │    9.5 │   14.7 │   13.9 │  13.3 ║
+║ R11     │ LOS  │  101.1 │  107.5   │    5.6 │    6.4   │    9.9 │    9.7 │    9.8 │  11.5 │    9.6 │    9.6 │    9.6 │   9.6 ║
+║ R12     │ LOS  │  103.0 │  108.6   │    3.4 │    4.0   │   10.5 │   10.2 │   10.9 │  11.6 │    9.5 │    9.5 │    9.5 │   9.3 ║
+║ R13     │ LOS  │  101.9 │  109.6   │    2.7 │    4.3   │   11.9 │   11.0 │   11.1 │  12.1 │   11.7 │   11.5 │   11.1 │  11.0 ║
+║ R01     │ NLOS │  118.5 │  122.5   │   27.8 │   24.5   │   11.0 │   14.6 │   20.5 │  19.7 │   47.1 │   45.9 │   45.5 │  45.2 ║
+║ R02     │ NLOS │  122.5 │  128.2   │   22.2 │   23.3   │   23.6 │   24.1 │   24.5 │  26.8 │   31.6 │   32.1 │   31.6 │  31.3 ║
+║ R03     │ NLOS │  124.1 │  129.0   │   19.4 │   20.1   │   28.7 │   27.7 │   30.7 │  30.0 │   28.6 │   28.2 │   27.4 │  26.9 ║
+║ R04     │ NLOS │  116.1 │  122.8   │   44.8 │   62.7   │   44.7 │   50.1 │   50.3 │  50.0 │   11.5 │   16.9 │   16.1 │  15.6 ║
+║ R05     │ NLOS │  117.2 │  121.6   │   64.0 │   66.0   │   79.9 │   80.3 │   81.1 │  81.1 │   23.5 │   23.5 │   22.9 │  22.4 ║
+║ R06     │ NLOS │  121.5 │  126.5   │   42.3 │   50.9   │   53.1 │   54.5 │   54.7 │  54.5 │   19.3 │   22.3 │   21.6 │  21.0 ║
+║ R07     │ NLOS │  104.8 │  109.4   │    5.7 │    6.1   │    9.2 │   12.3 │   19.6 │  19.7 │    9.8 │   10.0 │   10.9 │  10.7 ║
+║ R08     │ NLOS │  101.2 │  106.2   │    2.5 │    2.9   │    9.9 │   10.0 │    9.7 │  11.2 │   10.3 │   10.0 │    9.5 │   9.7 ║
+║ R09     │ NLOS │  115.2 │  121.7   │   14.3 │   21.7   │   17.6 │   17.7 │   22.3 │  21.3 │   26.9 │   26.4 │   26.7 │  26.3 ║
+║ R10     │ NLOS │  120.2 │  125.1   │   24.4 │   30.6   │   11.7 │   13.3 │   22.7 │  22.2 │   12.6 │   14.2 │   14.5 │  14.0 ║
+║ R11     │ NLOS │  112.7 │  118.9   │   11.0 │   13.4   │   19.7 │   23.2 │   25.9 │  26.1 │   18.2 │   17.1 │   16.8 │  17.0 ║
+║ R12     │ NLOS │  105.2 │  109.4   │    3.4 │    3.7   │    9.5 │    8.8 │    9.4 │  11.0 │    9.4 │    9.2 │    9.1 │   9.2 ║
+║ R13     │ NLOS │  119.8 │  124.2   │   36.6 │   39.8   │   14.4 │   23.2 │   26.9 │  28.3 │   27.6 │   29.4 │   28.6 │  28.2 ║
+╚═════════╧══════╧════════╧══════════╧════════╧══════════╧════════╧════════╧════════╧═══════╧════════╧════════╧════════╧═══════╝
+
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                              TABLE 3: STATISTICAL SUMMARY                                                      ║
+╠════════════════════════════════╤═════════════════════════════════════╤═════════════════════════════════════════════════════════╣
+║ Metric                         │     LOS (mean ± std)                │     NLOS (mean ± std)               │    ALL            ║
+╠════════════════════════════════╪═════════════════════════════════════╪═════════════════════════════════════════════════════════╣
+║ PL - NYU (SUM)                 │  100.8 ±   3.4 dB                    │  115.3 ±   7.3 dB                    │  108.1 ±   9.3 dB  ║
+║ PL - USC (perDelayMax)         │  107.4 ±   3.3 dB                    │  120.4 ±   7.5 dB                    │  113.9 ±   8.7 dB  ║
+║ Δ PL (NYU - USC)               │  -6.55 ±  0.54 dB                    │  -5.12 ±  0.88 dB                    │  -5.84 ±  1.02 dB  ║
+╠════════════════════════════════╪═════════════════════════════════════╪═════════════════════════════════════════════════════════╣
+║ DS - NYU (SUM)                 │   21.4 ±  20.2 ns                    │   24.5 ±  18.4 ns                    │   22.9 ±  19.0 ns  ║
+║ DS - USC (perDelayMax)         │   23.1 ±  20.6 ns                    │   28.1 ±  21.2 ns                    │   25.6 ±  20.6 ns  ║
+╠════════════════════════════════╪═════════════════════════════════════╪═════════════════════════════════════════════════════════╣
+║ ASA - NYU 10dB                 │   11.9 ±   4.8 deg                   │   25.6 ±  21.4 deg                   │   18.7 ±  16.7 deg ║
+║ ASA - NYU 15dB                 │   13.5 ±   7.2 deg                   │   27.7 ±  21.2 deg                   │   20.6 ±  17.1 deg ║
+║ ASA - NYU 20dB                 │   14.8 ±   7.8 deg                   │   30.6 ±  20.1 deg                   │   22.7 ±  17.0 deg ║
+║ ASA - USC (no threshold)       │   15.8 ±   7.0 deg                   │   30.9 ±  19.8 deg                   │   23.3 ±  16.5 deg ║
+╠════════════════════════════════╪═════════════════════════════════════╪═════════════════════════════════════════════════════════╣
+║ ASD - NYU 10dB                 │    9.9 ±   0.6 deg                   │   21.3 ±  11.1 deg                   │   15.6 ±   9.6 deg ║
+║ ASD - NYU 15dB                 │   10.9 ±   1.9 deg                   │   21.9 ±  10.6 deg                   │   16.4 ±   9.4 deg ║
+║ ASD - NYU 20dB                 │   11.1 ±   1.7 deg                   │   21.6 ±  10.4 deg                   │   16.4 ±   9.1 deg ║
+║ ASD - USC (no threshold)       │   11.0 ±   1.6 deg                   │   21.3 ±  10.3 deg                   │   16.2 ±   9.0 deg ║
+╚════════════════════════════════╧═════════════════════════════════════╧═════════════════════════════════════════════════════════╝
+
+Generating figures...
+Figures saved to: D:\unified-channel-analysis\matlab\processing\usc_145\Figures
+
+Saving results...
+
+═══════════════════════════════════════════════════════════════════════
+  Results saved to: D:\unified-channel-analysis\matlab\processing\usc_145\Results
+    - USC145GHz_Full_Results.csv (flat table)
+    - USC145GHz_Full_Results.xlsx (5 sheets)
+    - USC145GHz_Full_Results.mat (MATLAB format)
+  Figures saved to: D:\unified-channel-analysis\matlab\processing\usc_145\Figures
+═══════════════════════════════════════════════════════════════════════
+
+Done!
+[STEP 1.3] USC 145.5 GHz : DONE (0.8 min)
+
+----- [STEP 1.4] USC 6.75 GHz : running USC7GHz_NewData_Processing.m -----
+=======================================================================
+  USC 7GHz NEW DATA Processing (6 LOS + 11 NLOS)
+=======================================================================
+  USC Antenna: El=0 at index 10 (El=0 deg)
+  Peak gain (single horn): 18.1 dB at Az=0 deg
+  -10 dB beamwidth: 42 deg (from -20 to 22 deg offset)
+USC antenna pattern loaded: 181 points
+  Peak gain: 0.0 dB, -10 dB full BW: ~44 deg
+  Data Format: 4D [Nf=1001, N_aztx=13, N_azrx=36, N_elrx=5]
+  Freq extraction: indices 251:1251 (6.25-7.25 GHz)
+  PDP Threshold: Global max noise + 12 dB (DR cap = 22 dB)
+  Lobe gap detection HPBW: 10 deg (grid step)
+  Lobe expansion: USC antenna pattern -10 dB beamwidth
+  Locations: 6 LOS + 11 NLOS = 17 total
+=======================================================================
+
+=====================================================================
+    Processing USC FR3 7GHz NEW Data: PL, DS, and AS
+=====================================================================
+
+Processing [ 1/17] LOS_RX1_07-12-2024 (d=184.8 m, LOS, Nf_full=12001) ... [H: 12001x13x36x5] [DR=61.1>22, thresh: -155.4->-116.3] PL: 89.4/93.1 dB | DS: 0.7/0.7 ns | ASA: 9.2/5.5 | ASD: 8.9/5.2
+Processing [ 2/17] LOS_RX2_07-12-2024 (d=161.7 m, LOS, Nf_full=12001) ... [H: 12001x13x36x5] [DR=62.4>22, thresh: -155.0->-114.6] PL: 85.9/88.5 dB | DS: 18.3/24.1 ns | ASA: 9.4/27.1 | ASD: 9.2/5.3
+Processing [ 3/17] LOS_RX3_07-12-2024 (d=132.6 m, LOS, Nf_full=12001) ... [H: 12001x13x36x5] [DR=61.3>22, thresh: -154.6->-115.3] PL: 88.4/91.6 dB | DS: 0.7/0.8 ns | ASA: 9.8/3.9 | ASD: 9.6/4.7
+Processing [ 4/17] LOS_RX4_07-12-2024 (d=83.4 m, LOS, Nf_full=12001) ... [H: 12001x13x36x5] [DR=63.5>22, thresh: -153.1->-111.6] PL: 82.3/86.4 dB | DS: 0.7/0.7 ns | ASA: 9.1/5.1 | ASD: 9.8/5.8
+Processing [ 5/17] LOS_RX5_07-12-2024 (d=63.6 m, LOS, Nf_full=12001) ... [H: 12001x13x36x5] [DR=65.5>22, thresh: -151.3->-107.8] PL: 77.2/83.6 dB | DS: 7.3/10.8 ns | ASA: 11.6/9.3 | ASD: 9.4/8.0
+Processing [ 6/17] LOS_RX6_07-12-2024 (d=59.4 m, LOS, Nf_full=12001) ... [H: 12001x13x36x5] [DR=62.4>22, thresh: -148.9->-108.5] PL: 79.3/82.1 dB | DS: 18.4/24.4 ns | ASA: 16.0/11.9 | ASD: 9.6/6.2
+Processing [ 7/17] NLOS_65m (d=65.1 m, NLOS, Nf_full=8001) ... [H: 8001x13x36x5] [DR=69.2>22, thresh: -152.7->-105.6] PL: 72.5/81.8 dB | DS: 0.6/0.6 ns | ASA: 13.1/10.8 | ASD: 13.3/12.4
+Processing [ 8/17] NLOS_62m (d=62.1 m, NLOS, Nf_full=8001) ... [H: 8001x13x36x5] [DR=57.1>22, thresh: -152.2->-117.0] PL: 83.9/92.8 dB | DS: 1.4/2.5 ns | ASA: 12.4/10.8 | ASD: 28.0/25.0
+Processing [ 9/17] NLOS_104m (d=103.5 m, NLOS, Nf_full=8001) ... [H: 8001x13x36x5] [DR=51.0>22, thresh: -155.1->-126.1] PL: 89.9/100.5 dB | DS: 3.4/6.5 ns | ASA: 15.9/13.9 | ASD: 16.9/15.7
+Processing [10/17] NLOS_139m (d=139.1 m, NLOS, Nf_full=8001) ... [H: 8001x13x36x5] [DR=52.9>22, thresh: -156.8->-125.8] PL: 91.2/100.4 dB | DS: 1.1/1.4 ns | ASA: 13.0/10.3 | ASD: 12.5/10.8
+Processing [11/17] NLOS_144m (d=143.6 m, NLOS, Nf_full=8001) ... [H: 8001x13x36x5] [DR=39.7>22, thresh: -156.0->-138.3] PL: 102.5/110.9 dB | DS: 139.6/142.1 ns | ASA: 36.5/35.4 | ASD: 14.7/13.9
+Processing [12/17] NLOS_163m (d=162.8 m, NLOS, Nf_full=8001) ... [H: 8001x13x36x5] [DR=43.2>22, thresh: -153.2->-132.0] PL: 99.4/107.8 dB | DS: 1.5/2.4 ns | ASA: 12.5/11.4 | ASD: 11.7/10.2
+Processing [13/17] NLOS_201m (d=201.4 m, NLOS, Nf_full=8001) ... [H: 8001x13x36x5] [DR=29.2>22, thresh: -160.1->-152.9] PL: 111.6/119.8 dB | DS: 32.8/37.6 ns | ASA: 16.9/17.7 | ASD: 16.1/14.1
+Processing [14/17] NLOS_215m (d=214.9 m, NLOS, Nf_full=8001) ... [H: 8001x13x36x5] [DR=43.8>22, thresh: -153.0->-131.1] PL: 99.7/106.8 dB | DS: 6.5/10.5 ns | ASA: 10.8/7.5 | ASD: 9.4/7.2
+Processing [15/17] NLOS_336m (d=336.3 m, NLOS, Nf_full=8001) ... [H: 8001x13x36x5] [DR=44.8>22, thresh: -162.7->-139.9] PL: 107.7/115.8 dB | DS: 0.9/1.1 ns | ASA: 11.5/8.5 | ASD: 11.4/8.8
+Processing [16/17] NLOS_405m (d=404.9 m, NLOS, Nf_full=8001) ... [H: 8001x13x36x5] [DR=36.7>22, thresh: -167.0->-152.2] PL: 121.4/127.5 dB | DS: 1.9/2.2 ns | ASA: 10.3/6.0 | ASD: 10.7/7.9
+Processing [17/17] NLOS_436m (d=436.1 m, NLOS, Nf_full=8001) ... [H: 8001x13x36x5] [DR=34.2>22, thresh: -165.0->-152.8] PL: 122.3/128.5 dB | DS: 2.7/2.8 ns | ASA: 10.4/6.4 | ASD: 11.3/8.5
+
+Processing complete!
+
+==========================================================================================================================================
+                                             PER-LOCATION RESULTS
+==========================================================================================================================================
+  Location              | Env  | Dist(m) | PL NYU | PL USC | DS NYU | DS USC | ASA-10 | ASA USC | ASD-10 | ASD USC
+------------------------+------+---------+--------+--------+--------+--------+--------+---------+--------+--------
+ LOS_RX1_07-12-2024     | LOS  |  184.8  |   89.4 |   93.1 |    0.7 |    0.7 |    9.2 |     5.5 |    8.9 |    5.2
+ LOS_RX2_07-12-2024     | LOS  |  161.7  |   85.9 |   88.5 |   18.3 |   24.1 |    9.4 |    27.1 |    9.2 |    5.3
+ LOS_RX3_07-12-2024     | LOS  |  132.6  |   88.4 |   91.6 |    0.7 |    0.8 |    9.8 |     3.9 |    9.6 |    4.7
+ LOS_RX4_07-12-2024     | LOS  |   83.4  |   82.3 |   86.4 |    0.7 |    0.7 |    9.1 |     5.1 |    9.8 |    5.8
+ LOS_RX5_07-12-2024     | LOS  |   63.6  |   77.2 |   83.6 |    7.3 |   10.8 |   11.6 |     9.3 |    9.4 |    8.0
+ LOS_RX6_07-12-2024     | LOS  |   59.4  |   79.3 |   82.1 |   18.4 |   24.4 |   16.0 |    11.9 |    9.6 |    6.2
+ NLOS_65m               | NLOS |   65.1  |   72.5 |   81.8 |    0.6 |    0.6 |   13.1 |    10.8 |   13.3 |   12.4
+ NLOS_62m               | NLOS |   62.1  |   83.9 |   92.8 |    1.4 |    2.5 |   12.4 |    10.8 |   28.0 |   25.0
+ NLOS_104m              | NLOS |  103.5  |   89.9 |  100.5 |    3.4 |    6.5 |   15.9 |    13.9 |   16.9 |   15.7
+ NLOS_139m              | NLOS |  139.1  |   91.2 |  100.4 |    1.1 |    1.4 |   13.0 |    10.3 |   12.5 |   10.8
+ NLOS_144m              | NLOS |  143.6  |  102.5 |  110.9 |  139.6 |  142.1 |   36.5 |    35.4 |   14.7 |   13.9
+ NLOS_163m              | NLOS |  162.8  |   99.4 |  107.8 |    1.5 |    2.4 |   12.5 |    11.4 |   11.7 |   10.2
+ NLOS_201m              | NLOS |  201.4  |  111.6 |  119.8 |   32.8 |   37.6 |   16.9 |    17.7 |   16.1 |   14.1
+ NLOS_215m              | NLOS |  214.9  |   99.7 |  106.8 |    6.5 |   10.5 |   10.8 |     7.5 |    9.4 |    7.2
+ NLOS_336m              | NLOS |  336.3  |  107.7 |  115.8 |    0.9 |    1.1 |   11.5 |     8.5 |   11.4 |    8.8
+ NLOS_405m              | NLOS |  404.9  |  121.4 |  127.5 |    1.9 |    2.2 |   10.3 |     6.0 |   10.7 |    7.9
+ NLOS_436m              | NLOS |  436.1  |  122.3 |  128.5 |    2.7 |    2.8 |   10.4 |     6.4 |   11.3 |    8.5
+==========================================================================================================================================
+
+=== LOS Statistics (n=6) ===
+  PL_NYU              : mean=  83.73, std=  4.95, min=  77.18, max=  89.35 dB
+  PL_USC              : mean=  87.56, std=  4.34, min=  82.11, max=  93.07 dB
+  DS_NYU              : mean=   7.66, std=  8.66, min=   0.66, max=  18.42 ns
+  ASA_NYU_10dB        : mean=  10.86, std=  2.68, min=   9.11, max=  16.00 deg
+  ASD_NYU_10dB        : mean=   9.43, std=  0.32, min=   8.92, max=   9.83 deg
+
+=== NLOS Statistics (n=11) ===
+  PL_NYU              : mean= 100.21, std= 15.33, min=  72.52, max= 122.32 dB
+  PL_USC              : mean= 108.41, std= 14.28, min=  81.78, max= 128.50 dB
+  DS_NYU              : mean=  17.49, std= 41.57, min=   0.60, max= 139.63 ns
+  ASA_NYU_10dB        : mean=  14.83, std=  7.48, min=  10.30, max=  36.46 deg
+  ASD_NYU_10dB        : mean=  14.18, std=  5.14, min=   9.36, max=  28.01 deg
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+(a) LOS: LOS_RX1_07-12-2024
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+(b) NLOS: NLOS_65m
+] 
+Figures saved to: D:\unified-channel-analysis\matlab\processing\usc_7\Figures
+
+Saving results...
+
+=======================================================================
+  Results saved to: D:\unified-channel-analysis\matlab\processing\usc_7\Results
+    - USC7GHz_NewData_Results.csv
+    - USC7GHz_NewData_Results.xlsx
+    - USC7GHz_Full_Results.mat (replaces old 8-pt NLOS-only results)
+  Figures saved to: D:\unified-channel-analysis\matlab\processing\usc_7\Figures
+=======================================================================
+
+Done!
+[STEP 1.4] USC 6.75 GHz : DONE (0.6 min)
+
+############################################################
+#  STEP 2: Paper-figure scripts (verbatim authors' scripts)
+############################################################
+
+
+----- [STEP 2.1] cdf_ci_pl_analysis               (Fig 5 CI PL + Fig 6 DS CDF (sub-THz)) -----
+
+----- [STEP 2.2] cdf_ci_pl_analysis_DS_ref        (Fig 6 DS CDF (6.75 GHz)) -----
+matlab.exe : [STEP 2.1] cdf_ci_pl_analysis : FAILED -- Unable to find or open 'C:\Users\Dipankar\Documents\MATLABExperi
+ments\NaveedDipankarMingjunJorgeShare\USC\USCprocessNYUdata\OriginalNYU_pointData\7_UMi_N3.xlsx'. Check the path and 
+filename or file permissions.
+At line:1 char:353
++ ... is\matlab'; & 'C:\Program Files\MATLAB\R2025a\bin\matlab.exe' -batch  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([STEP 2.1] cdf_...le permissions.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+NYU Data (N3)
+  LOS  n = 1.794 , sigma = 2.571, (95% CI 1.693, 1.885)
+  NLOS n = 2.563 , sigma = 6.511, (95% CI 2.398, 2.767)
+USC Data (U3)
+  LOS  n = 1.911 , sigma = 1.478, (95% CI 1.849, 1.966)
+  NLOS n = 2.690 , sigma = 7.277, (95% CI 2.493, 2.854)
+Pooled NYU+USC
+  LOS  n = 1.848 , sigma = 2.442, (95% CI 1.781, 1.907)
+  NLOS n = 2.629 , sigma = 7.046, (95% CI 2.490, 2.761)
+
+NYU Data (N3)
+-----------------------------
+LOS: n CI width = 0.196, sigma CI width = 1.923
+NLOS: n CI width = 0.387, sigma CI width = 6.995
+
+USC Data (U3)
+-----------------------------
+LOS: n CI width = 0.128, sigma CI width = 1.449
+NLOS: n CI width = 0.370, sigma CI width = 5.470
+
+Pooled NYU+USC
+-----------------------------
+LOS: n CI width = 0.139, sigma CI width = 1.630
+NLOS: n CI width = 0.277, sigma CI width = 4.301
+
+NYU Data (N3)
+Mean DS/AS (log-domain mean, reported linear)
+  DS LOS mean: 73.462 ns
+  DS NLOS mean: 181.989 ns
+  ASA LOS mean: 25.100 deg
+  ASA NLOS mean: 33.176 deg
+  ASD LOS mean: 34.814 deg
+  ASD NLOS mean: 43.065 deg
+
+USC Data (U3)
+Mean DS/AS (log-domain mean, reported linear)
+  DS LOS mean: 18.579 ns
+  ASA LOS mean: 10.707 deg
+  ASD LOS mean: 5.878 deg
+
+USC Data (U3)
+Mean DS/AS (log-domain mean, reported linear)
+  DS LOS mean: 18.579 ns
+  DS NLOS mean: 16.250 ns
+  ASA LOS mean: 10.707 deg
+  ASA NLOS mean: 12.502 deg
+  ASD LOS mean: 5.878 deg
+  ASD NLOS mean: 12.240 deg
+
+Pooled NYU+USC
+Mean DS/AS (log-domain mean, reported linear)
+  DS LOS mean: 98.087 ns
+  DS NLOS mean: 128.713 ns
+  ASA LOS mean: 18.823 deg
+  ASA NLOS mean: 22.694 deg
+  ASD LOS mean: 21.513 deg
+  ASD NLOS mean: 26.760 deg
+
+NYU Data (N3)
+Log10-domain 95% CIs / widths for DS and AS
+  DS LOS: mean_lin=73.462 (95% CI [39.625, 128.378], width 88.753) | mu_lg=1.750, sigma_lg=0.318
+  DS NLOS: mean_lin=181.989 (95% CI [88.660, 352.563], width 263.903) | mu_lg=1.798, sigma_lg=0.633
+  ASA LOS: mean_lin=25.100 (95% CI [16.209, 39.666], width 23.457) | mu_lg=1.334, sigma_lg=0.238
+  ASA NLOS: mean_lin=33.176 (95% CI [22.398, 44.673], width 22.275) | mu_lg=1.449, sigma_lg=0.249
+  ASD LOS: mean_lin=34.814 (95% CI [19.868, 59.839], width 39.971) | mu_lg=1.460, sigma_lg=0.267
+  ASD NLOS: mean_lin=43.065 (95% CI [27.881, 62.317], width 34.436) | mu_lg=1.539, sigma_lg=0.287
+
+USC Data (U3)
+Log10-domain 95% CIs / widths for DS and AS
+  DS LOS: mean_lin=18.579 (95% CI [2.072, 39.117], width 37.046) | mu_lg=0.562, sigma_lg=0.784
+  DS NLOS: mean_lin=16.250 (95% CI [2.756, 85.556], width 82.800) | mu_lg=0.649, sigma_lg=0.699
+  ASA LOS: mean_lin=10.707 (95% CI [5.375, 19.254], width 13.879) | mu_lg=0.920, sigma_lg=0.309
+  ASA NLOS: mean_lin=12.502 (95% CI [8.663, 17.830], width 9.167) | mu_lg=1.042, sigma_lg=0.219
+  ASD LOS: mean_lin=5.878 (95% CI [5.153, 6.792], width 1.639) | mu_lg=0.762, sigma_lg=0.079
+  ASD NLOS: mean_lin=12.240 (95% CI [9.645, 15.448], width 5.803) | mu_lg=1.059, sigma_lg=0.158
+
+Pooled NYU+USC
+Log10-domain 95% CIs / widths for DS and AS
+  DS LOS: mean_lin=98.087 (95% CI [36.469, 219.447], width 182.978) | mu_lg=1.202, sigma_lg=0.828
+  DS NLOS: mean_lin=128.713 (95% CI [48.609, 221.819], width 173.210) | mu_lg=1.223, sigma_lg=0.877
+  ASA LOS: mean_lin=18.823 (95% CI [11.757, 29.584], width 17.827) | mu_lg=1.143, sigma_lg=0.338
+  ASA NLOS: mean_lin=22.694 (95% CI [16.213, 31.640], width 15.427) | mu_lg=1.246, sigma_lg=0.310
+  ASD LOS: mean_lin=21.513 (95% CI [11.255, 38.514], width 27.259) | mu_lg=1.138, sigma_lg=0.411
+  ASD NLOS: mean_lin=26.760 (95% CI [17.052, 39.297], width 22.245) | mu_lg=1.299, sigma_lg=0.334
+[STEP 2.2] cdf_ci_pl_analysis_DS_ref : OK
+
+----- [STEP 2.3] PL_CI_Merged                     (Fig 5 PLcombinedPlot{,7} (Merged-style CI PL)) -----
+Loading point data via load_point_data ...
+
+Outdoor UMi Omni-Directional CI PL for V-V polarization in the 140 GHz band
+  LOS  pooled NYU+USC: n=1.921 sigma=2.168 dB (n_NYU=1.947, n_USC=1.889)
+  NLOS pooled NYU+USC: n=2.792 sigma=7.307 dB (n_NYU=2.882, n_USC=2.706)
+Saved: D:\unified-channel-analysis\figures\matlab\PLcombinedPlot.jpg
+Saved: D:\unified-channel-analysis\figures\matlab\PLcombinedPlot.png
+Saved: D:\unified-channel-analysis\figures\matlab\PLcombinedPlot.fig
+
+Outdoor UMi Omni-Directional CI PL for V-V polarization at 6.75 GHz
+  LOS  pooled NYU+USC: n=1.860 sigma=2.363 dB (n_NYU=1.810, n_USC=1.911)
+  NLOS pooled NYU+USC: n=2.595 sigma=7.891 dB (n_NYU=2.501, n_USC=2.690)
+Saved: D:\unified-channel-analysis\figures\matlab\PLcombinedPlot7.jpg
+Saved: D:\unified-channel-analysis\figures\matlab\PLcombinedPlot7.png
+Saved: D:\unified-channel-analysis\figures\matlab\PLcombinedPlot7.fig
+
+All PL CI figures saved to: D:\unified-channel-analysis\figures\matlab
+Done!
+[STEP 2.3] PL_CI_Merged : OK
+
+----- [STEP 2.4] DS_CDF_Merged                    (Fig 6 OmniDS_merged{,7} (AS-style DS CDF)) -----
+Loading datasets...
+Sub-THz: NYU 16 LOS + 11 NLOS, USC 13 LOS + 13 NLOS
+6.75 GHz: NYU 6 LOS + 12 NLOS, USC 6 LOS + 11 NLOS
+Saved: D:\unified-channel-analysis\figures\matlab\OmniDS_merged.jpg
+Saved: D:\unified-channel-analysis\figures\matlab\OmniDS_merged.png
+Saved: D:\unified-channel-analysis\figures\matlab\OmniDS_merged.fig
+Saved: D:\unified-channel-analysis\figures\matlab\OmniDS_merged7.jpg
+Saved: D:\unified-channel-analysis\figures\matlab\OmniDS_merged7.png
+Saved: D:\unified-channel-analysis\figures\matlab\OmniDS_merged7.fig
+
+All DS CDF figures saved to: D:\unified-channel-analysis\figures\matlab
+Done!
+[STEP 2.4] DS_CDF_Merged : OK
+
+----- [STEP 2.5] AS_CDF_Merged                    (Figs 7 & 8 ASA/ASD CDF) -----
+Loading datasets...
+Sub-THz: NYU 16 LOS + 11 NLOS, USC 13 LOS + 13 NLOS
+6.75 GHz: NYU 6 LOS + 12 NLOS, USC 6 LOS + 11 NLOS
+Saved: D:\unified-channel-analysis\figures\matlab\OmniASA_merged.jpg
+Saved: D:\unified-channel-analysis\figures\matlab\OmniASA_merged.png
+Saved: D:\unified-channel-analysis\figures\matlab\OmniASA_merged.fig
+Saved: D:\unified-channel-analysis\figures\matlab\OmniASD_merged.jpg
+Saved: D:\unified-channel-analysis\figures\matlab\OmniASD_merged.png
+Saved: D:\unified-channel-analysis\figures\matlab\OmniASD_merged.fig
+Saved: D:\unified-channel-analysis\figures\matlab\OmniASA_merged7.jpg
+Saved: D:\unified-channel-analysis\figures\matlab\OmniASA_merged7.png
+Saved: D:\unified-channel-analysis\figures\matlab\OmniASA_merged7.fig
+Saved: D:\unified-channel-analysis\figures\matlab\OmniASD_merged7.jpg
+Saved: D:\unified-channel-analysis\figures\matlab\OmniASD_merged7.png
+Saved: D:\unified-channel-analysis\figures\matlab\OmniASD_merged7.fig
+
+All figures saved to: D:\unified-channel-analysis\figures\matlab
+Done!
+[STEP 2.5] AS_CDF_Merged : OK
+
+----- [STEP 2.6] bland_altman_analysis            (Fig 3 BA PL/DS) -----
+[STEP 2.6] bland_altman_analysis : FAILED -- Unable to find or open 'C:\Users\Dipankar\Documents\MATLABExperiments\Nave
+edDipankarMingjunJorgeShare\USC\USCprocessNYUdata\OriginalNYU_pointData\7_UMi_N3.xlsx'. Check the path and filename or 
+file permissions.
+
+----- [STEP 2.7] BA_AS_Merged                     (Fig 4 BA ASA/ASD) -----
+Loading datasets...
+  Sub-THz: NYU 1 locations, USC 1 locations
+  6.75 GHz: NYU 1 locations, USC 1 locations
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+Mean of paired ASA [°]
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+Difference (USC - NYU) [°]
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+N3 bias = +3.47 °
+1.96 SD = 15.75
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+U3 bias = +4.60 °
+1.96 SD = 8.67
+] 
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASA.jpg
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASA.png
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASA.pdf
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASA.fig
+  ASA @ sub-THz:
+    N3: Bias=+3.47, SD=8.04, n=27
+    U3: Bias=+4.60, SD=4.42, n=26
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+Mean of paired ASD [°]
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+Difference (USC - NYU) [°]
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+N3 bias = +0.35 °
+1.96 SD = 8.27
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+U3 bias = +0.55 °
+1.96 SD = 3.40
+] 
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASD.jpg
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASD.png
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASD.pdf
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASD.fig
+  ASD @ sub-THz:
+    N3: Bias=+0.35, SD=4.22, n=27
+    U3: Bias=+0.55, SD=1.73, n=26
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+Mean of paired ASA [°]
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+Difference (USC - NYU) [°]
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+N3 bias = -0.42 °
+1.96 SD = 8.72
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+U3 bias = -1.57 °
+1.96 SD = 10.24
+] 
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASA7.jpg
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASA7.png
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASA7.pdf
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASA7.fig
+  ASA @ 6.75 GHz:
+    N3: Bias=-0.42, SD=4.45, n=18
+    U3: Bias=-1.57, SD=5.22, n=17
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+Mean of paired ASD [°]
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+Difference (USC - NYU) [°]
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+N3 bias = +0.51 °
+1.96 SD = 15.62
+] 
+[Warning: Error in state of SceneNode.
+String scalar or character vector must have valid interpreter syntax:
+U3 bias = -2.52 °
+1.96 SD = 2.35
+] 
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASD7.jpg
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASD7.png
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASD7.pdf
+Saved: D:\unified-channel-analysis\figures\matlab\BA_ASD7.fig
+  ASD @ 6.75 GHz:
+    N3: Bias=+0.51, SD=7.97, n=18
+    U3: Bias=-2.52, SD=1.20, n=17
+
+All figures saved to: D:\unified-channel-analysis\figures\matlab
+Done!
+[STEP 2.7] BA_AS_Merged : OK
+
+----- [STEP 2.8] Plot_BlandAltman_PL_DS_AS        (Alt BA generator) -----
+Loading NYU data from: D:\unified-channel-analysis\matlab\processing\nyu_142\Results\NYU142GHz_Method_Comparison_Results.xlsx
+Loading USC data from: D:\unified-channel-analysis\matlab\processing\usc_145\Results\USC145GHz_Full_Results.xlsx
+  NYU: 27 locations loaded
+  USC: 26 locations loaded
+
+===================================================================
+  INDIVIDUAL BLAND-ALTMAN PLOTS
+===================================================================
+  NYU 142 GHz - Omni PL [dB]: Bias = -1.76 dB, SD = 0.63 dB (n=27)
+  USC 145 GHz - Omni PL [dB]: Bias = -5.84 dB, SD = 1.02 dB (n=26)
+  NYU 142 GHz - Omni DS [ns]: Bias = -1.34 ns, SD = 2.98 ns (n=27)
+  USC 145 GHz - Omni DS [ns]: Bias = -2.70 ns, SD = 3.97 ns (n=26)
+  NYU 142 GHz - ASA [deg]: Bias = -3.47 deg, SD = 8.04 deg (n=27)
+  USC 145 GHz - ASA [deg]: Bias = -4.60 deg, SD = 4.42 deg (n=26)
+  NYU 142 GHz - ASD [deg]: Bias = -0.35 deg, SD = 4.22 deg (n=27)
+  USC 145 GHz - ASD [deg]: Bias = -0.55 deg, SD = 1.73 deg (n=26)
+
+===================================================================
+  COMBINED BLAND-ALTMAN PLOTS (NYU 142 GHz vs USC 145 GHz)
+===================================================================
+  Combined Bland-Altman: Omni PL [dB] (NYU vs USC Data):
+    NYU 142 GHz: Bias=-1.76, SD=0.63 (n=27)
+    USC 145 GHz: Bias=-5.84, SD=1.02 (n=26)
+  Saved: BlandAltman_PL (.fig, .png, .pdf)
+  Combined Bland-Altman: Omni DS [ns] (NYU vs USC Data):
+    NYU 142 GHz: Bias=-1.34, SD=2.98 (n=27)
+    USC 145 GHz: Bias=-2.70, SD=3.97 (n=26)
+  Saved: BlandAltman_DS (.fig, .png, .pdf)
+  Combined Bland-Altman: ASA [deg] (NYU vs USC Data):
+    NYU 142 GHz: Bias=-3.47, SD=8.04 (n=27)
+    USC 145 GHz: Bias=-4.60, SD=4.42 (n=26)
+  Saved: BlandAltman_ASA (.fig, .png, .pdf)
+  Combined Bland-Altman: ASD [deg] (NYU vs USC Data):
+    NYU 142 GHz: Bias=-0.35, SD=4.22 (n=27)
+    USC 145 GHz: Bias=-0.55, SD=1.73 (n=26)
+  Saved: BlandAltman_ASD (.fig, .png, .pdf)
+
+===================================================================
+  BLAND-ALTMAN SUMMARY STATISTICS (NYU method - USC method)
+===================================================================
+
+--- Omni PL [dB] ---
+  NYU 142 GHz: Mean = -1.76 dB, SD = 0.63 dB, RMSE = 1.87 dB (n=27)
+  USC 145 GHz: Mean = -5.84 dB, SD = 1.02 dB, RMSE = 5.92 dB (n=26)
+
+--- Omni DS [ns] ---
+  NYU 142 GHz: Mean = -1.34 ns, SD = 2.98 ns, RMSE = 3.21 ns (n=27)
+  USC 145 GHz: Mean = -2.70 ns, SD = 3.97 ns, RMSE = 4.73 ns (n=26)
+
+--- ASA [deg] ---
+  NYU 142 GHz: Mean = -3.47 deg, SD = 8.04 deg, RMSE = 8.62 deg (n=27)
+  USC 145 GHz: Mean = -4.60 deg, SD = 4.42 deg, RMSE = 6.32 deg (n=26)
+
+--- ASD [deg] ---
+  NYU 142 GHz: Mean = -0.35 deg, SD = 4.22 deg, RMSE = 4.16 deg (n=27)
+  USC 145 GHz: Mean = -0.55 deg, SD = 1.73 deg, RMSE = 1.79 deg (n=26)
+
+===================================================================
+Figures saved to: D:\unified-channel-analysis\figures\matlab\BlandAltman_Figures
+[STEP 2.8] Plot_BlandAltman_PL_DS_AS : OK
+
+----- [STEP 2.9] calculate_AS_RMSE                (Table VI ASA/ASD RMSE) -----
+=== Table N3: USC perDelayMax method, NYU Data ===
+ASA RMSE (USC thres vs N1): 7.87°
+ASA RMSE (NYU thres vs N1): 0.00°
+ASD RMSE (USC thres vs N1): 3.85°
+ASD RMSE (NYU thres vs N1): 0.00°
+
+=== Table U3: NYU SUM method, USC Data ===
+ASA RMSE (NYU thres vs U1): 6.12°
+ASA RMSE (USC thres vs U1): 0.00°
+ASD RMSE (NYU thres vs U1): 2.01°
+ASD RMSE (USC thres vs U1): 0.00°
+
+=====================================
+SUMMARY FOR PAPER TABLE (Tab:RMSE_th)
+=====================================
+
+                  | USC Data, NYU SUM (U3)  | NYU Data, USC perDelayMax (N3) |
+                  | NYU Thr   | USC Thr     | USC Thr    | NYU Thr           |
+------------------+-----------+-------------+------------+-------------------|
+ASA [°]           | 6.12      | 0.00        | 7.87       | 0.00              |
+ASD [°]           | 2.01      | 0.00        | 3.85       | 0.00              |
+
+LaTeX Table Values:
+ASA [°] & 6.12 & 0.00 & 7.87 & 0.00 \\
+ASD [°] & 2.01 & 0.00 & 3.85 & 0.00 \\
+[STEP 2.9] calculate_AS_RMSE : OK
+
+############################################################
+#  STEP 3: Unified figure drivers (Python parity)
+############################################################
+
+
+----- [STEP 3.1] fig03_bland_altman_pl_ds     (Fig 3 BA PL/DS) -----
+  fig03_BA_PL:
+    N3 (NYU data): Bias=+1.76 dB, SD=0.63, n(NYU)=27
+    U3 (USC data): Bias=+5.84 dB, SD=1.02, n(USC)=26
+  fig03_BA_DS:
+    N3 (NYU data): Bias=+1.34 ns, SD=2.98, n(NYU)=27
+    U3 (USC data): Bias=+2.70 ns, SD=3.97, n(USC)=26
+  fig03_BA_PL7:
+    N3 (NYU data): Bias=+3.53 dB, SD=1.41, n(NYU)=18
+    U3 (USC data): Bias=+6.65 dB, SD=2.53, n(USC)=17
+  fig03_BA_DS7:
+    N3 (NYU data): Bias=+13.62 ns, SD=14.41, n(NYU)=18
+    U3 (USC data): Bias=+1.93 ns, SD=2.17, n(USC)=17
+[STEP 3.1] fig03_bland_altman_pl_ds : OK
+
+----- [STEP 3.2] fig04_bland_altman_as        (Fig 4 BA AS) -----
+  fig04_BA_ASA:
+    N3 (NYU data): Bias=+3.47 deg, SD=8.04, n(NYU)=27
+    U3 (USC data): Bias=+4.60 deg, SD=4.42, n(USC)=26
+  fig04_BA_ASD:
+    N3 (NYU data): Bias=+0.35 deg, SD=4.22, n(NYU)=27
+    U3 (USC data): Bias=+0.55 deg, SD=1.73, n(USC)=26
+  fig04_BA_ASA7:
+    N3 (NYU data): Bias=-0.42 deg, SD=4.45, n(NYU)=18
+    U3 (USC data): Bias=-1.57 deg, SD=5.22, n(USC)=17
+  fig04_BA_ASD7:
+    N3 (NYU data): Bias=+0.51 deg, SD=7.97, n(NYU)=18
+    U3 (USC data): Bias=-2.52 deg, SD=1.20, n(USC)=17
+[STEP 3.2] fig04_bland_altman_as : OK
+
+----- [STEP 3.3] fig05_ci_pl_scatter          (Fig 5 CI PL scatter) -----
+
+Outdoor UMi Omni-Directional CI PL for V-V polarization in the 140 GHz band
+  LOS  pooled NYU+USC: n=1.921 sigma=2.168 dB (n_NYU=1.947, n_USC=1.889)
+  NLOS pooled NYU+USC: n=2.792 sigma=7.307 dB (n_NYU=2.882, n_USC=2.706)
+
+Outdoor UMi Omni-Directional CI PL for V-V polarization at 6.75 GHz
+  LOS  pooled NYU+USC: n=1.860 sigma=2.363 dB (n_NYU=1.810, n_USC=1.911)
+  NLOS pooled NYU+USC: n=2.595 sigma=7.891 dB (n_NYU=2.501, n_USC=2.690)
+[STEP 3.3] fig05_ci_pl_scatter : OK
+
+----- [STEP 3.4] fig06_ds_cdf                 (Fig 6 DS CDF) -----
+[STEP 3.4] fig06_ds_cdf : OK
+
+----- [STEP 3.5] fig07_asa_cdf                (Fig 7 ASA CDF) -----
+[STEP 3.5] fig07_asa_cdf : OK
+
+----- [STEP 3.6] fig08_asd_cdf                (Fig 8 ASD CDF) -----
+[STEP 3.6] fig08_asd_cdf : OK
+
+----- [STEP 3.7] table06_rmse                 (Table 6 RMSE) -----
+[table06] wrote D:\unified-channel-analysis\figures\matlab\table06_rmse.csv
+[STEP 3.7] table06_rmse : OK
+
+----- [STEP 3.8] table07_pooled_stats         (Table 7 pooled stats) -----
+[table07] wrote D:\unified-channel-analysis\figures\matlab\table07_pooled_stats.csv
+[STEP 3.8] table07_pooled_stats : OK
+
+----- [STEP 3.9] table_dumps                  (Tables 4, 8, 9, 10, 11) -----
+[table_dumps] wrote D:\unified-channel-analysis\figures\matlab\table04_N1_142.csv
+[table_dumps] wrote D:\unified-channel-analysis\figures\matlab\table05_N1_7.csv
+[table_dumps] wrote D:\unified-channel-analysis\figures\matlab\table08_U3_145.csv
+[table_dumps] wrote D:\unified-channel-analysis\figures\matlab\table09_U3_7.csv
+[table_dumps] wrote D:\unified-channel-analysis\figures\matlab\table10_N3_142.csv
+[table_dumps] wrote D:\unified-channel-analysis\figures\matlab\table11_N3_7.csv
+[STEP 3.9] table_dumps : OK
+
+----- [STEP 3.10] paper_parity                 (Paper vs Python vs MATLAB side-by-side) -----
+
+==============================================================
+ Paper reproduction parity (TIGHT / CLOSE / MISS)
+==============================================================
+  Python vs Paper - Table VI:  0 TIGHT,  0 CLOSE,  0 MISS  (of 0)  [32 skipped]
+  Python vs Paper - Table VII:  0 TIGHT,  0 CLOSE,  0 MISS  (of 0)  [108 skipped]
+  MATLAB vs Paper - Table VI:  11 TIGHT,  5 CLOSE,  16 MISS  (of 32)
+  MATLAB vs Paper - Table VII:  87 TIGHT,  15 CLOSE,  6 MISS  (of 108)
+==============================================================
+
+[paper_parity] wrote D:\unified-channel-analysis\docs\paper_parity_matlab.md
+[STEP 3.10] paper_parity : OK
+
+############################################################
+#  STEP 4: Summary
+############################################################
+
+  Raw-processing outcomes:
+    - NYU 142 GHz      : ok
+    - NYU 6.75 GHz     : ok
+    - USC 145.5 GHz    : ok
+    - USC 6.75 GHz     : ok
+
+  Output locations:
+    - Per-pipeline Results : D:\unified-channel-analysis\matlab\processing\*\Results
+    - Paper figures        : D:\unified-channel-analysis\figures\matlab
+
+  To rerun raw processing from scratch  : run_all('rebuild')
+  To regenerate figures only            : run_all('figures')
+  To regenerate 6.75 GHz U3/N3 xlsx     : run_all('cb_a')
+
+============================================================
+  Done.
+============================================================
+

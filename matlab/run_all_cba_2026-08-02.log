@@ -1,0 +1,149 @@
+﻿
+============================================================
+  Unified channel-analysis MATLAB pipeline (02-Aug-2026 09:56:17)
+============================================================
+  Repo root     : D:\unified-channel-analysis
+  Output dir    : D:\unified-channel-analysis\figures\matlab
+  Mode          : cb_a
+============================================================
+
+
+############################################################
+#  STEP 1: Codebase-A 7 GHz cross-processing
+############################################################
+
+
+[STEP cb_a.1] NYUprocessUSC7 ...
+
+===========================================================================
+  17-loc NewData PL Validation (NYU method vs USC PL_USC_dB) - Paper Table VI 6.75 U3
+===========================================================================
+  Matches: n=17 (LOS=6, NLOS=11) of 17 RX files
+  LOS  RMSE = 3.5859 dB   (n=6)
+  NLOS RMSE = 4.1393 dB   (n=11)
+  Combined RMSE (all pts) = 3.9528 dB
+  Avg(LOS_RMSE, NLOS_RMSE) = 3.8626 dB   <-- paper convention for Table VI 6.75 U3
+===========================================================================
+
+Path Loss Error Metrics (NYU processed - USC original)\nLOS  : RMSE = 3.631 dB, MAE = 3.461 dB (N=4)\nNLOS : RMSE = 4.549 dB, MAE = 3.707 dB (N=4)\nElapsed time is 30.345907 seconds.
+
+[STEP cb_a.2] USCprocessNYU7M_exp ...
+   122
+
+   205
+
+    66
+
+   100
+
+   283
+
+    64
+
+   116
+
+    33
+
+     3
+
+   166
+
+   135
+
+   181
+
+   110
+
+   219
+
+   214
+
+     9
+
+    99
+
+    80
+
+
+===========================================================================
+  PATH LOSS VALIDATION SUMMARY — 142 GHz UMi
+===========================================================================
+Link            d (m)     PL Ref    PL Comp      Error   Type
+---------------------------------------------------------------------------
+T1-R1           40.00    74.6300    76.8043    +2.1743    LOS
+T1-R2          100.00    82.8500    85.2039    +2.3539    LOS
+T1-R3          193.00    86.8900    88.5205    +1.6305    LOS
+T1-R4          560.00   110.0000   112.9398    +2.9398   NLOS
+T1-R5          880.00   124.8000   124.8210    +0.0210   NLOS
+T1-R7          424.00   100.2000   102.1161    +1.9161    LOS
+T2-R1           58.00    80.7400    84.4631    +3.7231    LOS
+T2-R2           51.50    88.9300    93.1271    +4.1971   NLOS
+T2-R3          100.90   101.2000   109.7811    +8.5811   NLOS
+T3-R1           71.00   101.0000   105.3399    +4.3399   NLOS
+T3-R2           45.00    88.9200    92.2976    +3.3776   NLOS
+T3-R3          125.00   100.6000   104.7296    +4.1296   NLOS
+T4-R1           88.70    97.7000   101.8591    +4.1591   NLOS
+T4-R2          120.00    87.2500    90.1968    +2.9468    LOS
+T4-R4          185.00   124.5000   125.4359    +0.9359   NLOS
+T5-R1           52.00    81.9800    84.5420    +2.5620    LOS
+T5-R2          170.00   101.5000   106.3286    +4.8286   NLOS
+T5-R3          141.00   106.3000   109.4438    +3.1438   NLOS
+---------------------------------------------------------------------------
+  Max absolute error : +8.5811 dB  (T2-R3)
+  Mean absolute error: 3.2200 dB
+  RMS error          : 3.6838 dB
+  Links within ±1 dB : 2 / 18
+===========================================================================
+
+Elapsed time is 192.246377 seconds.
+[Warning: Column headers from the file were modified to make them valid MATLAB identifiers before creating variable names for the table. The original column headers are saved in
+the VariableDescriptions property.
+Set 'VariableNamingRule' to 'preserve' to use the original column headers as table variable names.] 
+
+===========================================================================
+  DELAY SPREAD VALIDATION SUMMARY 142 GHz UMi
+===========================================================================
+Link            d (m)   DS Ref(ns)  DS Comp(ns)      Error   Type
+---------------------------------------------------------------------------
+T1-R1           40.00      11.8900      14.9863    +3.0963    LOS
+T1-R2          100.00       1.2100      73.0530   +71.8430    LOS
+T1-R3          193.00       1.0600     114.9786  +113.9186    LOS
+T1-R4          560.00       0.4200      82.2504   +81.8304   NLOS
+T1-R5          880.00       0.4000       0.8639    +0.4639   NLOS
+T1-R7          424.00       0.3900     178.7713  +178.3813    LOS
+T2-R1           58.00       5.9900      10.0406    +4.0506    LOS
+T2-R2           51.50       4.5800      98.7516   +94.1716   NLOS
+T2-R3          100.88      11.0900     128.7305  +117.6405   NLOS
+T3-R1           71.00       0.5100     178.9079  +178.3979   NLOS
+T3-R2           45.00       9.4300      49.4012   +39.9712   NLOS
+T3-R3          125.00     116.6300     134.2421   +17.6121   NLOS
+T4-R1           88.70       0.3900      93.5884   +93.1984   NLOS
+T4-R2          120.00       0.4400       1.0823    +0.6423    LOS
+T4-R4          185.00       0.0900     139.3915  +139.3015   NLOS
+T5-R1           52.00       0.6500       0.8584    +0.2084    LOS
+T5-R2          170.00       0.0000      20.5932   +20.5932   NLOS
+T5-R3          141.00      36.6100     101.3237   +64.7137   NLOS
+---------------------------------------------------------------------------
+  Max absolute error : +178.3979  (T3-R1)
+  Mean absolute error: 67.7797
+  RMS error          : 90.0079
+===========================================================================
+
+
+[STEP cb_a.3] paper_parity ...
+
+==============================================================
+ Paper reproduction parity (TIGHT / CLOSE / MISS)
+==============================================================
+  Python vs Paper - Table VI:  0 TIGHT,  0 CLOSE,  0 MISS  (of 0)  [32 skipped]
+  Python vs Paper - Table VII:  0 TIGHT,  0 CLOSE,  0 MISS  (of 0)  [108 skipped]
+  MATLAB vs Paper - Table VI:  11 TIGHT,  5 CLOSE,  16 MISS  (of 32)
+  MATLAB vs Paper - Table VII:  87 TIGHT,  15 CLOSE,  6 MISS  (of 108)
+==============================================================
+
+[paper_parity] wrote D:\unified-channel-analysis\docs\paper_parity_matlab.md
+
+============================================================
+  Codebase-A 7 GHz pipeline done.
+============================================================
+
