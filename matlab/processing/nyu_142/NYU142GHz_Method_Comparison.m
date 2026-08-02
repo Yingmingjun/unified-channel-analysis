@@ -79,6 +79,17 @@ TX_power_table = load_TX_power_table(csv_path);
 % =========================================================================
 config.thres_below_pk = 25;        % dB below peak
 config.thres_above_noise = 5;      % dB above noise floor
+% Threshold-sweep override (JSON in env THRESH_OVERRIDE, e.g.
+% '{"thres_above_noise":10}'); used by tools/threshold_sweep_subthz.m.
+ovr_json = getenv('THRESH_OVERRIDE');
+if ~isempty(ovr_json)
+    ovr = jsondecode(ovr_json);
+    ovr_fn = fieldnames(ovr);
+    for ovr_k = 1:numel(ovr_fn)
+        config.(ovr_fn{ovr_k}) = ovr.(ovr_fn{ovr_k});
+    end
+    fprintf('[sweep] NYU142 config override: %s\n', ovr_json);
+end
 config.multipath_low_bound = -200; % Absolute floor in dB (set low so surviving weak
                                     % signals like -105 dB are not confused with floor)
 

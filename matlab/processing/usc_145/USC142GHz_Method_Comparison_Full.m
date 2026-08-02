@@ -122,6 +122,17 @@ params.correction_factor_lin = 10^(params.correction_factor_dB/10);
 % =========================================================================
 % PDP Threshold (USC method - COMMON for all metrics)
 config.noise_margin_dB = 12;      % dB above max noise floor (Naveed USCprocessing.m L60)
+% Threshold-sweep override (JSON in env THRESH_OVERRIDE); used by
+% tools/threshold_sweep_subthz.m.
+ovr_json = getenv('THRESH_OVERRIDE');
+if ~isempty(ovr_json)
+    ovr = jsondecode(ovr_json);
+    ovr_fn = fieldnames(ovr);
+    for ovr_k = 1:numel(ovr_fn)
+        config.(ovr_fn{ovr_k}) = ovr.(ovr_fn{ovr_k});
+    end
+    fprintf('[sweep] USC145 config override: %s\n', ovr_json);
+end
 
 % PAS Threshold (NYU AS method only)
 config.PAS_threshold_1 = 10;      % Strictest: 10 dB below peak
