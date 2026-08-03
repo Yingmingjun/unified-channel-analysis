@@ -167,3 +167,10 @@ The source code in this repository is released under **Creative Commons Attribut
 The authors thank the NYU WIRELESS and USC Center for Wireless Propagation Research teams who conducted the original 142 GHz / 145.5 GHz / 6.75 GHz urban-microcell measurement campaigns in Brooklyn, NY and Los Angeles, CA. In particular the contributions of Dipankar Shakya, Mingjun Ying, Naveed A. Abbasi, Jorge Gomez-Ponce, Xingchen Liu, Xinquan Wang, Daniel Abraham, Prof. Theodore S. Rappaport, and Prof. Andreas F. Molisch made this joint-analysis release possible.
 
 Funding: NYU WIRELESS Industrial Affiliates Program; Affiliates of the Center for Wireless Propagation Research at USC; U.S. National Science Foundation.
+
+## Joining the framework
+
+New institutions onboard through the five-step checklist in
+[ONBOARDING.md](ONBOARDING.md): golden dataset, reference implementation,
+per-link tolerance gate, point-data + metadata publication, and the beta
+compatibility test.
