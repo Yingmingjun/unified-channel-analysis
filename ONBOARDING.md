@@ -11,9 +11,9 @@ O(K) per institution, not O(K^2) pairwise replications.
 - The per-link point-data tables and processing metadata for all 88
   NYU/USC UMi links are in `data/point_data/` of this repository.
 - Golden **raw** samples (one calibrated directional-PDP location per
-  institution) are available through the archival DOI / on request,
-  pending institutional approval; the full raw datasets are shared
-  among participating institutions under the collaboration agreement.
+  institution) are available on request, pending institutional approval;
+  the full raw datasets are shared among participating institutions under
+  the collaboration agreement.
 
 ## Step 2 — Run the reference implementation
 
