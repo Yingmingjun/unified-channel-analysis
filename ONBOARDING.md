@@ -41,20 +41,36 @@ O(K) per institution, not O(K^2) pairwise replications.
   calibration details are mandatory. Undeclared processing choices are
   the leading failure class the framework detects.
 
-## Step 5 — Run the compatibility test before pooling
+## Step 5 - Run the compatibility test before pooling
 
 - Re-express your dataset and the pooled corpus in one common convention
   (exact per-link re-expression; no mean-offset shortcuts: the per-link
   offset is not predictable from observable statistics).
-- Fit the residual inter-dataset offset beta with bootstrap CIs
-  (protocol of `revision` analysis script m15 in the paper repository;
-  B = 10000, percentile CIs).
-- Verdicts: CI contains 0 **and** half-width <= 1 dB -> pool term-free;
-  offset detected -> pool **with** an institution term; insufficient n
-  -> pool with the term and consult the acquisition targets (about 40
-  LOS / 400 NLOS links per institution at UMi shadowing levels).
-  Pooling is never precluded; the verdict selects its statistically
-  defensible form.
+- Put your links and ours in one CSV with the columns
+  `institution, band, loc_class, dist_m, freq_ghz, pl_db, ds_ns, asa_deg,
+  asd_deg`, then run:
+
+      python python/scripts/poolability.py links.csv --ds-floor 2
+
+  Any parameter column you omit is skipped. `--ds-floor` should be one
+  delay bin at your sounding bandwidth. `--bound-pl`, `--bound-ds` and
+  `--bound-as` default to twice the tolerances of Step 3; set them to
+  twice your own if you declared different ones.
+- The tool reports, for each parameter and each band/class cell, one of
+  three verdicts:
+
+  | verdict | meaning |
+  |---|---|
+  | `pool` | interval contains zero and is within the bound: a pooled model may omit the organization term |
+  | `term` | interval excludes zero: pool, but keep the organization term |
+  | `more-data` | interval contains zero but is too wide to certify; the required per-organization link count is printed |
+
+  Pooling is never precluded. The verdict fixes the form in which it is
+  defensible.
+- Sanity check: run it on the released 88-link corpus and you should
+  reproduce the manuscript's raw-convention offsets, for example
+  path loss at sub-THz LOS at -0.95 dB and the 6.75 GHz LOS detection at
+  +2.34 dB.
 
 Quality gates that apply throughout: back-to-back calibration
 verification, first-arrival causality (t >= d/c), LOS-vs-free-space
