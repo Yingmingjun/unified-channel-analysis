@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Decide whether two datasets may be pooled, and in what form.
 
-This is the admission procedure of the manuscript, packaged so that any
+This is the compatibility procedure of the manuscript, packaged so that any
 pair of organizations can run it on their own point data. It is
 organization-agnostic: the two labels are whatever appears in the
 institution column.
