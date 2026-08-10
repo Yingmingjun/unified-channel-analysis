@@ -20,7 +20,7 @@ O(K) per institution, not O(K^2) pairwise replications.
 - MATLAB: `matlab/run_all.m` regenerates every data-derived table and
   figure of the paper from the shared raw data in one scripted run.
 - Python: `python/scripts/table07_canonical.py` reproduces the paper's
-  Table VI bit-exactly from the released point-data tables (no MATLAB
+  Table VII bit-exactly from the released point-data tables (no MATLAB
   required).
 
 ## Step 3 — Replicate and pass the per-link gate

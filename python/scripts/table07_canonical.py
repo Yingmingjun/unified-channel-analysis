@@ -1,5 +1,5 @@
 """table07_canonical.py -- bit-exact regeneration of the revised paper's
-Table VI (pooled statistics) from the canonical point-data xlsx.
+Table VII (pooled statistics) from the canonical point-data xlsx.
 
 Conventions (single released state, revised manuscript):
   - links/labels/values from the "orig." columns of N3_142/U3_142/N3_7/U3_7
